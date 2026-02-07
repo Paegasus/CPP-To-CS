@@ -1,0 +1,11 @@
+{
+    "cmake.cmakePath": "C:/msys64/ucrt64/bin/cmake.exe",
+    "cmake.generator": "Ninja",
+    "terminal.integrated.profiles.windows": {
+        "PowerShell": {
+            "source": "PowerShell",
+            "args": ["-ExecutionPolicy", "Bypass"]
+        }
+    },
+    "terminal.integrated.defaultProfile.windows": "PowerShell"
+}
