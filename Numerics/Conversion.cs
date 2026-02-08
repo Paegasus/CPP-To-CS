@@ -16,8 +16,8 @@ namespace UI.Numerics
             where TDest : INumber<TDest>
             where TSrc : INumber<TSrc>
         {
-            // This is the magic of .NET 7+ Generic Math. The Base Class Library
-            // now provides this optimized operation for any type that implements INumber.
+            // This is the magic of .NET 7+ Generic Math.
+            // The Base Class Library now provides this optimized operation for any type that implements INumber.
             return TDest.CreateSaturating(value);
         }
 
