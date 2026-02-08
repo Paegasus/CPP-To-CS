@@ -38,26 +38,6 @@ public struct LayoutUnit : IFixedPoint<int, uint>
 		m_Value = 0;
 	}
 
-    public LayoutUnit(T value) where T : IBinaryInteger<T>, ISignedNumber<T>
-    {
-        m_Value = ClampRawValue(long.CreateSaturating(value) * FixedPointDenominator);
-    }
-
-    public LayoutUnit(T value) where T : IBinaryInteger<T>, IUnsignedNumber<T>
-    {
-        m_Value = ClampRawValue(ulong.CreateSaturating(value) * (ulong)FixedPointDenominator);
-    }
-
-    public LayoutUnit(float value)
-    {
-        m_Value = ClampRawValue(value * FixedPointDenominator);
-    }
-
-    public LayoutUnit(double value)
-    {
-        m_Value = ClampRawValue(value * FixedPointDenominator);
-    }
-
     public readonly int RawValue()
     {
         return m_Value;
