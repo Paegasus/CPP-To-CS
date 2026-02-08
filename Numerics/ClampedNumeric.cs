@@ -273,32 +273,61 @@ public readonly struct ClampedNumeric<T> : INumber<ClampedNumeric<T>>, IEquatabl
 
     public static bool TryConvertFromChecked<TOther>(TOther value, [MaybeNullWhen(false)] out ClampedNumeric<T> result) where TOther : INumberBase<TOther>
     {
-        throw new NotImplementedException();
+        try
+        {
+            var tValue = T.CreateChecked(value);
+            result = new ClampedNumeric<T>(tValue);
+            return true;
+        }
+        catch (OverflowException)
+        {
+            result = default;
+            return false;
+        }
     }
 
     public static bool TryConvertFromSaturating<TOther>(TOther value, [MaybeNullWhen(false)] out ClampedNumeric<T> result) where TOther : INumberBase<TOther>
     {
-        throw new NotImplementedException();
+        // CreateSaturating will never throw, so this always succeeds.
+        var tValue = T.CreateSaturating(value);
+        result = new ClampedNumeric<T>(tValue);
+        return true;
     }
 
     public static bool TryConvertFromTruncating<TOther>(TOther value, [MaybeNullWhen(false)] out ClampedNumeric<T> result) where TOther : INumberBase<TOther>
     {
-        throw new NotImplementedException();
+        // CreateTruncating will never throw, so this always succeeds.
+        var tValue = T.CreateTruncating(value);
+        result = new ClampedNumeric<T>(tValue);
+        return true;
     }
 
     public static bool TryConvertToChecked<TOther>(ClampedNumeric<T> value, [MaybeNullWhen(false)] out TOther result) where TOther : INumberBase<TOther>
     {
-        throw new NotImplementedException();
+        try
+        {
+            result = TOther.CreateChecked(value._value);
+            return true;
+        }
+        catch (OverflowException)
+        {
+            result = default;
+            return false;
+        }
     }
 
     public static bool TryConvertToSaturating<TOther>(ClampedNumeric<T> value, [MaybeNullWhen(false)] out TOther result) where TOther : INumberBase<TOther>
     {
-        throw new NotImplementedException();
+        // CreateSaturating on the target type will never throw.
+        result = TOther.CreateSaturating(value._value);
+        return true;
     }
 
     public static bool TryConvertToTruncating<TOther>(ClampedNumeric<T> value, [MaybeNullWhen(false)] out TOther result) where TOther : INumberBase<TOther>
     {
-        throw new NotImplementedException();
+        // CreateTruncating on the target type will never throw.
+        result = TOther.CreateTruncating(value._value);
+        return true;
     }
 
     public bool Equals(ClampedNumeric<T> other)
