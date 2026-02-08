@@ -132,98 +132,57 @@ IMinMaxValue<T>
 
     public int CompareTo(object? obj)
     {
-        throw new NotImplementedException();
+        if (obj is ClampedNumeric<T> other)
+        {
+            return CompareTo(other);
+        }
+
+        if (obj is null)
+        {
+            return 1;
+        }
+
+        throw new ArgumentException($"Object is not a {nameof(ClampedNumeric<T>)}", nameof(obj));
     }
 
     public int CompareTo(ClampedNumeric<T> other)
     {
-        throw new NotImplementedException();
+        return _value.CompareTo(other._value);
     }
 
-    public static bool IsCanonical(ClampedNumeric<T> value)
-    {
-        throw new NotImplementedException();
-    }
+    public static bool IsCanonical(ClampedNumeric<T> value) => T.IsCanonical(value._value);
 
-    public static bool IsComplexNumber(ClampedNumeric<T> value)
-    {
-        throw new NotImplementedException();
-    }
+    public static bool IsComplexNumber(ClampedNumeric<T> value) => T.IsComplexNumber(value._value);
 
-    public static bool IsEvenInteger(ClampedNumeric<T> value)
-    {
-        throw new NotImplementedException();
-    }
+    public static bool IsEvenInteger(ClampedNumeric<T> value) => T.IsEvenInteger(value._value);
 
-    public static bool IsFinite(ClampedNumeric<T> value)
-    {
-        throw new NotImplementedException();
-    }
+    public static bool IsFinite(ClampedNumeric<T> value) => T.IsFinite(value._value);
 
-    public static bool IsImaginaryNumber(ClampedNumeric<T> value)
-    {
-        throw new NotImplementedException();
-    }
+    public static bool IsImaginaryNumber(ClampedNumeric<T> value) => T.IsImaginaryNumber(value._value);
 
-    public static bool IsInfinity(ClampedNumeric<T> value)
-    {
-        throw new NotImplementedException();
-    }
+    public static bool IsInfinity(ClampedNumeric<T> value) => T.IsInfinity(value._value);
 
-    public static bool IsInteger(ClampedNumeric<T> value)
-    {
-        throw new NotImplementedException();
-    }
+    public static bool IsInteger(ClampedNumeric<T> value) => T.IsInteger(value._value);
 
-    public static bool IsNaN(ClampedNumeric<T> value)
-    {
-        throw new NotImplementedException();
-    }
+    public static bool IsNaN(ClampedNumeric<T> value) => T.IsNaN(value._value);
 
-    public static bool IsNegative(ClampedNumeric<T> value)
-    {
-        throw new NotImplementedException();
-    }
+    public static bool IsNegative(ClampedNumeric<T> value) => T.IsNegative(value._value);
 
-    public static bool IsNegativeInfinity(ClampedNumeric<T> value)
-    {
-        throw new NotImplementedException();
-    }
+    public static bool IsNegativeInfinity(ClampedNumeric<T> value) => T.IsNegativeInfinity(value._value);
 
-    public static bool IsNormal(ClampedNumeric<T> value)
-    {
-        throw new NotImplementedException();
-    }
+    public static bool IsNormal(ClampedNumeric<T> value) => T.IsNormal(value._value);
 
-    public static bool IsOddInteger(ClampedNumeric<T> value)
-    {
-        throw new NotImplementedException();
-    }
+    public static bool IsOddInteger(ClampedNumeric<T> value) => T.IsOddInteger(value._value);
 
-    public static bool IsPositive(ClampedNumeric<T> value)
-    {
-        throw new NotImplementedException();
-    }
+    public static bool IsPositive(ClampedNumeric<T> value) => T.IsPositive(value._value);
 
-    public static bool IsPositiveInfinity(ClampedNumeric<T> value)
-    {
-        throw new NotImplementedException();
-    }
+    public static bool IsPositiveInfinity(ClampedNumeric<T> value) => T.IsPositiveInfinity(value._value);
 
-    public static bool IsRealNumber(ClampedNumeric<T> value)
-    {
-        throw new NotImplementedException();
-    }
+    public static bool IsRealNumber(ClampedNumeric<T> value) => T.IsRealNumber(value._value);
 
-    public static bool IsSubnormal(ClampedNumeric<T> value)
-    {
-        throw new NotImplementedException();
-    }
+    public static bool IsSubnormal(ClampedNumeric<T> value) => T.IsSubnormal(value._value);
 
-    public static bool IsZero(ClampedNumeric<T> value)
-    {
-        throw new NotImplementedException();
-    }
+    public static bool IsZero(ClampedNumeric<T> value) => T.IsZero(value._value);
 
     public static ClampedNumeric<T> MaxMagnitude(ClampedNumeric<T> x, ClampedNumeric<T> y)
     {
@@ -327,18 +286,18 @@ IMinMaxValue<T>
 
     public bool Equals(ClampedNumeric<T> other)
     {
-        throw new NotImplementedException();
+        return _value == other._value;
     }
 
     // Necessary for == and != operators
-    public override bool Equals(object? other)
+    public override bool Equals(object? obj)
     {
-        return other is ClampedNumeric<T> numeric && Equals(numeric);
+        return obj is ClampedNumeric<T> other && Equals(other);
     }
 
     // Necessary for == and != operators
     public override int GetHashCode()
     {
-        throw new NotImplementedException();
+        return _value.GetHashCode();
     }
 }
