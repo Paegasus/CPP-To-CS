@@ -17,5 +17,4 @@ public interface IFixedPoint<TSigned, TUnsigned>
     public TUnsigned ToUnsignedInteger();
     public float ToFloat();
 	public double ToDouble();
-    public TSigned ClampRawValue<T>(T rawValue) where T : IBinaryInteger<T>;
 }
