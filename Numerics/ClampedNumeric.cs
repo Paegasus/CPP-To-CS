@@ -8,7 +8,9 @@ namespace UI.Numerics;
 /// A wrapper for a numeric type that ensures all arithmetic operations
 /// are clamped within the range of the underlying type T.
 /// </summary>
-public readonly struct ClampedNumeric<T> : INumber<ClampedNumeric<T>>, IEquatable<ClampedNumeric<T>> where T : IBinaryInteger<T>
+public readonly struct ClampedNumeric<T> : INumber<ClampedNumeric<T>>, IEquatable<ClampedNumeric<T>> where T : 
+IBinaryInteger<T>,
+IMinMaxValue<T>
 {
     private readonly T _value;
 
@@ -17,94 +19,105 @@ public readonly struct ClampedNumeric<T> : INumber<ClampedNumeric<T>>, IEquatabl
         _value = value;
     }
 
-    public static ClampedNumeric<T> One => throw new NotImplementedException();
+    public static ClampedNumeric<T> One => new(T.One);
 
-    public static int Radix => throw new NotImplementedException();
+    public static int Radix => T.Radix;
 
-    public static ClampedNumeric<T> Zero => throw new NotImplementedException();
+    public static ClampedNumeric<T> Zero => new(T.Zero);
 
-    public static ClampedNumeric<T> AdditiveIdentity => throw new NotImplementedException();
+    public static ClampedNumeric<T> AdditiveIdentity => new(T.AdditiveIdentity);
 
-    public static ClampedNumeric<T> MultiplicativeIdentity => throw new NotImplementedException();
+    public static ClampedNumeric<T> MultiplicativeIdentity => new(T.MultiplicativeIdentity);
 
-    // Example: Operator overload
+    public static ClampedNumeric<T> operator +(ClampedNumeric<T> value)
+    {
+        return value; // Unary plus is a no-op.
+    }
+
     public static ClampedNumeric<T> operator +(ClampedNumeric<T> left, ClampedNumeric<T> right)
     {
-        // The C++ code promotes to a wider type for the intermediate calculation to prevent overflow, then clamps the result.
-        // .NET's CreateSaturating handles this kind of logic for us.
         var result = T.CreateSaturating(left._value + right._value);
 
         return new ClampedNumeric<T>(result);
     }
 
-    public static bool operator >(ClampedNumeric<T> left, ClampedNumeric<T> right)
+    public static ClampedNumeric<T> operator -(ClampedNumeric<T> value)
     {
-        throw new NotImplementedException();
-    }
+        var result = T.CreateSaturating(T.Zero - value._value);
 
-    public static bool operator >=(ClampedNumeric<T> left, ClampedNumeric<T> right)
-    {
-        throw new NotImplementedException();
-    }
-
-    public static bool operator <(ClampedNumeric<T> left, ClampedNumeric<T> right)
-    {
-        throw new NotImplementedException();
-    }
-
-    public static bool operator <=(ClampedNumeric<T> left, ClampedNumeric<T> right)
-    {
-        throw new NotImplementedException();
-    }
-
-    public static ClampedNumeric<T> operator %(ClampedNumeric<T> left, ClampedNumeric<T> right)
-    {
-        throw new NotImplementedException();
-    }
-
-    public static ClampedNumeric<T> operator --(ClampedNumeric<T> value)
-    {
-        throw new NotImplementedException();
-    }
-
-    public static ClampedNumeric<T> operator /(ClampedNumeric<T> left, ClampedNumeric<T> right)
-    {
-        throw new NotImplementedException();
-    }
-
-    public static bool operator ==(ClampedNumeric<T> left, ClampedNumeric<T> right)
-    {
-        throw new NotImplementedException();
-    }
-
-    public static bool operator !=(ClampedNumeric<T> left, ClampedNumeric<T> right)
-    {
-        throw new NotImplementedException();
-    }
-
-    public static ClampedNumeric<T> operator ++(ClampedNumeric<T> value)
-    {
-        throw new NotImplementedException();
-    }
-
-    public static ClampedNumeric<T> operator *(ClampedNumeric<T> left, ClampedNumeric<T> right)
-    {
-        throw new NotImplementedException();
+        return new ClampedNumeric<T>(result);
     }
 
     public static ClampedNumeric<T> operator -(ClampedNumeric<T> left, ClampedNumeric<T> right)
     {
-        throw new NotImplementedException();
+        var result = T.CreateSaturating(left._value - right._value);
+
+        return new ClampedNumeric<T>(result);
     }
 
-    public static ClampedNumeric<T> operator -(ClampedNumeric<T> value)
+    public static ClampedNumeric<T> operator ++(ClampedNumeric<T> value)
     {
-        throw new NotImplementedException();
+        var result = T.CreateSaturating(value._value + T.One);
+        return new ClampedNumeric<T>(result);
     }
 
-    public static ClampedNumeric<T> operator +(ClampedNumeric<T> value)
+    public static ClampedNumeric<T> operator --(ClampedNumeric<T> value)
     {
-        throw new NotImplementedException();
+        var result = T.CreateSaturating(value._value - T.One);
+        return new ClampedNumeric<T>(result);
+    }
+
+    public static ClampedNumeric<T> operator *(ClampedNumeric<T> left, ClampedNumeric<T> right)
+    {
+        var result = T.CreateSaturating(left._value * right._value);
+        return new ClampedNumeric<T>(result);
+    }
+
+    public static ClampedNumeric<T> operator /(ClampedNumeric<T> left, ClampedNumeric<T> right)
+    {
+        if (T.IsNegative(T.MinValue) &&
+            right._value == (T.Zero - T.One) &&
+            left._value == T.MinValue)
+        {
+            return new ClampedNumeric<T>(T.MaxValue);
+        }
+
+        return new ClampedNumeric<T>(left._value / right._value);
+    }
+
+    public static ClampedNumeric<T> operator %(ClampedNumeric<T> left, ClampedNumeric<T> right)
+    {
+        return new ClampedNumeric<T>(left._value % right._value);
+    }
+
+    public static bool operator >(ClampedNumeric<T> left, ClampedNumeric<T> right)
+    {
+        return left._value > right._value;
+    }
+
+    public static bool operator >=(ClampedNumeric<T> left, ClampedNumeric<T> right)
+    {
+        return left._value >= right._value;
+    }
+
+    public static bool operator <(ClampedNumeric<T> left, ClampedNumeric<T> right)
+    {
+        return left._value < right._value;
+    }
+
+    public static bool operator <=(ClampedNumeric<T> left, ClampedNumeric<T> right)
+    {
+        return left._value <= right._value;
+    }
+
+    public static bool operator ==(ClampedNumeric<T> left, ClampedNumeric<T> right)
+    {
+        return left.Equals(right);
+    }
+
+    public static bool operator !=(ClampedNumeric<T> left, ClampedNumeric<T> right)
+    {
+        return !left.Equals(right);
     }
 
     static ClampedNumeric<T> INumber<ClampedNumeric<T>>.Clamp(ClampedNumeric<T> value, ClampedNumeric<T> min, ClampedNumeric<T> max)
