@@ -38,6 +38,45 @@ public struct LayoutUnit : IFixedPoint<int, uint>
 		m_Value = 0;
 	}
 
+    public LayoutUnit(int value)
+    {
+        m_Value = value;
+    }
+
+    public LayoutUnit(short value)
+    {
+        m_Value = value;
+    }
+
+    public LayoutUnit(sbyte value)
+    {
+        m_Value = value;
+    }
+
+    public LayoutUnit(uint value) => SaturatedSet(value);
+    public LayoutUnit(ushort value) => SaturatedSet(value);
+    public LayoutUnit(byte value) => SaturatedSet(value);
+
+    public LayoutUnit(long value)
+    {
+        m_Value = ClampRawValue(value * FixedPointDenominator);
+    }
+
+    public LayoutUnit(ulong value)
+    {
+        m_Value = ClampRawValue(value * (ulong)FixedPointDenominator);
+    }
+
+    public LayoutUnit(float value)
+    {
+        m_Value = ClampRawValue(value * FixedPointDenominator);
+    }
+
+    public LayoutUnit(double value)
+    {
+        m_Value = ClampRawValue(value * FixedPointDenominator);
+    }
+
     public readonly int RawValue()
     {
         return m_Value;
