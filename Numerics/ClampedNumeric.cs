@@ -8,9 +8,7 @@ namespace UI.Numerics;
 /// A wrapper for a numeric type that ensures all arithmetic operations
 /// are clamped within the range of the underlying type T.
 /// </summary>
-public readonly struct ClampedNumeric<T> : INumber<ClampedNumeric<T>>, IEquatable<ClampedNumeric<T>> where T : 
-IBinaryInteger<T>,
-IMinMaxValue<T>
+public readonly struct ClampedNumeric<T> : INumber<ClampedNumeric<T>>, IEquatable<ClampedNumeric<T>> where T : IBinaryInteger<T>, IMinMaxValue<T>
 {
     private readonly T _value;
 
@@ -120,16 +118,6 @@ IMinMaxValue<T>
         return !left.Equals(right);
     }
 
-    static ClampedNumeric<T> INumber<ClampedNumeric<T>>.Clamp(ClampedNumeric<T> value, ClampedNumeric<T> min, ClampedNumeric<T> max)
-    {
-        return new ClampedNumeric<T>(T.Clamp(value._value, min._value, max._value));
-    }
-
-    static ClampedNumeric<T> INumberBase<ClampedNumeric<T>>.Abs(ClampedNumeric<T> value)
-    {
-        return new ClampedNumeric<T>(T.Abs(value._value));
-    }
-
     public int CompareTo(object? obj)
     {
         if (obj is ClampedNumeric<T> other)
@@ -186,20 +174,35 @@ IMinMaxValue<T>
 
     public static ClampedNumeric<T> MaxMagnitude(ClampedNumeric<T> x, ClampedNumeric<T> y)
     {
-        throw new NotImplementedException();
+        return new ClampedNumeric<T>(T.MaxMagnitude(x._value, y._value));
     }
 
     public static ClampedNumeric<T> MaxMagnitudeNumber(ClampedNumeric<T> x, ClampedNumeric<T> y)
     {
-        throw new NotImplementedException();
+        return new ClampedNumeric<T>(T.MaxMagnitudeNumber(x._value, y._value));
     }
 
     public static ClampedNumeric<T> MinMagnitude(ClampedNumeric<T> x, ClampedNumeric<T> y)
     {
-        throw new NotImplementedException();
+        return new ClampedNumeric<T>(T.MinMagnitude(x._value, y._value));
     }
 
     public static ClampedNumeric<T> MinMagnitudeNumber(ClampedNumeric<T> x, ClampedNumeric<T> y)
+    {
+        return new ClampedNumeric<T>(T.MinMagnitudeNumber(x._value, y._value));
+    }
+
+    public static ClampedNumeric<T> Parse(string s, IFormatProvider? provider)
+    {
+        throw new NotImplementedException();
+    }
+
+    public static ClampedNumeric<T> Parse(string s, NumberStyles style, IFormatProvider? provider)
+    {
+        throw new NotImplementedException();
+    }
+
+    public static ClampedNumeric<T> Parse(ReadOnlySpan<char> s, IFormatProvider? provider)
     {
         throw new NotImplementedException();
     }
@@ -209,7 +212,22 @@ IMinMaxValue<T>
         throw new NotImplementedException();
     }
 
-    public static ClampedNumeric<T> Parse(string s, NumberStyles style, IFormatProvider? provider)
+    public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider? provider, [MaybeNullWhen(false)] out ClampedNumeric<T> result)
+    {
+        throw new NotImplementedException();
+    }
+
+    public static bool TryParse(ReadOnlySpan<char> s, NumberStyles style, IFormatProvider? provider, [MaybeNullWhen(false)] out ClampedNumeric<T> result)
+    {
+        throw new NotImplementedException();
+    }
+
+    public static bool TryParse([NotNullWhen(true)] string? s, IFormatProvider? provider, [MaybeNullWhen(false)] out ClampedNumeric<T> result)
+    {
+        throw new NotImplementedException();
+    }
+
+    public static bool TryParse([NotNullWhen(true)] string? s, NumberStyles style, IFormatProvider? provider, [MaybeNullWhen(false)] out ClampedNumeric<T> result)
     {
         throw new NotImplementedException();
     }
@@ -244,42 +262,12 @@ IMinMaxValue<T>
         throw new NotImplementedException();
     }
 
-    public static bool TryParse(ReadOnlySpan<char> s, NumberStyles style, IFormatProvider? provider, [MaybeNullWhen(false)] out ClampedNumeric<T> result)
-    {
-        throw new NotImplementedException();
-    }
-
-    public static bool TryParse([NotNullWhen(true)] string? s, NumberStyles style, IFormatProvider? provider, [MaybeNullWhen(false)] out ClampedNumeric<T> result)
-    {
-        throw new NotImplementedException();
-    }
-
     public bool TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format, IFormatProvider? provider)
     {
         throw new NotImplementedException();
     }
 
     public string ToString(string? format, IFormatProvider? formatProvider)
-    {
-        throw new NotImplementedException();
-    }
-
-    public static ClampedNumeric<T> Parse(ReadOnlySpan<char> s, IFormatProvider? provider)
-    {
-        throw new NotImplementedException();
-    }
-
-    public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider? provider, [MaybeNullWhen(false)] out ClampedNumeric<T> result)
-    {
-        throw new NotImplementedException();
-    }
-
-    public static ClampedNumeric<T> Parse(string s, IFormatProvider? provider)
-    {
-        throw new NotImplementedException();
-    }
-
-    public static bool TryParse([NotNullWhen(true)] string? s, IFormatProvider? provider, [MaybeNullWhen(false)] out ClampedNumeric<T> result)
     {
         throw new NotImplementedException();
     }
@@ -299,5 +287,15 @@ IMinMaxValue<T>
     public override int GetHashCode()
     {
         return _value.GetHashCode();
+    }
+
+    static ClampedNumeric<T> INumberBase<ClampedNumeric<T>>.Abs(ClampedNumeric<T> value)
+    {
+        return new ClampedNumeric<T>(T.Abs(value._value));
+    }
+
+    static ClampedNumeric<T> INumber<ClampedNumeric<T>>.Clamp(ClampedNumeric<T> value, ClampedNumeric<T> min, ClampedNumeric<T> max)
+    {
+        return new ClampedNumeric<T>(T.Clamp(value._value, min._value, max._value));
     }
 }
