@@ -38,6 +38,26 @@ public struct LayoutUnit : IFixedPoint<int, uint>
 		m_Value = 0;
 	}
 
+    public LayoutUnit(T value) where T : IBinaryInteger<T>, ISignedNumber<T>
+    {
+        m_Value = ClampRawValue(long.CreateSaturating(value) * FixedPointDenominator);
+    }
+
+    public LayoutUnit(T value) where T : IBinaryInteger<T>, IUnsignedNumber<T>
+    {
+        m_Value = ClampRawValue(ulong.CreateSaturating(value) * (ulong)FixedPointDenominator);
+    }
+
+    public LayoutUnit(float value)
+    {
+        m_Value = ClampRawValue(value * FixedPointDenominator);
+    }
+
+    public LayoutUnit(double value)
+    {
+        m_Value = ClampRawValue(value * FixedPointDenominator);
+    }
+
     public readonly int RawValue()
     {
         return m_Value;
@@ -117,6 +137,16 @@ public struct LayoutUnit : IFixedPoint<int, uint>
 	{
         return Conversion.SaturatedCast<int, T>(value);
 	}
+
+    public static int ClampRawValue(float value)
+    {
+        return Conversion.SaturatedCast<int, float>(value);
+    }
+
+    public static int ClampRawValue(double value)
+    {
+        return Conversion.SaturatedCast<int, double>(value);
+    }
 
 	public static LayoutUnit FromRawValue(int value)
 	{
