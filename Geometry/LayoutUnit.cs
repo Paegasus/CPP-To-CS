@@ -102,14 +102,12 @@ public struct LayoutUnit : IFixedPoint<int, uint>
 
 	public readonly int ToInteger()
 	{
-		unchecked
-		{
-			return m_Value / FixedPointDenominator;
-		}
+		return m_Value / FixedPointDenominator;
 	}
 
 	public readonly uint ToUnsignedInteger()
 	{
+        // unchecked is required here to handle the conversion of negative values correctly
 		unchecked
 		{
 			return (uint)(m_Value / FixedPointDenominator);
@@ -159,4 +157,26 @@ public struct LayoutUnit : IFixedPoint<int, uint>
 		// return FromRawValue(Conversion.SaturatedCast<int, T>(raw_value));
 		return FromRawValue(LayoutUnit.ClampRawValue<T>(raw_value));
 	}
+
+    // Note: Maybe we should create one static instance instead of always creating one in Max() and Min()
+
+    static LayoutUnit Max()
+    {
+        return FromRawValue(RawValueMax);
+    }
+
+    static LayoutUnit Min()
+    {
+        return FromRawValue(RawValueMin);
+    }
+
+    public static LayoutUnit NearlyMax()
+    {
+        return FromRawValue(RawValueMax - FixedPointDenominator / 2);
+    }
+
+    public static LayoutUnit NearlyMin()
+    {
+        return FromRawValue(RawValueMin + FixedPointDenominator / 2);
+    }
 }
