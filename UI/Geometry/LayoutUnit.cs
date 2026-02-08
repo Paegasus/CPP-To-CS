@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Numerics;
 using UI.Numerics;
 
@@ -32,10 +33,9 @@ public struct LayoutUnit : IFixedPoint<int, uint>
 
 	public void SetRawValue(long value)
 	{
-		// We should report overflow if outside range.
-		//if (value > int.MaxValue || value < int.MinValue)
-		//	throw new OverflowException("Raw value out of range for LayoutUnit.");
-
+#if DEBUG
+        Debug.WriteLineIf(value > int.MaxValue || value < int.MinValue, $"LayoutUnit overflow: {value} is out of range for a 32-bit integer.");
+#endif
 		m_Value = (int)value;
 	}
 
@@ -65,14 +65,6 @@ public struct LayoutUnit : IFixedPoint<int, uint>
 		return (double)m_Value / FixedPointDenominator;
 	}
 
-    // Original C++ version of ClampRawValue()
-    /*
-    template <typename T>
-    static constexpr Storage ClampRawValue(T raw_value)
-    {
-	    return base::saturated_cast<Storage>(raw_value);
-    }
-    */
 	public readonly int ClampRawValue<T>(T rawValue) where T : IBinaryInteger<T>
 	{
         return Conversion.SaturatedCast<int, T>(rawValue);
