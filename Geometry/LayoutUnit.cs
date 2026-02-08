@@ -30,26 +30,31 @@ public struct LayoutUnit : IFixedPoint<int, uint>
     public const int RawValueMin = int.MinValue;
     public const int IntegerMax = RawValueMax / FixedPointDenominator;
     public const int IntegerMin = RawValueMin / FixedPointDenominator;
+
+    public static readonly LayoutUnit Max = FromRawValue(RawValueMax);
+    public static readonly LayoutUnit Min = FromRawValue(RawValueMin);
+    public static readonly LayoutUnit NearlyMax = FromRawValue(RawValueMax - FixedPointDenominator / 2);
+    public static readonly LayoutUnit NearlyMin = FromRawValue(RawValueMin + FixedPointDenominator / 2);
 	
 	private int m_Value;
 
 	public LayoutUnit() { m_Value = 0; }
 
-    // Signed Integer Constructors
+    // Constructors from signed integral types <= sizeof(int)
     public LayoutUnit(int value) { m_Value = value; }
     public LayoutUnit(short value) { m_Value = value; }
     public LayoutUnit(sbyte value) { m_Value = value; }
 
-    // Unsigned Integer Constructors
+    // Constructors from unsigned integral types <= sizeof(int)
     public LayoutUnit(uint value) => SaturatedSet(value);
     public LayoutUnit(ushort value) => SaturatedSet(value);
     public LayoutUnit(byte value) => SaturatedSet(value);
 
-    // Long Constructors
+    // Constructors from integral types larger than int
     public LayoutUnit(long value) { m_Value = ClampRawValue(value * FixedPointDenominator); }
     public LayoutUnit(ulong value) { m_Value = ClampRawValue(value * FixedPointDenominator); }
 
-    // Decimal Constructors
+    // Constructors from floating-point types
     public LayoutUnit(float value) { m_Value = ClampRawValue(value * FixedPointDenominator); }
     public LayoutUnit(double value) { m_Value = ClampRawValue(value * FixedPointDenominator); }
 
@@ -157,26 +162,4 @@ public struct LayoutUnit : IFixedPoint<int, uint>
 		// return FromRawValue(Conversion.SaturatedCast<int, T>(raw_value));
 		return FromRawValue(LayoutUnit.ClampRawValue<T>(raw_value));
 	}
-
-    // Note: Maybe we should create one static instance instead of always creating one in Max() and Min()
-
-    static LayoutUnit Max()
-    {
-        return FromRawValue(RawValueMax);
-    }
-
-    static LayoutUnit Min()
-    {
-        return FromRawValue(RawValueMin);
-    }
-
-    public static LayoutUnit NearlyMax()
-    {
-        return FromRawValue(RawValueMax - FixedPointDenominator / 2);
-    }
-
-    public static LayoutUnit NearlyMin()
-    {
-        return FromRawValue(RawValueMin + FixedPointDenominator / 2);
-    }
 }
