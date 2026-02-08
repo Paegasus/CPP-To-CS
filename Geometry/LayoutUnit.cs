@@ -39,6 +39,35 @@ public struct LayoutUnit : IFixedPoint<int, uint>
 		m_Value = (int)value;
 	}
 
+    public void SaturatedSet(int value)
+    {
+        if (value > IntegerMax)
+        {
+            m_Value = RawValueMax;
+        }
+        else if (value < IntegerMin)
+        {
+            m_Value = RawValueMin;
+        }
+        else
+        {
+            m_Value = value << FractionalBits;
+        }
+    }
+
+    public void SaturatedSet(uint value)
+    {
+        // Unsigned values can't be negative, so we only need to check the upper bound.
+        if (value >= (uint)IntegerMax)
+        {
+            m_Value = RawValueMax;
+        }
+        else
+        {
+            m_Value = (int)(value << FractionalBits);
+        }
+    }
+
 	public readonly int ToInteger()
 	{
 		unchecked
