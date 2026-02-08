@@ -73,7 +73,6 @@ public struct LayoutUnit : IFixedPoint<int, uint>
 	    return base::saturated_cast<Storage>(raw_value);
     }
     */
-    
 	public readonly int ClampRawValue<T>(T rawValue) where T : IBinaryInteger<T>
 	{
         return Conversion.SaturatedCast<int, T>(rawValue);
