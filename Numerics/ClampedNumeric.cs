@@ -194,42 +194,81 @@ public readonly struct ClampedNumeric<T> : INumber<ClampedNumeric<T>>, IEquatabl
 
     public static ClampedNumeric<T> Parse(string s, IFormatProvider? provider)
     {
-        throw new NotImplementedException();
+        return new ClampedNumeric<T>(T.Parse(s, provider));
     }
 
     public static ClampedNumeric<T> Parse(string s, NumberStyles style, IFormatProvider? provider)
     {
-        throw new NotImplementedException();
+        return new ClampedNumeric<T>(T.Parse(s, style, provider));
     }
 
     public static ClampedNumeric<T> Parse(ReadOnlySpan<char> s, IFormatProvider? provider)
     {
-        throw new NotImplementedException();
+        return new ClampedNumeric<T>(T.Parse(s, provider));
     }
 
     public static ClampedNumeric<T> Parse(ReadOnlySpan<char> s, NumberStyles style, IFormatProvider? provider)
     {
-        throw new NotImplementedException();
+        return new ClampedNumeric<T>(T.Parse(s, style, provider));
     }
 
     public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider? provider, [MaybeNullWhen(false)] out ClampedNumeric<T> result)
     {
-        throw new NotImplementedException();
+        if (T.TryParse(s, provider, out var value))
+        {
+            result = new ClampedNumeric<T>(value);
+            return true;
+        }
+        result = default;
+        return false;
     }
 
     public static bool TryParse(ReadOnlySpan<char> s, NumberStyles style, IFormatProvider? provider, [MaybeNullWhen(false)] out ClampedNumeric<T> result)
     {
-        throw new NotImplementedException();
+        if (T.TryParse(s, style, provider, out var value))
+        {
+            result = new ClampedNumeric<T>(value);
+            return true;
+        }
+        result = default;
+        return false;
     }
 
     public static bool TryParse([NotNullWhen(true)] string? s, IFormatProvider? provider, [MaybeNullWhen(false)] out ClampedNumeric<T> result)
     {
-        throw new NotImplementedException();
+        if (T.TryParse(s, provider, out var value))
+        {
+            result = new ClampedNumeric<T>(value);
+            return true;
+        }
+        result = default;
+        return false;
     }
 
     public static bool TryParse([NotNullWhen(true)] string? s, NumberStyles style, IFormatProvider? provider, [MaybeNullWhen(false)] out ClampedNumeric<T> result)
     {
-        throw new NotImplementedException();
+        if (T.TryParse(s, style, provider, out var value))
+        {
+            result = new ClampedNumeric<T>(value);
+            return true;
+        }
+        result = default;
+        return false;
+    }
+
+    public bool TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format, IFormatProvider? provider)
+    {
+        return _value.TryFormat(destination, out charsWritten, format, provider);
+    }
+
+    public override string ToString()
+    {
+        return _value.ToString() ?? string.Empty;
+    }
+
+    public string ToString(string? format, IFormatProvider? formatProvider)
+    {
+        return _value.ToString(format, formatProvider);
     }
 
     public static bool TryConvertFromChecked<TOther>(TOther value, [MaybeNullWhen(false)] out ClampedNumeric<T> result) where TOther : INumberBase<TOther>
@@ -258,16 +297,6 @@ public readonly struct ClampedNumeric<T> : INumber<ClampedNumeric<T>>, IEquatabl
     }
 
     public static bool TryConvertToTruncating<TOther>(ClampedNumeric<T> value, [MaybeNullWhen(false)] out TOther result) where TOther : INumberBase<TOther>
-    {
-        throw new NotImplementedException();
-    }
-
-    public bool TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format, IFormatProvider? provider)
-    {
-        throw new NotImplementedException();
-    }
-
-    public string ToString(string? format, IFormatProvider? formatProvider)
     {
         throw new NotImplementedException();
     }
