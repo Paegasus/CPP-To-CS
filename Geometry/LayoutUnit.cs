@@ -47,7 +47,7 @@ public struct LayoutUnit : IFixedPoint<int, uint>
 
     // Long Constructors
     public LayoutUnit(long value) { m_Value = ClampRawValue(value * FixedPointDenominator); }
-    public LayoutUnit(ulong value) { m_Value = ClampRawValue(value * (ulong)FixedPointDenominator); }
+    public LayoutUnit(ulong value) { m_Value = ClampRawValue(value * FixedPointDenominator); }
 
     // Decimal Constructors
     public LayoutUnit(float value) { m_Value = ClampRawValue(value * FixedPointDenominator); }
