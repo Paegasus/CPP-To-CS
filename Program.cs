@@ -12,6 +12,10 @@ public static class Program
 
         Console.WriteLine(test.ToString());
 
+        test.SetRawValue(64);
+
+        Console.WriteLine(test.ToString());
+
         Console.WriteLine(LayoutUnit.Max.ToString());
 
         /*
