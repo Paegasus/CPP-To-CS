@@ -310,6 +310,8 @@ public struct LayoutUnit : IFixedPoint<int, uint>, IEquatable<LayoutUnit>
     public static bool operator >(int a, LayoutUnit b) => new LayoutUnit(a) > b;
     public static bool operator ==(LayoutUnit a, int b) => a == new LayoutUnit(b);
     public static bool operator ==(int a, LayoutUnit b) => new LayoutUnit(a) == b;
+    public static bool operator !=(LayoutUnit a, int b) => a != new LayoutUnit(b);
+    public static bool operator !=(int a, LayoutUnit b) => new LayoutUnit(a) != b;
 
     public static double operator *(LayoutUnit a, double b) => a.ToDouble() * b;
     public static float operator *(LayoutUnit a, float b) => a.ToFloat() * b;
