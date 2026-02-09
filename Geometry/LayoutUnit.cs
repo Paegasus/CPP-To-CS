@@ -31,6 +31,11 @@ public struct LayoutUnit : IFixedPoint<int, uint>
     public const int IntegerMax = RawValueMax / FixedPointDenominator;
     public const int IntegerMin = RawValueMin / FixedPointDenominator;
 
+    // kIndefiniteSize is a special value used within layout code.
+    // It is typical within layout to have sizes which are only allowed to be non-negative or "indefinite".
+    // We use the value of "-1" to represent these indefinite values.
+    public static readonly LayoutUnit IndefiniteSize = new(-1);
+
     public static readonly LayoutUnit Max = FromRawValue(RawValueMax);
     public static readonly LayoutUnit Min = FromRawValue(RawValueMin);
     public static readonly LayoutUnit NearlyMax = FromRawValue(RawValueMax - FixedPointDenominator / 2);
@@ -41,9 +46,9 @@ public struct LayoutUnit : IFixedPoint<int, uint>
 	public LayoutUnit() { m_Value = 0; }
 
     // Constructors from signed integral types <= sizeof(int)
-    public LayoutUnit(int value) { m_Value = value; }
-    public LayoutUnit(short value) { m_Value = value; }
-    public LayoutUnit(sbyte value) { m_Value = value; }
+    public LayoutUnit(int value) => SaturatedSet(value);
+    public LayoutUnit(short value) => SaturatedSet(value);
+    public LayoutUnit(sbyte value) => SaturatedSet(value);
 
     // Constructors from unsigned integral types <= sizeof(int)
     public LayoutUnit(uint value) => SaturatedSet(value);
