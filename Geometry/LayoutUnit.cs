@@ -222,14 +222,6 @@ public struct LayoutUnit : IFixedPoint<int, uint>
         return FromRawValue(m_Value < RawValueMax ? m_Value + 1 : m_Value);
     }
 
-    public readonly int Floor() 
-    {
-        if (m_Value <= RawValueMin + FixedPointDenominator - 1)
-            return IntegerMin;
-        
-        return m_Value >> FractionalBits;
-    }
-
     public readonly int Ceil()
     {
         if (m_Value >= RawValueMax - FixedPointDenominator + 1)
@@ -246,8 +238,38 @@ public struct LayoutUnit : IFixedPoint<int, uint>
         return ToInteger() + ((Fraction().RawValue() + (FixedPointDenominator / 2)) >> FractionalBits);
     }
 
-   public override readonly string ToString()
-   {
+    public readonly int Floor() 
+    {
+        if (m_Value <= RawValueMin + FixedPointDenominator - 1)
+            return IntegerMin;
+        
+        return m_Value >> FractionalBits;
+    }
+
+    public readonly LayoutUnit ClampNegativeToZero()
+    {
+        return m_Value < 0 ? new LayoutUnit() : this;
+    }
+
+    public readonly LayoutUnit ClampPositiveToZero()
+    {
+        return m_Value > 0 ? new LayoutUnit() : this;
+    }
+
+    public readonly LayoutUnit ClampIndefiniteToZero()
+    {
+        if (m_Value == -FixedPointDenominator)
+            return new LayoutUnit();
+
+#if DEBUG
+        Debug.WriteLineIf(m_Value >= 0, "ClampIndefiniteToZero called on a negative value that is not the 'indefinite' sentinel.");
+#endif
+
+        return this;
+    }
+
+    public override readonly string ToString()
+    {
         string formatted = ToDouble().ToString("G14");
 
         if (m_Value == Max.RawValue()) return $"Max({formatted})";
