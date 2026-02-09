@@ -58,7 +58,7 @@ public struct LayoutUnit : IFixedPoint<int, uint>
     public LayoutUnit(float value) { m_Value = ClampRawValue(value * FixedPointDenominator); }
     public LayoutUnit(double value) { m_Value = ClampRawValue(value * FixedPointDenominator); }
 
-    public readonly int RawValue => m_Value;
+    public readonly int RawValue() => m_Value;
 
 	public void SetRawValue(int value) => m_Value = value;
 
@@ -167,6 +167,32 @@ public struct LayoutUnit : IFixedPoint<int, uint>
 		return FromRawValue(LayoutUnit.ClampRawValue<T>(raw_value));
 	}
 
+    // The specified `value` is rounded up to a multiple of `Epsilon()`, and is
+    // clamped by `Min()` and `Max()`. A NaN `value` produces `FixedPoint(0)`.
+    public static LayoutUnit FromFloatCeil(float value)
+    {
+        return FromRawValue(ClampRawValue(MathF.Ceiling(value * FixedPointDenominator)));
+    }
+
+    // The specified `value` is truncated to a multiple of `Epsilon()`, and is
+    // clamped by `Min()` and `Max()`. A NaN `value` produces `FixedPoint(0)`.
+    public static LayoutUnit FromFloatFloor(float value)
+    {
+        return FromRawValue(ClampRawValue(MathF.Floor(value * FixedPointDenominator)));
+    }
+
+    // The specified `value` is rounded to a multiple of `Epsilon()`, and is
+    // clamped by `Min()` and `Max()`. A NaN `value` produces `FixedPoint(0)`.
+    public static LayoutUnit FromFloatRound(float value)
+    {
+        return FromRawValue(ClampRawValue(MathF.Round(value * FixedPointDenominator)));
+    }
+
+    public static LayoutUnit FromDoubleRound(double value)
+    {
+        return FromRawValue(ClampRawValue(Math.Round(value * FixedPointDenominator)));
+    }
+
     public readonly bool HasFraction => (m_Value % FixedPointDenominator) != 0;
 
     public readonly bool IsInteger => (m_Value % FixedPointDenominator) == 0;
@@ -210,6 +236,6 @@ public struct LayoutUnit : IFixedPoint<int, uint>
 
     public readonly int Round()
     {
-        return ToInteger() + ((Fraction().m_Value + (FixedPointDenominator / 2)) >> FractionalBits);
+        return ToInteger() + ((Fraction().RawValue() + (FixedPointDenominator / 2)) >> FractionalBits);
     }
 }
