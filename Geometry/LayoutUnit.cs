@@ -164,7 +164,7 @@ public struct LayoutUnit : IFixedPoint<int, uint>
 	{
 		// Note: Might be better to just call Conversion.SaturatedCast() directly and avoid the indirect call to ClampRawValue()
 		// return FromRawValue(Conversion.SaturatedCast<int, T>(raw_value));
-		return FromRawValue(LayoutUnit.ClampRawValue<T>(raw_value));
+		return FromRawValue(ClampRawValue<T>(raw_value));
 	}
 
     // The specified `value` is rounded up to a multiple of `Epsilon()`, and is
@@ -181,6 +181,11 @@ public struct LayoutUnit : IFixedPoint<int, uint>
         return FromRawValue(ClampRawValue(MathF.Floor(value * FixedPointDenominator)));
     }
 
+    public static LayoutUnit Clamp(double value)
+    {
+        return FromFloatFloor((float)value);
+    }
+
     // The specified `value` is rounded to a multiple of `Epsilon()`, and is
     // clamped by `Min()` and `Max()`. A NaN `value` produces `FixedPoint(0)`.
     public static LayoutUnit FromFloatRound(float value)
@@ -188,6 +193,8 @@ public struct LayoutUnit : IFixedPoint<int, uint>
         return FromRawValue(ClampRawValue(MathF.Round(value * FixedPointDenominator)));
     }
 
+    // The specified `value` is rounded to a multiple of `Epsilon()`, and is
+    // clamped by `Min()` and `Max()`. A NaN `value` produces `FixedPoint(0)`.
     public static LayoutUnit FromDoubleRound(double value)
     {
         return FromRawValue(ClampRawValue(Math.Round(value * FixedPointDenominator)));
@@ -237,5 +244,17 @@ public struct LayoutUnit : IFixedPoint<int, uint>
     public readonly int Round()
     {
         return ToInteger() + ((Fraction().RawValue() + (FixedPointDenominator / 2)) >> FractionalBits);
+    }
+
+   public override readonly string ToString()
+   {
+        string formatted = ToDouble().ToString("G14");
+
+        if (m_Value == Max.RawValue()) return $"Max({formatted})";
+        if (m_Value == Min.RawValue()) return $"Min({formatted})";
+        if (m_Value == NearlyMax.RawValue()) return $"NearlyMax({formatted})";
+        if (m_Value == NearlyMin.RawValue()) return $"NearlyMin({formatted})";
+
+        return formatted;
     }
 }
