@@ -40,6 +40,10 @@ public readonly struct ClampedNumeric<T> : IEquatable<ClampedNumeric<T>>
 
     public static bool operator ==(ClampedNumeric<T> left, ClampedNumeric<T> right) => left.Equals(right);
     public static bool operator !=(ClampedNumeric<T> left, ClampedNumeric<T> right) => !left.Equals(right);
+    public static bool operator <(ClampedNumeric<T> left, ClampedNumeric<T> right) => left._value < right._value;
+    public static bool operator <=(ClampedNumeric<T> left, ClampedNumeric<T> right) => left._value <= right._value;
+    public static bool operator >(ClampedNumeric<T> left, ClampedNumeric<T> right) => left._value > right._value;
+    public static bool operator >=(ClampedNumeric<T> left, ClampedNumeric<T> right) => left._value >= right._value;
 
     // Implicit conversions for convenience
     public static implicit operator ClampedNumeric<T>(T value) => new(value);
@@ -69,17 +73,13 @@ public readonly struct ClampedNumeric<T> : IEquatable<ClampedNumeric<T>>
         var a = left._value;
         var b = right._value;
 
-        if (T.IsZero(b))
-            return left;
-
-        // For floating-point types, standard addition works as it produces +/- Infinity on overflow.
-        if (typeof(T) == typeof(float) || typeof(T) == typeof(double) || typeof(T) == typeof(decimal))
+        // Standard addition for floating-point types already saturates to Infinity.
+        if (T.IsFloatingPoint(a))
         {
             return new ClampedNumeric<T>(a + b);
         }
 
-        // For integer types, perform saturating addition.
-        // The logic from C++ `ClampedAddOp` is implemented here directly.
+        // Integer saturating addition logic.
         if (T.IsPositive(b))
         {
             if (a > T.MaxValue - b)
@@ -98,7 +98,93 @@ public readonly struct ClampedNumeric<T> : IEquatable<ClampedNumeric<T>>
     /// </summary>
     public static ClampedNumeric<T> operator -(ClampedNumeric<T> left, ClampedNumeric<T> right)
     {
-        // Subtraction is implemented as addition of the negated value, which reuses the saturation logic.
-        return left + -right;
+        var a = left._value;
+        var b = right._value;
+
+        if (T.IsFloatingPoint(a))
+        {
+            return new ClampedNumeric<T>(a - b);
+        }
+
+        // Integer saturating subtraction logic.
+        if (T.IsNegative(b))
+        {
+            // Subtracting a negative is like adding a positive.
+            if (a > T.MaxValue + b) // Note: b is negative, so this is `T.MaxValue - abs(b)`
+                return new ClampedNumeric<T>(T.MaxValue);
+        }
+        else
+        {
+            // Subtracting a positive.
+            if (a < T.MinValue + b)
+                return new ClampedNumeric<T>(T.MinValue);
+        }
+        return new ClampedNumeric<T>(a - b);
+    }
+
+    /// <summary>
+    /// Performs saturating multiplication.
+    /// </summary>
+    public static ClampedNumeric<T> operator *(ClampedNumeric<T> left, ClampedNumeric<T> right)
+    {
+        var a = left._value;
+        var b = right._value;
+
+        if (T.IsFloatingPoint(a))
+        {
+            return new ClampedNumeric<T>(a * b);
+        }
+
+        // Integer saturating multiplication logic.
+        if (T.IsZero(a) || T.IsZero(b)) return new ClampedNumeric<T>(T.Zero);
+        if (a == T.One) return right;
+        if (b == T.One) return left;
+
+        if (a == T.MinValue && b == -T.One)
+            return new ClampedNumeric<T>(T.MaxValue);
+        if (b == T.MinValue && a == -T.One)
+             return new ClampedNumeric<T>(T.MaxValue);
+
+        T result = a * b;
+        // Check for overflow by seeing if the division gets us back to the original number.
+        if (a != result / b)
+        {
+            // Overflow occurred. Determine saturation direction.
+            return (T.IsNegative(a) ^ T.IsNegative(b)) 
+                ? new ClampedNumeric<T>(T.MinValue) 
+                : new ClampedNumeric<T>(T.MaxValue);
+        }
+
+        return new ClampedNumeric<T>(result);
+    }
+
+    /// <summary>
+    /// Performs saturating division.
+    /// </summary>
+    public static ClampedNumeric<T> operator /(ClampedNumeric<T> left, ClampedNumeric<T> right)
+    {
+        var a = left._value;
+        var b = right._value;
+
+        if (T.IsFloatingPoint(a))
+        {
+            // Floating point division by zero yields Infinity, which is a form of saturation.
+            return new ClampedNumeric<T>(a / b);
+        }
+
+        if (T.IsZero(b))
+        {
+            // For integer division by zero, saturate to MaxValue if positive, MinValue if negative, or 0 if a is 0.
+            if (T.IsZero(a)) return new ClampedNumeric<T>(T.Zero);
+            return T.IsNegative(a) ? new ClampedNumeric<T>(T.MinValue) : new ClampedNumeric<T>(T.MaxValue);
+        }
+
+        // The only integer overflow case for division is `MinValue / -1`
+        if (a == T.MinValue && b == -T.One)
+        {
+            return new ClampedNumeric<T>(T.MaxValue);
+        }
+
+        return new ClampedNumeric<T>(a / b);
     }
 }
