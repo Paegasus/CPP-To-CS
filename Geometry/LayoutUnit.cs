@@ -167,12 +167,9 @@ public struct LayoutUnit : IFixedPoint<int, uint>
 		return FromRawValue(LayoutUnit.ClampRawValue<T>(raw_value));
 	}
 
-    public readonly bool HasFraction()
-    {
-        return (RawValue() % FixedPointDenominator) != 0;
-    }
+    public readonly bool HasFraction() => (RawValue() % FixedPointDenominator) != 0;
 
-    public readonly bool IsInteger() => !HasFraction();
+    public readonly bool IsInteger() => (RawValue() % FixedPointDenominator) == 0;
 
     public readonly LayoutUnit Fraction()
     {
