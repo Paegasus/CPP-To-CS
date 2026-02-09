@@ -58,7 +58,7 @@ public struct LayoutUnit : IFixedPoint<int, uint>
     public LayoutUnit(float value) { m_Value = ClampRawValue(value * FixedPointDenominator); }
     public LayoutUnit(double value) { m_Value = ClampRawValue(value * FixedPointDenominator); }
 
-    public readonly int RawValue() => m_Value;
+    public readonly int RawValue => m_Value;
 
 	public void SetRawValue(int value) => m_Value = value;
 
@@ -210,6 +210,6 @@ public struct LayoutUnit : IFixedPoint<int, uint>
 
     public readonly int Round()
     {
-        return ToInteger() + ((Fraction().RawValue() + (FixedPointDenominator / 2)) >> FractionalBits);
+        return ToInteger() + ((Fraction().m_Value + (FixedPointDenominator / 2)) >> FractionalBits);
     }
 }
