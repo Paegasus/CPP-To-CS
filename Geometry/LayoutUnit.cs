@@ -125,10 +125,10 @@ public struct LayoutUnit : IFixedPoint<int, uint>
 
     public readonly LayoutUnit Abs()
     {
-        // Make the operation explicitly unchecked (Even with "checked" compiler flag)
+        // Make the operation explicitly unchecked (Even with "checked" compiler flag on)
         unchecked
         {
-            // Not using Math.Abs() here because it throws
+            // Not using Math.Abs() here because it throws a overflow exception if value < 0
             return FromRawValue(m_Value < 0 ? -m_Value : m_Value);
         }
     }
