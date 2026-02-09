@@ -14,7 +14,7 @@ namespace UI.Numerics;
 /// </summary>
 /// <typeparam name="T">An arithmetic type, such as int, float, or double.</typeparam>
 public readonly struct ClampedNumeric<T> : IEquatable<ClampedNumeric<T>>
-    where T : struct, INumber<T>
+    where T : struct, IBinaryInteger<T> // Restrict to integer types for now
 {
     private readonly T _value;
 
@@ -24,20 +24,21 @@ public readonly struct ClampedNumeric<T> : IEquatable<ClampedNumeric<T>>
     public T RawValue => _value;
 
     /// <summary>
-    /// Constructs a ClampedNumeric. The constructor is private to enforce
-    /// creation via the factory method or implicit conversion, which makes
-    /// the source of values clearer.
+    /// Constructs a ClampedNumeric. The value is saturated on construction.
     /// </summary>
-    private ClampedNumeric(T value)
+    public ClampedNumeric(T value)
     {
-        _value = value;
+        // Although operators saturate, values can also be constructed from raw T,
+        // so we must saturate here for consistency.
+        _value = Conversion.SaturatedCast<T, T>(value);
     }
-    
+
     public override string ToString() => _value.ToString() ?? string.Empty;
     public override bool Equals(object? obj) => obj is ClampedNumeric<T> other && Equals(other);
     public bool Equals(ClampedNumeric<T> other) => _value.Equals(other._value);
     public override int GetHashCode() => _value.GetHashCode();
 
+    // --- Comparison Operators ---
     public static bool operator ==(ClampedNumeric<T> left, ClampedNumeric<T> right) => left.Equals(right);
     public static bool operator !=(ClampedNumeric<T> left, ClampedNumeric<T> right) => !left.Equals(right);
     public static bool operator <(ClampedNumeric<T> left, ClampedNumeric<T> right) => left._value < right._value;
@@ -45,146 +46,110 @@ public readonly struct ClampedNumeric<T> : IEquatable<ClampedNumeric<T>>
     public static bool operator >(ClampedNumeric<T> left, ClampedNumeric<T> right) => left._value > right._value;
     public static bool operator >=(ClampedNumeric<T> left, ClampedNumeric<T> right) => left._value >= right._value;
 
-    // Implicit conversions for convenience
+    // --- Implicit and Explicit Conversions ---
     public static implicit operator ClampedNumeric<T>(T value) => new(value);
     public static explicit operator T(ClampedNumeric<T> value) => value.RawValue;
-    
-    // --- Arithmetic Operators ---
 
-    /// <summary>
-    /// Performs saturating negation.
-    /// </summary>
+    // --- Unary Operators ---
+    public static ClampedNumeric<T> operator +(ClampedNumeric<T> value) => value; // Unary plus is a no-op
+
     public static ClampedNumeric<T> operator -(ClampedNumeric<T> value)
     {
         var val = value._value;
-        // For signed integers, the only case where negation saturates is negating the minimum value.
-        if (val == T.MinValue)
-        {
-            return new ClampedNumeric<T>(T.MaxValue);
-        }
+        if (val == T.MinValue) return new ClampedNumeric<T>(T.MaxValue);
         return new ClampedNumeric<T>(-val);
     }
 
-    /// <summary>
-    /// Performs saturating addition.
-    /// </summary>
+    public static ClampedNumeric<T> operator ++(ClampedNumeric<T> value) => value + One;
+    public static ClampedNumeric<T> operator --(ClampedNumeric<T> value) => value - One;
+
+    // --- Binary Operators ---
     public static ClampedNumeric<T> operator +(ClampedNumeric<T> left, ClampedNumeric<T> right)
     {
         var a = left._value;
         var b = right._value;
-
-        // Standard addition for floating-point types already saturates to Infinity.
-        if (T.IsFloatingPoint(a))
-        {
-            return new ClampedNumeric<T>(a + b);
-        }
-
-        // Integer saturating addition logic.
-        if (T.IsPositive(b))
-        {
-            if (a > T.MaxValue - b)
-                return new ClampedNumeric<T>(T.MaxValue);
-        }
-        else
-        {
-            if (a < T.MinValue - b)
-                return new ClampedNumeric<T>(T.MinValue);
-        }
+        if (T.IsPositive(b)) { if (a > T.MaxValue - b) return MaxValue; }
+        else { if (a < T.MinValue - b) return MinValue; }
         return new ClampedNumeric<T>(a + b);
     }
 
-    /// <summary>
-    /// Performs saturating subtraction.
-    /// </summary>
     public static ClampedNumeric<T> operator -(ClampedNumeric<T> left, ClampedNumeric<T> right)
     {
         var a = left._value;
         var b = right._value;
-
-        if (T.IsFloatingPoint(a))
-        {
-            return new ClampedNumeric<T>(a - b);
-        }
-
-        // Integer saturating subtraction logic.
-        if (T.IsNegative(b))
-        {
-            // Subtracting a negative is like adding a positive.
-            if (a > T.MaxValue + b) // Note: b is negative, so this is `T.MaxValue - abs(b)`
-                return new ClampedNumeric<T>(T.MaxValue);
-        }
-        else
-        {
-            // Subtracting a positive.
-            if (a < T.MinValue + b)
-                return new ClampedNumeric<T>(T.MinValue);
-        }
+        if (T.IsNegative(b)) { if (a > T.MaxValue + b) return MaxValue; }
+        else { if (a < T.MinValue + b) return MinValue; }
         return new ClampedNumeric<T>(a - b);
     }
 
-    /// <summary>
-    /// Performs saturating multiplication.
-    /// </summary>
     public static ClampedNumeric<T> operator *(ClampedNumeric<T> left, ClampedNumeric<T> right)
     {
         var a = left._value;
         var b = right._value;
-
-        if (T.IsFloatingPoint(a))
-        {
-            return new ClampedNumeric<T>(a * b);
-        }
-
-        // Integer saturating multiplication logic.
-        if (T.IsZero(a) || T.IsZero(b)) return new ClampedNumeric<T>(T.Zero);
-        if (a == T.One) return right;
-        if (b == T.One) return left;
-
-        if (a == T.MinValue && b == -T.One)
-            return new ClampedNumeric<T>(T.MaxValue);
-        if (b == T.MinValue && a == -T.One)
-             return new ClampedNumeric<T>(T.MaxValue);
+        if (T.IsZero(a) || T.IsZero(b)) return Zero;
+        if (a == One) return right;
+        if (b == One) return left;
+        if (a == T.MinValue && b == -One) return MaxValue;
+        if (b == T.MinValue && a == -One) return MaxValue;
 
         T result = a * b;
-        // Check for overflow by seeing if the division gets us back to the original number.
-        if (a != result / b)
+        if (a != result / b) // Overflow check
         {
-            // Overflow occurred. Determine saturation direction.
-            return (T.IsNegative(a) ^ T.IsNegative(b)) 
-                ? new ClampedNumeric<T>(T.MinValue) 
-                : new ClampedNumeric<T>(T.MaxValue);
+            return (T.IsNegative(a) ^ T.IsNegative(b)) ? MinValue : MaxValue;
         }
-
         return new ClampedNumeric<T>(result);
     }
 
-    /// <summary>
-    /// Performs saturating division.
-    /// </summary>
     public static ClampedNumeric<T> operator /(ClampedNumeric<T> left, ClampedNumeric<T> right)
     {
         var a = left._value;
         var b = right._value;
-
-        if (T.IsFloatingPoint(a))
+        if (T.IsZero(b)) 
         {
-            // Floating point division by zero yields Infinity, which is a form of saturation.
-            return new ClampedNumeric<T>(a / b);
+            if (T.IsZero(a)) return Zero;
+            return T.IsNegative(a) ? MinValue : MaxValue;
         }
-
-        if (T.IsZero(b))
-        {
-            // For integer division by zero, saturate to MaxValue if positive, MinValue if negative, or 0 if a is 0.
-            if (T.IsZero(a)) return new ClampedNumeric<T>(T.Zero);
-            return T.IsNegative(a) ? new ClampedNumeric<T>(T.MinValue) : new ClampedNumeric<T>(T.MaxValue);
-        }
-
-        // The only integer overflow case for division is `MinValue / -1`
-        if (a == T.MinValue && b == -T.One)
-        {
-            return new ClampedNumeric<T>(T.MaxValue);
-        }
-
+        if (a == T.MinValue && b == -One) return MaxValue;
         return new ClampedNumeric<T>(a / b);
     }
+
+    public static ClampedNumeric<T> operator %(ClampedNumeric<T> left, ClampedNumeric<T> right)
+    {
+        var a = left._value;
+        var b = right._value;
+        if (T.IsZero(b) || (a == T.MinValue && b == -One)) return left; // Match C++ failure case
+        return new ClampedNumeric<T>(a % b);
+    }
+
+    public static ClampedNumeric<T> operator &(ClampedNumeric<T> left, ClampedNumeric<T> right) => new(left._value & right._value);
+    public static ClampedNumeric<T> operator |(ClampedNumeric<T> left, ClampedNumeric<T> right) => new(left._value | right._value);
+    public static ClampedNumeric<T> operator ^(ClampedNumeric<T> left, ClampedNumeric<T> right) => new(left._value ^ right._value);
+
+    public static ClampedNumeric<T> operator <<(ClampedNumeric<T> left, int shift)
+    {
+        var val = left._value;
+        if (shift <= 0) return left;
+        int bitWidth = val.GetByteCount() * 8;
+        if (shift >= bitWidth) return T.IsNegative(val) ? MinValue : MaxValue;
+        
+        var shifted = val << shift;
+        if ((shifted >> shift) != val) // Overflow check
+        {
+            return T.IsNegative(val) ? MinValue : MaxValue;
+        }
+        return new ClampedNumeric<T>(shifted);
+    }
+
+    public static ClampedNumeric<T> operator >>(ClampedNumeric<T> left, int shift)
+    {
+        if (shift <= 0) return left;
+        return new ClampedNumeric<T>(left._value >> shift);
+    }
+
+    // -- Constants --
+    public static ClampedNumeric<T> MaxValue => new(T.MaxValue);
+    public static ClampedNumeric<T> MinValue => new(T.MinValue);
+    public static ClampedNumeric<T> Zero => new(T.Zero);
+    public static ClampedNumeric<T> One => new(T.One);
+    private static readonly ClampedNumeric<T> NegativeOne = new(-T.One);
 }
