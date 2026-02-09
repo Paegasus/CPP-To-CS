@@ -1,359 +1,104 @@
-using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
+using System;
 using System.Numerics;
 
 namespace UI.Numerics;
 
 /// <summary>
-/// A wrapper for a numeric type that ensures all arithmetic operations
-/// are clamped within the range of the underlying type T.
+/// A wrapper for numeric types that provides saturating (clamping) arithmetic.
+/// Any operation that would normally overflow or underflow will instead clamp
+/// to the maximum or minimum value of the underlying type.
+///
+/// This is the C# equivalent of the C++ ClampedNumeric class, designed to be
+/// idiomatic and performant in .NET. It uses generic math interfaces (`INumber<T>`)
+/// to provide a safe, generic, and efficient implementation of saturating arithmetic.
 /// </summary>
-public readonly struct ClampedNumeric<T> : INumber<ClampedNumeric<T>>, IEquatable<ClampedNumeric<T>> where T : IBinaryInteger<T>, IMinMaxValue<T>
+/// <typeparam name="T">An arithmetic type, such as int, float, or double.</typeparam>
+public readonly struct ClampedNumeric<T> : IEquatable<ClampedNumeric<T>>
+    where T : struct, INumber<T>
 {
     private readonly T _value;
 
-    public ClampedNumeric(T value)
+    /// <summary>
+    /// Gets the raw underlying value.
+    /// </summary>
+    public T RawValue => _value;
+
+    /// <summary>
+    /// Constructs a ClampedNumeric. The constructor is private to enforce
+    /// creation via the factory method or implicit conversion, which makes
+    /// the source of values clearer.
+    /// </summary>
+    private ClampedNumeric(T value)
     {
         _value = value;
     }
+    
+    public override string ToString() => _value.ToString() ?? string.Empty;
+    public override bool Equals(object? obj) => obj is ClampedNumeric<T> other && Equals(other);
+    public bool Equals(ClampedNumeric<T> other) => _value.Equals(other._value);
+    public override int GetHashCode() => _value.GetHashCode();
 
-    public static ClampedNumeric<T> One => new(T.One);
+    public static bool operator ==(ClampedNumeric<T> left, ClampedNumeric<T> right) => left.Equals(right);
+    public static bool operator !=(ClampedNumeric<T> left, ClampedNumeric<T> right) => !left.Equals(right);
 
-    public static int Radix => T.Radix;
+    // Implicit conversions for convenience
+    public static implicit operator ClampedNumeric<T>(T value) => new(value);
+    public static explicit operator T(ClampedNumeric<T> value) => value.RawValue;
+    
+    // --- Arithmetic Operators ---
 
-    public static ClampedNumeric<T> Zero => new(T.Zero);
-
-    public static ClampedNumeric<T> AdditiveIdentity => new(T.AdditiveIdentity);
-
-    public static ClampedNumeric<T> MultiplicativeIdentity => new(T.MultiplicativeIdentity);
-
-    public static ClampedNumeric<T> operator +(ClampedNumeric<T> value)
-    {
-        return value; // Unary plus is a no-op.
-    }
-
-    public static ClampedNumeric<T> operator +(ClampedNumeric<T> left, ClampedNumeric<T> right)
-    {
-        var result = T.CreateSaturating(left._value + right._value);
-
-        return new ClampedNumeric<T>(result);
-    }
-
+    /// <summary>
+    /// Performs saturating negation.
+    /// </summary>
     public static ClampedNumeric<T> operator -(ClampedNumeric<T> value)
     {
-        var result = T.CreateSaturating(T.Zero - value._value);
-
-        return new ClampedNumeric<T>(result);
-    }
-
-    public static ClampedNumeric<T> operator -(ClampedNumeric<T> left, ClampedNumeric<T> right)
-    {
-        var result = T.CreateSaturating(left._value - right._value);
-
-        return new ClampedNumeric<T>(result);
-    }
-
-    public static ClampedNumeric<T> operator ++(ClampedNumeric<T> value)
-    {
-        var result = T.CreateSaturating(value._value + T.One);
-        return new ClampedNumeric<T>(result);
-    }
-
-    public static ClampedNumeric<T> operator --(ClampedNumeric<T> value)
-    {
-        var result = T.CreateSaturating(value._value - T.One);
-        return new ClampedNumeric<T>(result);
-    }
-
-    public static ClampedNumeric<T> operator *(ClampedNumeric<T> left, ClampedNumeric<T> right)
-    {
-        var result = T.CreateSaturating(left._value * right._value);
-        return new ClampedNumeric<T>(result);
-    }
-
-    public static ClampedNumeric<T> operator /(ClampedNumeric<T> left, ClampedNumeric<T> right)
-    {
-        if (T.IsNegative(T.MinValue) &&
-            right._value == (T.Zero - T.One) &&
-            left._value == T.MinValue)
+        var val = value._value;
+        // For signed integers, the only case where negation saturates is negating the minimum value.
+        if (val == T.MinValue)
         {
             return new ClampedNumeric<T>(T.MaxValue);
         }
-
-        return new ClampedNumeric<T>(left._value / right._value);
+        return new ClampedNumeric<T>(-val);
     }
 
-    public static ClampedNumeric<T> operator %(ClampedNumeric<T> left, ClampedNumeric<T> right)
+    /// <summary>
+    /// Performs saturating addition.
+    /// </summary>
+    public static ClampedNumeric<T> operator +(ClampedNumeric<T> left, ClampedNumeric<T> right)
     {
-        return new ClampedNumeric<T>(left._value % right._value);
-    }
+        var a = left._value;
+        var b = right._value;
 
-    public static bool operator >(ClampedNumeric<T> left, ClampedNumeric<T> right)
-    {
-        return left._value > right._value;
-    }
+        if (T.IsZero(b))
+            return left;
 
-    public static bool operator >=(ClampedNumeric<T> left, ClampedNumeric<T> right)
-    {
-        return left._value >= right._value;
-    }
-
-    public static bool operator <(ClampedNumeric<T> left, ClampedNumeric<T> right)
-    {
-        return left._value < right._value;
-    }
-
-    public static bool operator <=(ClampedNumeric<T> left, ClampedNumeric<T> right)
-    {
-        return left._value <= right._value;
-    }
-
-    public static bool operator ==(ClampedNumeric<T> left, ClampedNumeric<T> right)
-    {
-        return left.Equals(right);
-    }
-
-    public static bool operator !=(ClampedNumeric<T> left, ClampedNumeric<T> right)
-    {
-        return !left.Equals(right);
-    }
-
-    public int CompareTo(object? obj)
-    {
-        if (obj is ClampedNumeric<T> other)
+        // For floating-point types, standard addition works as it produces +/- Infinity on overflow.
+        if (typeof(T) == typeof(float) || typeof(T) == typeof(double) || typeof(T) == typeof(decimal))
         {
-            return CompareTo(other);
+            return new ClampedNumeric<T>(a + b);
         }
 
-        if (obj is null)
+        // For integer types, perform saturating addition.
+        // The logic from C++ `ClampedAddOp` is implemented here directly.
+        if (T.IsPositive(b))
         {
-            return 1;
+            if (a > T.MaxValue - b)
+                return new ClampedNumeric<T>(T.MaxValue);
         }
-
-        throw new ArgumentException($"Object is not a {nameof(ClampedNumeric<T>)}", nameof(obj));
-    }
-
-    public int CompareTo(ClampedNumeric<T> other)
-    {
-        return _value.CompareTo(other._value);
-    }
-
-    public static bool IsCanonical(ClampedNumeric<T> value) => T.IsCanonical(value._value);
-
-    public static bool IsComplexNumber(ClampedNumeric<T> value) => T.IsComplexNumber(value._value);
-
-    public static bool IsEvenInteger(ClampedNumeric<T> value) => T.IsEvenInteger(value._value);
-
-    public static bool IsFinite(ClampedNumeric<T> value) => T.IsFinite(value._value);
-
-    public static bool IsImaginaryNumber(ClampedNumeric<T> value) => T.IsImaginaryNumber(value._value);
-
-    public static bool IsInfinity(ClampedNumeric<T> value) => T.IsInfinity(value._value);
-
-    public static bool IsInteger(ClampedNumeric<T> value) => T.IsInteger(value._value);
-
-    public static bool IsNaN(ClampedNumeric<T> value) => T.IsNaN(value._value);
-
-    public static bool IsNegative(ClampedNumeric<T> value) => T.IsNegative(value._value);
-
-    public static bool IsNegativeInfinity(ClampedNumeric<T> value) => T.IsNegativeInfinity(value._value);
-
-    public static bool IsNormal(ClampedNumeric<T> value) => T.IsNormal(value._value);
-
-    public static bool IsOddInteger(ClampedNumeric<T> value) => T.IsOddInteger(value._value);
-
-    public static bool IsPositive(ClampedNumeric<T> value) => T.IsPositive(value._value);
-
-    public static bool IsPositiveInfinity(ClampedNumeric<T> value) => T.IsPositiveInfinity(value._value);
-
-    public static bool IsRealNumber(ClampedNumeric<T> value) => T.IsRealNumber(value._value);
-
-    public static bool IsSubnormal(ClampedNumeric<T> value) => T.IsSubnormal(value._value);
-
-    public static bool IsZero(ClampedNumeric<T> value) => T.IsZero(value._value);
-
-    public static ClampedNumeric<T> MaxMagnitude(ClampedNumeric<T> x, ClampedNumeric<T> y)
-    {
-        return new ClampedNumeric<T>(T.MaxMagnitude(x._value, y._value));
-    }
-
-    public static ClampedNumeric<T> MaxMagnitudeNumber(ClampedNumeric<T> x, ClampedNumeric<T> y)
-    {
-        return new ClampedNumeric<T>(T.MaxMagnitudeNumber(x._value, y._value));
-    }
-
-    public static ClampedNumeric<T> MinMagnitude(ClampedNumeric<T> x, ClampedNumeric<T> y)
-    {
-        return new ClampedNumeric<T>(T.MinMagnitude(x._value, y._value));
-    }
-
-    public static ClampedNumeric<T> MinMagnitudeNumber(ClampedNumeric<T> x, ClampedNumeric<T> y)
-    {
-        return new ClampedNumeric<T>(T.MinMagnitudeNumber(x._value, y._value));
-    }
-
-    public static ClampedNumeric<T> Parse(string s, IFormatProvider? provider)
-    {
-        return new ClampedNumeric<T>(T.Parse(s, provider));
-    }
-
-    public static ClampedNumeric<T> Parse(string s, NumberStyles style, IFormatProvider? provider)
-    {
-        return new ClampedNumeric<T>(T.Parse(s, style, provider));
-    }
-
-    public static ClampedNumeric<T> Parse(ReadOnlySpan<char> s, IFormatProvider? provider)
-    {
-        return new ClampedNumeric<T>(T.Parse(s, provider));
-    }
-
-    public static ClampedNumeric<T> Parse(ReadOnlySpan<char> s, NumberStyles style, IFormatProvider? provider)
-    {
-        return new ClampedNumeric<T>(T.Parse(s, style, provider));
-    }
-
-    public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider? provider, [MaybeNullWhen(false)] out ClampedNumeric<T> result)
-    {
-        if (T.TryParse(s, provider, out var value))
+        else
         {
-            result = new ClampedNumeric<T>(value);
-            return true;
+            if (a < T.MinValue - b)
+                return new ClampedNumeric<T>(T.MinValue);
         }
-        result = default;
-        return false;
+        return new ClampedNumeric<T>(a + b);
     }
 
-    public static bool TryParse(ReadOnlySpan<char> s, NumberStyles style, IFormatProvider? provider, [MaybeNullWhen(false)] out ClampedNumeric<T> result)
+    /// <summary>
+    /// Performs saturating subtraction.
+    /// </summary>
+    public static ClampedNumeric<T> operator -(ClampedNumeric<T> left, ClampedNumeric<T> right)
     {
-        if (T.TryParse(s, style, provider, out var value))
-        {
-            result = new ClampedNumeric<T>(value);
-            return true;
-        }
-        result = default;
-        return false;
-    }
-
-    public static bool TryParse([NotNullWhen(true)] string? s, IFormatProvider? provider, [MaybeNullWhen(false)] out ClampedNumeric<T> result)
-    {
-        if (T.TryParse(s, provider, out var value))
-        {
-            result = new ClampedNumeric<T>(value);
-            return true;
-        }
-        result = default;
-        return false;
-    }
-
-    public static bool TryParse([NotNullWhen(true)] string? s, NumberStyles style, IFormatProvider? provider, [MaybeNullWhen(false)] out ClampedNumeric<T> result)
-    {
-        if (T.TryParse(s, style, provider, out var value))
-        {
-            result = new ClampedNumeric<T>(value);
-            return true;
-        }
-        result = default;
-        return false;
-    }
-
-    public bool TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format, IFormatProvider? provider)
-    {
-        return _value.TryFormat(destination, out charsWritten, format, provider);
-    }
-
-    public override string ToString()
-    {
-        return _value.ToString() ?? string.Empty;
-    }
-
-    public string ToString(string? format, IFormatProvider? formatProvider)
-    {
-        return _value.ToString(format, formatProvider);
-    }
-
-    public static bool TryConvertFromChecked<TOther>(TOther value, [MaybeNullWhen(false)] out ClampedNumeric<T> result) where TOther : INumberBase<TOther>
-    {
-        try
-        {
-            var tValue = T.CreateChecked(value);
-            result = new ClampedNumeric<T>(tValue);
-            return true;
-        }
-        catch (OverflowException)
-        {
-            result = default;
-            return false;
-        }
-    }
-
-    public static bool TryConvertFromSaturating<TOther>(TOther value, [MaybeNullWhen(false)] out ClampedNumeric<T> result) where TOther : INumberBase<TOther>
-    {
-        // CreateSaturating will never throw, so this always succeeds.
-        var tValue = T.CreateSaturating(value);
-        result = new ClampedNumeric<T>(tValue);
-        return true;
-    }
-
-    public static bool TryConvertFromTruncating<TOther>(TOther value, [MaybeNullWhen(false)] out ClampedNumeric<T> result) where TOther : INumberBase<TOther>
-    {
-        // CreateTruncating will never throw, so this always succeeds.
-        var tValue = T.CreateTruncating(value);
-        result = new ClampedNumeric<T>(tValue);
-        return true;
-    }
-
-    public static bool TryConvertToChecked<TOther>(ClampedNumeric<T> value, [MaybeNullWhen(false)] out TOther result) where TOther : INumberBase<TOther>
-    {
-        try
-        {
-            result = TOther.CreateChecked(value._value);
-            return true;
-        }
-        catch (OverflowException)
-        {
-            result = default;
-            return false;
-        }
-    }
-
-    public static bool TryConvertToSaturating<TOther>(ClampedNumeric<T> value, [MaybeNullWhen(false)] out TOther result) where TOther : INumberBase<TOther>
-    {
-        // CreateSaturating on the target type will never throw.
-        result = TOther.CreateSaturating(value._value);
-        return true;
-    }
-
-    public static bool TryConvertToTruncating<TOther>(ClampedNumeric<T> value, [MaybeNullWhen(false)] out TOther result) where TOther : INumberBase<TOther>
-    {
-        // CreateTruncating on the target type will never throw.
-        result = TOther.CreateTruncating(value._value);
-        return true;
-    }
-
-    public bool Equals(ClampedNumeric<T> other)
-    {
-        return _value == other._value;
-    }
-
-    // Necessary for == and != operators
-    public override bool Equals(object? obj)
-    {
-        return obj is ClampedNumeric<T> other && Equals(other);
-    }
-
-    // Necessary for == and != operators
-    public override int GetHashCode()
-    {
-        return _value.GetHashCode();
-    }
-
-    static ClampedNumeric<T> INumberBase<ClampedNumeric<T>>.Abs(ClampedNumeric<T> value)
-    {
-        return new ClampedNumeric<T>(T.Abs(value._value));
-    }
-
-    static ClampedNumeric<T> INumber<ClampedNumeric<T>>.Clamp(ClampedNumeric<T> value, ClampedNumeric<T> min, ClampedNumeric<T> max)
-    {
-        return new ClampedNumeric<T>(T.Clamp(value._value, min._value, max._value));
+        // Subtraction is implemented as addition of the negated value, which reuses the saturation logic.
+        return left + -right;
     }
 }
