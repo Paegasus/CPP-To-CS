@@ -166,4 +166,29 @@ public struct LayoutUnit : IFixedPoint<int, uint>
 		// return FromRawValue(Conversion.SaturatedCast<int, T>(raw_value));
 		return FromRawValue(LayoutUnit.ClampRawValue<T>(raw_value));
 	}
+
+    public readonly bool HasFraction()
+    {
+        return (RawValue() % FixedPointDenominator) != 0;
+    }
+
+    public readonly bool IsInteger() => !HasFraction();
+
+    public readonly LayoutUnit Fraction()
+    {
+        // Compute fraction using the mod operator to preserve the sign of the value as it may affect rounding.
+        return FromRawValue(RawValue() % FixedPointDenominator);
+    }
+
+    public readonly bool MightBeSaturated()
+    {
+        return RawValue() == RawValueMax || RawValue() == RawValueMin;
+    }
+
+    public static float Epsilon() => 1.0f / FixedPointDenominator;
+
+    public readonly LayoutUnit AddEpsilon()
+    {
+        return FromRawValue(m_Value < RawValueMax ? m_Value + 1 : m_Value);
+    }
 }
