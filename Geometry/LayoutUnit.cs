@@ -167,19 +167,19 @@ public struct LayoutUnit : IFixedPoint<int, uint>
 		return FromRawValue(LayoutUnit.ClampRawValue<T>(raw_value));
 	}
 
-    public readonly bool HasFraction() => (RawValue() % FixedPointDenominator) != 0;
+    public readonly bool HasFraction => (m_Value % FixedPointDenominator) != 0;
 
-    public readonly bool IsInteger() => (RawValue() % FixedPointDenominator) == 0;
+    public readonly bool IsInteger => (m_Value % FixedPointDenominator) == 0;
 
     public readonly LayoutUnit Fraction()
     {
         // Compute fraction using the mod operator to preserve the sign of the value as it may affect rounding.
-        return FromRawValue(RawValue() % FixedPointDenominator);
+        return FromRawValue(m_Value % FixedPointDenominator);
     }
 
     public readonly bool MightBeSaturated()
     {
-        return RawValue() == RawValueMax || RawValue() == RawValueMin;
+        return m_Value == RawValueMax || m_Value == RawValueMin;
     }
 
     public static float Epsilon() => 1.0f / FixedPointDenominator;
@@ -187,5 +187,29 @@ public struct LayoutUnit : IFixedPoint<int, uint>
     public readonly LayoutUnit AddEpsilon()
     {
         return FromRawValue(m_Value < RawValueMax ? m_Value + 1 : m_Value);
+    }
+
+    public readonly int Floor() 
+    {
+        if (m_Value <= RawValueMin + FixedPointDenominator - 1)
+            return IntegerMin;
+        
+        return m_Value >> FractionalBits;
+    }
+
+    public readonly int Ceil()
+    {
+        if (m_Value >= RawValueMax - FixedPointDenominator + 1)
+            return IntegerMax;
+
+        if (m_Value >= 0)
+            return (m_Value + FixedPointDenominator - 1) / FixedPointDenominator;
+
+        return ToInteger();
+    }
+
+    public readonly int Round()
+    {
+        return ToInteger() + ((Fraction().RawValue() + (FixedPointDenominator / 2)) >> FractionalBits);
     }
 }
