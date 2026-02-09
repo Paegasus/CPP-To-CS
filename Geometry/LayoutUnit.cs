@@ -123,6 +123,16 @@ public struct LayoutUnit : IFixedPoint<int, uint>
 		return (double)m_Value / FixedPointDenominator;
 	}
 
+    public readonly LayoutUnit Abs()
+    {
+        // Make the operation explicitly unchecked (Even with "checked" compiler flag)
+        unchecked
+        {
+            // Not using Math.Abs() here because it throws
+            return FromRawValue(m_Value < 0 ? -m_Value : m_Value);
+        }
+    }
+
 	// Note: Original C++ has this function here as well, but since it's static and only calls Conversion.SaturatedCast(),
 	// I'm not sure if we should keep it in LayoutUnit, there might be a better place for it.
 	public static int ClampRawValue<T>(T value) where T : IBinaryInteger<T>
