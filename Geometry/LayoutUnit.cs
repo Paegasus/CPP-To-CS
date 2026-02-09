@@ -269,7 +269,7 @@ public struct LayoutUnit : IFixedPoint<int, uint>
             return new LayoutUnit();
 
 #if DEBUG
-        Debug.WriteLineIf(m_Value >= 0, "ClampIndefiniteToZero called on a negative value that is not the 'indefinite' sentinel.");
+        Debug.Assert(m_Value >= 0, "ClampIndefiniteToZero called on a negative value that is not the 'indefinite' sentinel.");
 #endif
 
         return this;
