@@ -21,7 +21,7 @@ namespace UI.Geometry;
 // this results in unwanted anti-aliasing.
 // When aligning to device pixels the edges are aligned to the nearest pixel and then the size is adjusted accordingly.
 // This ensures that the bottom/right edge and the total width/height is at most off-by-one.
-public struct LayoutUnit : IFixedPoint<int, uint>
+public struct LayoutUnit : IFixedPoint<int, uint>, IEquatable<LayoutUnit>
 {
 	public const int FractionalBits = 6;
     public const int IntegralBits = sizeof(int) * 8 - FractionalBits;
@@ -286,4 +286,43 @@ public struct LayoutUnit : IFixedPoint<int, uint>
 
         return formatted;
     }
+
+    public override readonly bool Equals(object? obj) => obj is LayoutUnit other && Equals(other);
+
+    public readonly bool Equals(LayoutUnit other) => m_Value == other.m_Value;
+
+    public override readonly int GetHashCode() => m_Value.GetHashCode();
+
+    public static bool operator ==(LayoutUnit left, LayoutUnit right) => left.Equals(right);
+    public static bool operator !=(LayoutUnit left, LayoutUnit right) => !left.Equals(right);
+    public static bool operator <(LayoutUnit left, LayoutUnit right) => left.m_Value < right.m_Value;
+    public static bool operator <=(LayoutUnit left, LayoutUnit right) => left.m_Value <= right.m_Value;
+    public static bool operator >(LayoutUnit left, LayoutUnit right) => left.m_Value > right.m_Value;
+    public static bool operator >=(LayoutUnit left, LayoutUnit right) => left.m_Value >= right.m_Value;
+
+    public static bool operator <=(LayoutUnit a, int b) => a <= new LayoutUnit(b);
+    public static bool operator <=(int a, LayoutUnit b) => new LayoutUnit(a) <= b;
+    public static bool operator >=(LayoutUnit a, int b) => a >= new LayoutUnit(b);
+    public static bool operator >=(int a, LayoutUnit b) => new LayoutUnit(a) >= b;
+    public static bool operator <(LayoutUnit a, int b) => a < new LayoutUnit(b);
+    public static bool operator <(int a, LayoutUnit b) => new LayoutUnit(a) < b;
+    public static bool operator >(LayoutUnit a, int b) => a > new LayoutUnit(b);
+    public static bool operator >(int a, LayoutUnit b) => new LayoutUnit(a) > b;
+    public static bool operator ==(LayoutUnit a, int b) => a == new LayoutUnit(b);
+    public static bool operator ==(int a, LayoutUnit b) => new LayoutUnit(a) == b;
+
+    public static double operator *(LayoutUnit a, double b) => a.ToDouble() * b;
+    public static float operator *(LayoutUnit a, float b) => a.ToFloat() * b;
+    public static float operator *(float a, LayoutUnit b) => a * b.ToFloat();
+    public static double operator *(double a, LayoutUnit b) => a * b.ToDouble();
+    public static float operator /(LayoutUnit a, float b) => a.ToFloat() / b;
+    public static double operator /(LayoutUnit a, double b) => a.ToDouble() / b;
+    public static float operator /(float a, LayoutUnit b) => a / b.ToFloat();
+    public static double operator /(double a, LayoutUnit b) => a / b.ToDouble();
+    public static double operator +(LayoutUnit a, double b) => a.ToDouble() + b;
+    public static float operator +(float a, LayoutUnit b) => a + b.ToFloat();
+    public static double operator +(double a, LayoutUnit b) => a + b.ToDouble();
+    public static float operator -(LayoutUnit a, float b) => a.ToFloat() - b;
+    public static double operator -(LayoutUnit a, double b) => a.ToDouble() - b;
+    public static float operator -(float a, LayoutUnit b) => a - b.ToFloat();
 }
