@@ -116,7 +116,7 @@ public struct LayoutSize
         return new LayoutSize(Width, Width * aspectRatio.Height / aspectRatio.Width);
     }
 
-    public LayoutSize Fraction()
+    public readonly LayoutSize Fraction()
     {
         return new LayoutSize(m_width.Fraction(), m_height.Fraction());
     }
