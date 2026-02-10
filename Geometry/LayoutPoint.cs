@@ -147,7 +147,6 @@ public struct LayoutPoint
 
     public override readonly bool Equals(object? obj)
     {
-        // Handle potential null 'obj' safely
         if (obj is null) return false;
         
         return obj is LayoutPoint point && this == point;
