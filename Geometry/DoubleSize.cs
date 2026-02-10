@@ -1,4 +1,5 @@
 using System;
+using UI.Numerics;
 
 namespace UI.Geometry;
 
@@ -88,16 +89,16 @@ public struct DoubleSize
 
     public static IntSize RoundedIntSize(DoubleSize p)
     {
-        return new IntSize(Numerics.Conversion.ClampTo<int>(Math.Round(p.Width)), Numerics.Conversion.ClampTo<int>(Math.Round(p.Height)));
+        return new IntSize(MathExtras.ClampTo(Math.Round(p.Width)), MathExtras.ClampTo(Math.Round(p.Height)));
     }
 
     public static IntSize FlooredIntSize(DoubleSize p)
     {
-        return new IntSize(Numerics.Conversion.ClampTo<int>(Math.Floor(p.Width)), Numerics.Conversion.ClampTo<int>(Math.Floor(p.Height)));
+        return new IntSize(MathExtras.ClampTo(Math.Floor(p.Width)), MathExtras.ClampTo(Math.Floor(p.Height)));
     }
 
     public static IntSize ExpandedIntSize(DoubleSize p)
     {
-        return new IntSize(Numerics.Conversion.ClampTo<int>(Math.Ceiling(p.Width)), Numerics.Conversion.ClampTo<int>(Math.Ceiling(p.Height)));
+        return new IntSize(MathExtras.ClampTo(Math.Ceiling(p.Width)), MathExtras.ClampTo(Math.Ceiling(p.Height)));
     }
 }

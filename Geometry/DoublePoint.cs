@@ -1,4 +1,5 @@
 using System;
+using UI.Numerics;
 
 namespace UI.Geometry;
 
@@ -99,9 +100,9 @@ public struct DoublePoint
     public static DoublePoint operator -(DoublePoint a) => new(-a.X, -a.Y);
     public static DoublePoint operator -(DoublePoint a, DoubleSize b) => new(a.X - b.Width, a.Y - b.Height);
 
-    public static IntPoint RoundedIntPoint(DoublePoint p) => new(Numerics.Conversion.ClampTo<int>(Math.Round(p.X)), Numerics.Conversion.ClampTo<int>(Math.Round(p.Y)));
-    public static IntPoint CeiledIntPoint(DoublePoint p) => new(Numerics.Conversion.ClampTo<int>(Math.Ceiling(p.X)), Numerics.Conversion.ClampTo<int>(Math.Ceiling(p.Y)));
-    public static IntPoint FlooredIntPoint(DoublePoint p) => new(Numerics.Conversion.ClampTo<int>(Math.Floor(p.X)), Numerics.Conversion.ClampTo<int>(Math.Floor(p.Y)));
+    public static IntPoint RoundedIntPoint(DoublePoint p) => new(MathExtras.ClampTo(Math.Round(p.X)), MathExtras.ClampTo(Math.Round(p.Y)));
+    public static IntPoint CeiledIntPoint(DoublePoint p) => new(MathExtras.ClampTo(Math.Ceiling(p.X)), MathExtras.ClampTo(Math.Ceiling(p.Y)));
+    public static IntPoint FlooredIntPoint(DoublePoint p) => new(MathExtras.ClampTo(Math.Floor(p.X)), MathExtras.ClampTo(Math.Floor(p.Y)));
 
     public static FloatPoint ToFloatPoint(DoublePoint a) => new((float)a.X, (float)a.Y);
     public static DoubleSize ToDoubleSize(DoublePoint a) => new(a.X, a.Y);

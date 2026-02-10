@@ -1,4 +1,5 @@
 using System;
+using UI.Numerics;
 
 namespace UI.Geometry;
 
@@ -94,8 +95,8 @@ public struct FloatSize
     public static bool operator ==(FloatSize a, FloatSize b) => a.Width == b.Width && a.Height == b.Height;
     public static bool operator !=(FloatSize a, FloatSize b) => !(a == b);
 
-    public static IntSize RoundedIntSize(FloatSize p) => new(Numerics.Conversion.ClampTo<int>(MathF.Round(p.Width)), Numerics.Conversion.ClampTo<int>(MathF.Round(p.Height)));
-    public static IntSize FlooredIntSize(FloatSize p) => new(Numerics.Conversion.ClampTo<int>(MathF.Floor(p.Width)), Numerics.Conversion.ClampTo<int>(MathF.Floor(p.Height)));
-    public static IntSize ExpandedIntSize(FloatSize p) => new(Numerics.Conversion.ClampTo<int>(MathF.Ceiling(p.Width)), Numerics.Conversion.ClampTo<int>(MathF.Ceiling(p.Height)));
-    public static IntPoint FlooredIntPoint(FloatSize p) => new(Numerics.Conversion.ClampTo<int>(MathF.Floor(p.Width)), Numerics.Conversion.ClampTo<int>(MathF.Floor(p.Height)));
+    public static IntSize RoundedIntSize(FloatSize p) => new(MathExtras.ClampTo(MathF.Round(p.Width)), MathExtras.ClampTo(MathF.Round(p.Height)));
+    public static IntSize FlooredIntSize(FloatSize p) => new(MathExtras.ClampTo(MathF.Floor(p.Width)), MathExtras.ClampTo(MathF.Floor(p.Height)));
+    public static IntSize ExpandedIntSize(FloatSize p) => new(MathExtras.ClampTo(MathF.Ceiling(p.Width)), MathExtras.ClampTo(MathF.Ceiling(p.Height)));
+    public static IntPoint FlooredIntPoint(FloatSize p) => new(MathExtras.ClampTo(MathF.Floor(p.Width)), MathExtras.ClampTo(MathF.Floor(p.Height)));
 }
