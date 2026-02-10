@@ -327,4 +327,35 @@ public struct LayoutUnit : IFixedPoint<int, uint>, IEquatable<LayoutUnit>
     public static float operator -(LayoutUnit a, float b) => a.ToFloat() - b;
     public static double operator -(LayoutUnit a, double b) => a.ToDouble() - b;
     public static float operator -(float a, LayoutUnit b) => a - b.ToFloat();
+
+    public static LayoutUnit operator +(LayoutUnit a, LayoutUnit b)
+    {
+        ClampedNumeric<int> result = new ClampedNumeric<int>(a.RawValue()) + new ClampedNumeric<int>(b.RawValue());
+        return FromRawValue(result.RawValue);
+    }
+
+    public static LayoutUnit operator -(LayoutUnit a, LayoutUnit b)
+    {
+        ClampedNumeric<int> result = new ClampedNumeric<int>(a.RawValue()) - new ClampedNumeric<int>(b.RawValue());
+        return FromRawValue(result.RawValue);
+    }
+
+    public static LayoutUnit operator *(LayoutUnit a, int b)
+    {
+        ClampedNumeric<int> result = new ClampedNumeric<int>(a.RawValue()) * new ClampedNumeric<int>(b);
+        return FromRawValue(result.RawValue);
+    }
+
+    public static LayoutUnit operator *(int a, LayoutUnit b) => b * a;
+
+    public static LayoutUnit operator /(LayoutUnit a, int b)
+    {
+        ClampedNumeric<int> result = new ClampedNumeric<int>(a.RawValue()) / new ClampedNumeric<int>(b);
+        return FromRawValue(result.RawValue);
+    }
+
+    public static LayoutUnit operator +(LayoutUnit a, int b) => a + new LayoutUnit(b);
+    public static LayoutUnit operator +(int a, LayoutUnit b) => new LayoutUnit(a) + b;
+    public static LayoutUnit operator -(LayoutUnit a, int b) => a - new LayoutUnit(b);
+    public static LayoutUnit operator -(int a, LayoutUnit b) => new LayoutUnit(a) - b;
 }
