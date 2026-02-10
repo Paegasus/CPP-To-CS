@@ -128,8 +128,6 @@ public struct LayoutUnit : IFixedPoint<int, uint>, IEquatable<LayoutUnit>
 		return (double)m_Value / FixedPointDenominator;
 	}
 
-    
-
 	// Note: Original C++ has this function here as well, but since it's static and only calls Conversion.SaturatedCast(),
 	// I'm not sure if we should keep it in LayoutUnit, there might be a better place for it.
 	public static int ClampRawValue<T>(T value) where T : IBinaryInteger<T>
