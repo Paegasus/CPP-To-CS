@@ -165,4 +165,9 @@ public struct FloatPoint
     {
         return new SKPoint(point.m_x, point.m_y);
     }
+
+    public override readonly string ToString()
+    {
+        return $"FloatPoint({m_x}, {m_y})";
+    }
 }
