@@ -6,7 +6,7 @@ public static class Program
 {
     public static void Main(string[] args)
     {
-        LayoutUnit a = new LayoutUnit();
+        LayoutUnit a = new();
 
         Console.WriteLine(a.ToString()); // Output: 0
 
