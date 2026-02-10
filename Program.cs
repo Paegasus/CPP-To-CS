@@ -6,6 +6,23 @@ public static class Program
 {
     public static void Main(string[] args)
     {
+        LayoutUnit a = new LayoutUnit();
+
+        Console.WriteLine(a.ToString()); // Output: 0
+
+        a++;
+
+        Console.WriteLine(a.ToString()); // Output: 1
+
+        a++;
+
+        Console.WriteLine(a.ToString()); // Output: 2
+
+        a--;
+
+        Console.WriteLine(a.ToString()); // Output: 1
+
+        /*
         LayoutUnit test1 = new LayoutUnit(1);
         LayoutUnit test2 = new LayoutUnit(2);
         LayoutUnit test3 = new LayoutUnit(3);
@@ -16,6 +33,7 @@ public static class Program
         Console.WriteLine(test3.RawValue());
 
         Console.WriteLine(LayoutUnit.Max.RawValue());
+        */
 
         /*
         var unit_ceil_nan = Geometry.LayoutUnit.FromFloatCeil(float.NaN);
