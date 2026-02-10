@@ -1,4 +1,3 @@
-using System;
 using UI.Numerics;
 
 namespace UI.Geometry;

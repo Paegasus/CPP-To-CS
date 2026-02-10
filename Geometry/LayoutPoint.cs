@@ -1,5 +1,3 @@
-using System;
-
 namespace UI.Geometry;
 
 public struct LayoutPoint

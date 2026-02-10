@@ -1,5 +1,3 @@
-using System;
-
 namespace UI.Numerics
 {
     public static class MathExtras
