@@ -14,7 +14,7 @@ namespace UI.Numerics;
 /// </summary>
 /// <typeparam name="T">An arithmetic type, such as int, float, or double.</typeparam>
 public readonly struct ClampedNumeric<T> : IEquatable<ClampedNumeric<T>>
-    where T : struct, IBinaryInteger<T> // Restrict to integer types for now
+    where T : struct, IBinaryInteger<T>, IMinMaxValue<T> // Restrict to integer types for now
 {
     private readonly T _value;
 
