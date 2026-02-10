@@ -275,6 +275,15 @@ PLATFORM_EXPORT bool findIntersection(const FloatPoint& p1, const FloatPoint& p2
 // See platform/testing/GeometryPrinters.h.
 void PrintTo(const FloatPoint&, std::ostream*);
 
+// Here's the actual implementation of PrintTo() for reference:
+//
+//void PrintTo(const FloatPoint& point, std::ostream* os)
+//{
+//    ScopedFloatFlags scope(*os);
+//	
+//    *os << "FloatPoint("<< point.x() << ", " << point.y() << ")";
+//}
+
 }
 
 #endif
