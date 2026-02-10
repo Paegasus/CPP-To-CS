@@ -414,4 +414,47 @@ public struct LayoutUnit : IFixedPoint<int, uint>, IEquatable<LayoutUnit>
         LayoutUnit fraction = location.Fraction();
         return (fraction + size).Round() - fraction.Round();
     }
+
+    /// <summary>
+    /// Returns (a * b) / c.
+    /// </summary>
+    public static LayoutUnit MulDiv(LayoutUnit a, LayoutUnit b, LayoutUnit c)
+    {
+        if (c.RawValue() == 0)
+            return FromRawValue(a.RawValue() >= 0 ? RawValueMax : RawValueMin);
+
+        long result = ((long)a.RawValue() * b.RawValue()) / c.RawValue();
+        return FromRawValue(ClampRawValue(result));
+    }
+
+    /// <summary>
+    /// Returns (a * b) / c.
+    /// </summary>
+    public static LayoutUnit MulDiv(LayoutUnit a, int b, int c)
+    {
+        if (c == 0)
+            return FromRawValue(a.RawValue() >= 0 ? RawValueMax : RawValueMin);
+
+        long result = ((long)a.RawValue() * b) / c;
+        return FromRawValue(ClampRawValue(result));
+    }
+
+    /// <summary>
+    /// Rounds |a| down to the nearest multiple of |b|.
+    /// The rounding is towards zero.
+    /// </summary>
+    public static LayoutUnit RoundDownToMultiple(LayoutUnit a, LayoutUnit b)
+    {
+        if (b.RawValue() <= 0)
+            return new LayoutUnit(); // Return 0
+
+        if (a.RawValue() >= 0)
+            return a - IntMod(a, b);
+
+        // For negative a, the logic is a bit different to round towards zero.
+        LayoutUnit r = a + IntMod(-a, b);
+        
+        // If the result crossed over to be positive, it should be clamped to zero.
+        return r.RawValue() > 0 ? new LayoutUnit() : r;
+    }
 }
