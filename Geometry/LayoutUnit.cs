@@ -335,6 +335,17 @@ public struct LayoutUnit : IFixedPoint<int, uint>, IEquatable<LayoutUnit>
     public static float operator /(float a, LayoutUnit b) => a / b.ToFloat();
     public static double operator /(double a, LayoutUnit b) => a / b.ToDouble();
 
+    public static LayoutUnit operator -(LayoutUnit a)
+    {
+        // This is implemented to match the C++ behavior of two's complement
+        // integer negation, where -int.MinValue is int.MinValue. The unchecked
+        // block prevents an OverflowException.
+        unchecked
+        {
+            return FromRawValue(-a.RawValue());
+        }
+    }
+
     public static LayoutUnit operator +(LayoutUnit a, LayoutUnit b)
     {
         ClampedNumeric<int> result = new ClampedNumeric<int>(a.RawValue()) + new ClampedNumeric<int>(b.RawValue());
