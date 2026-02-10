@@ -1,4 +1,5 @@
 using UI.Numerics;
+using SkiaSharp;
 
 namespace UI.Geometry;
 
@@ -159,4 +160,9 @@ public struct FloatPoint
     public static IntSize FlooredIntSize(FloatPoint p) => new(MathExtras.ClampTo(MathF.Floor(p.X)), MathExtras.ClampTo(MathF.Floor(p.Y)));
 
     public static FloatSize ToFloatSize(FloatPoint a) => new(a.X, a.Y);
+
+    public static implicit operator SKPoint(FloatPoint point)
+    {
+        return new SKPoint(point.m_x, point.m_y);
+    }
 }
