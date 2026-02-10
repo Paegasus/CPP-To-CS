@@ -346,6 +346,16 @@ public struct LayoutUnit : IFixedPoint<int, uint>, IEquatable<LayoutUnit>
         }
     }
 
+    public static LayoutUnit operator ++(LayoutUnit a)
+    {
+        return a + new LayoutUnit(1);
+    }
+
+    public static LayoutUnit operator --(LayoutUnit a)
+    {
+        return a - new LayoutUnit(1);
+    }
+
     public static LayoutUnit operator +(LayoutUnit a, LayoutUnit b)
     {
         ClampedNumeric<int> result = new ClampedNumeric<int>(a.RawValue()) + new ClampedNumeric<int>(b.RawValue());
