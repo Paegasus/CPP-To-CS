@@ -392,4 +392,26 @@ public struct LayoutUnit : IFixedPoint<int, uint>, IEquatable<LayoutUnit>
     {
         return FromRawValue(a.RawValue() % b.RawValue());
     }
+
+    public static int SnapSizeToPixel(LayoutUnit size, LayoutUnit location)
+    {
+        LayoutUnit fraction = location.Fraction();
+        int result = (fraction + size).Round() - fraction.Round();
+
+        // This check handles cases where a LayoutUnit is small but non-zero.
+        // The C++ version uses [[unlikely]] which is a hint for branch prediction.
+        // We just implement the logic directly. The threshold of 4 is 4/64 pixels.
+        if (result == 0 && (size.RawValue() > 4 || size.RawValue() < -4))
+        {
+            return size > 0 ? 1 : -1;
+        }
+
+        return result;
+    }
+
+    public static int SnapSizeToPixelAllowingZero(LayoutUnit size, LayoutUnit location)
+    {
+        LayoutUnit fraction = location.Fraction();
+        return (fraction + size).Round() - fraction.Round();
+    }
 }
