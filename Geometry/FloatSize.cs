@@ -85,6 +85,7 @@ public struct FloatSize
     public override bool Equals(object obj) => obj is FloatSize size && this == size;
     public override int GetHashCode() => HashCode.Combine(m_width, m_height);
 
+    public static FloatPoint operator +(IntPoint a, FloatSize b) => new(a.X + b.Width, a.Y + b.Height);
     public static FloatSize operator +(FloatSize a, FloatSize b) => new(a.Width + b.Width, a.Height + b.Height);
     public static FloatSize operator -(FloatSize a, FloatSize b) => new(a.Width - b.Width, a.Height - b.Height);
     public static FloatSize operator -(FloatSize size) => new(-size.Width, -size.Height);

@@ -133,7 +133,6 @@ public struct FloatPoint
 
     public static FloatPoint operator +(FloatPoint a, FloatSize b) => new(a.X + b.Width, a.Y + b.Height);
     public static FloatPoint operator +(FloatPoint a, IntSize b) => new(a.X + b.Width, a.Y + b.Height);
-    public static FloatPoint operator +(IntPoint a, FloatSize b) => new(a.X + b.Width, a.Y + b.Height);
     public static FloatPoint operator +(FloatPoint a, FloatPoint b) => new(a.X + b.X, a.Y + b.Y);
     public static FloatPoint operator +(FloatPoint a, IntPoint b) => new(a.X + b.X, a.Y + b.Y);
 
