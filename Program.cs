@@ -8,19 +8,19 @@ public static class Program
     {
         LayoutUnit a = new();
 
-        Console.WriteLine(a.ToString()); // Output: 0
+        Console.WriteLine($"Value: {a}, Raw Value: {a.RawValue()}"); // Output: Value: 0, Raw Value: 0
 
         a++;
 
-        Console.WriteLine(a.ToString()); // Output: 1
+        Console.WriteLine($"Value: {a}, Raw Value: {a.RawValue()}"); // Value: 1, Raw Value: 64
 
         a++;
 
-        Console.WriteLine(a.ToString()); // Output: 2
+        Console.WriteLine($"Value: {a}, Raw Value: {a.RawValue()}"); // Value: 2, Raw Value: 128
 
         a--;
 
-        Console.WriteLine(a.ToString()); // Output: 1
+        Console.WriteLine($"Value: {a}, Raw Value: {a.RawValue()}"); // Value: 1, Raw Value: 64
 
         /*
         LayoutUnit test1 = new LayoutUnit(1);
