@@ -74,7 +74,7 @@ public struct LayoutSize
 
     public LayoutSize ExpandedTo(LayoutSize other)
     {
-        return new LayoutSize(Math.Max(m_width, other.m_width), Math.Max(m_height, other.m_height));
+        return new LayoutSize(LayoutUnit.Max(m_width, other.m_width), LayoutUnit.Max(m_height, other.m_height));
     }
 
     public LayoutSize ExpandedTo(IntSize other)
@@ -86,7 +86,7 @@ public struct LayoutSize
 
     public LayoutSize ShrunkTo(LayoutSize other)
     {
-        return new LayoutSize(Math.Min(m_width, other.m_width), Math.Min(m_height, other.m_height));
+        return new LayoutSize(LayoutUnit.Min(m_width, other.m_width), LayoutUnit.Min(m_height, other.m_height));
     }
 
     public void ClampNegativeToZero()

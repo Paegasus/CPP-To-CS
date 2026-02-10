@@ -77,12 +77,12 @@ public struct LayoutPoint
 
     public LayoutPoint ExpandedTo(LayoutPoint other)
     {
-        return new LayoutPoint(Math.Max(m_x, other.m_x), Math.Max(m_y, other.m_y));
+        return new LayoutPoint(LayoutUnit.Max(m_x, other.m_x), LayoutUnit.Max(m_y, other.m_y));
     }
 
     public LayoutPoint ShrunkTo(LayoutPoint other)
     {
-        return new LayoutPoint(Math.Min(m_x, other.m_x), Math.Min(m_y, other.m_y));
+        return new LayoutPoint(LayoutUnit.Min(m_x, other.m_x), LayoutUnit.Min(m_y, other.m_y));
     }
 
     public void ClampNegativeToZero()

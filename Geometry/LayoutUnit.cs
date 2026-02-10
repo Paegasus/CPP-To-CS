@@ -22,7 +22,7 @@ namespace UI.Geometry;
 // this results in unwanted anti-aliasing.
 // When aligning to device pixels the edges are aligned to the nearest pixel and then the size is adjusted accordingly.
 // This ensures that the bottom/right edge and the total width/height is at most off-by-one.
-public struct LayoutUnit : IFixedPoint<int, uint>, IEquatable<LayoutUnit>
+public struct LayoutUnit : IFixedPoint<int, uint>, IEquatable<LayoutUnit>, IComparable<LayoutUnit>
 {
 	public const int FractionalBits = 6;
     public const int IntegralBits = sizeof(int) * 8 - FractionalBits;
@@ -37,10 +37,10 @@ public struct LayoutUnit : IFixedPoint<int, uint>, IEquatable<LayoutUnit>
     // We use the value of "-1" to represent these indefinite values.
     public static readonly LayoutUnit IndefiniteSize = new(-1);
 
-    public static readonly LayoutUnit Max = FromRawValue(RawValueMax);
-    public static readonly LayoutUnit Min = FromRawValue(RawValueMin);
-    public static readonly LayoutUnit NearlyMax = FromRawValue(RawValueMax - FixedPointDenominator / 2);
-    public static readonly LayoutUnit NearlyMin = FromRawValue(RawValueMin + FixedPointDenominator / 2);
+    public static readonly LayoutUnit MaxValue = FromRawValue(RawValueMax);
+    public static readonly LayoutUnit MinValue = FromRawValue(RawValueMin);
+    public static readonly LayoutUnit NearlyMaxValue = FromRawValue(RawValueMax - FixedPointDenominator / 2);
+    public static readonly LayoutUnit NearlyMinValue = FromRawValue(RawValueMin + FixedPointDenominator / 2);
 	
 	private int m_Value;
 
@@ -278,10 +278,10 @@ public struct LayoutUnit : IFixedPoint<int, uint>, IEquatable<LayoutUnit>
     {
         string formatted = ToDouble().ToString("G14");
 
-        if (m_Value == Max.RawValue()) return $"Max({formatted})";
-        if (m_Value == Min.RawValue()) return $"Min({formatted})";
-        if (m_Value == NearlyMax.RawValue()) return $"NearlyMax({formatted})";
-        if (m_Value == NearlyMin.RawValue()) return $"NearlyMin({formatted})";
+        if (m_Value == MaxValue.RawValue()) return $"Max({formatted})";
+        if (m_Value == MinValue.RawValue()) return $"Min({formatted})";
+        if (m_Value == NearlyMaxValue.RawValue()) return $"NearlyMax({formatted})";
+        if (m_Value == NearlyMinValue.RawValue()) return $"NearlyMin({formatted})";
 
         return formatted;
     }
@@ -289,6 +289,8 @@ public struct LayoutUnit : IFixedPoint<int, uint>, IEquatable<LayoutUnit>
     public override readonly bool Equals(object? obj) => obj is LayoutUnit other && Equals(other);
 
     public readonly bool Equals(LayoutUnit other) => m_Value == other.m_Value;
+
+    public readonly int CompareTo(LayoutUnit other) => m_Value.CompareTo(other.m_Value);
 
     public override readonly int GetHashCode() => m_Value.GetHashCode();
 
@@ -479,4 +481,7 @@ public struct LayoutUnit : IFixedPoint<int, uint>, IEquatable<LayoutUnit>
         // If the result crossed over to be positive, it should be clamped to zero.
         return r.RawValue() > 0 ? new LayoutUnit() : r;
     }
+
+    public static LayoutUnit Min(LayoutUnit a, LayoutUnit b) => a < b ? a : b;
+    public static LayoutUnit Max(LayoutUnit a, LayoutUnit b) => a > b ? a : b;
 }
