@@ -30,18 +30,18 @@ public struct DoubleSize
         m_height = p.Height;
     }
 
-    public double Width { get => m_width; set => m_width = value; }
-    public double Height { get => m_height; set => m_height = value; }
+    public double Width { readonly get => m_width; set => m_width = value; }
+    public double Height { readonly get => m_height; set => m_height = value; }
 
-    public bool IsEmpty() => m_width <= 0 || m_height <= 0;
-    public bool IsZero() => m_width == 0 && m_height == 0;
+    public readonly bool IsEmpty() => m_width <= 0 || m_height <= 0;
+    public readonly bool IsZero() => m_width == 0 && m_height == 0;
 
-    public DoubleSize ExpandedTo(DoubleSize other)
+    public readonly DoubleSize ExpandedTo(DoubleSize other)
     {
         return new DoubleSize(Math.Max(m_width, other.m_width), Math.Max(m_height, other.m_height));
     }
 
-    public DoubleSize ShrunkTo(DoubleSize other)
+    public readonly DoubleSize ShrunkTo(DoubleSize other)
     {
         return new DoubleSize(Math.Min(m_width, other.m_width), Math.Min(m_height, other.m_height));
     }
@@ -53,8 +53,14 @@ public struct DoubleSize
         m_height *= sy;
     }
 
-    public override bool Equals(object obj) => obj is DoubleSize size && this == size;
-    public override int GetHashCode() => HashCode.Combine(m_width, m_height);
+    public override readonly bool Equals(object? obj)
+    {
+        if(obj is null) return false;
+        
+        return obj is DoubleSize size && this == size;
+    }
+
+    public override readonly int GetHashCode() => HashCode.Combine(m_width, m_height);
 
     public static DoubleSize operator +(DoubleSize a, DoubleSize b)
     {

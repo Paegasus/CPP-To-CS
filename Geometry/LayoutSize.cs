@@ -40,13 +40,13 @@ public struct LayoutSize
         m_height = new LayoutUnit(size.Height);
     }
 
-    public LayoutUnit Width { get { return m_width; } set { m_width = value; } }
-    public LayoutUnit Height { get { return m_height; } set { m_height = value; } }
+    public LayoutUnit Width { readonly get { return m_width; } set { m_width = value; } }
+    public LayoutUnit Height { readonly get { return m_height; } set { m_height = value; } }
 
-    public bool IsEmpty() => m_width.RawValue() <= 0 || m_height.RawValue() <= 0;
-    public bool IsZero() => m_width.RawValue() == 0 && m_height.RawValue() == 0;
+    public readonly bool IsEmpty() => m_width.RawValue() <= 0 || m_height.RawValue() <= 0;
+    public readonly bool IsZero() => m_width.RawValue() == 0 && m_height.RawValue() == 0;
 
-    public float AspectRatio() => m_width.ToFloat() / m_height.ToFloat();
+    public readonly float AspectRatio() => m_width.ToFloat() / m_height.ToFloat();
 
     public void Expand(LayoutUnit width, LayoutUnit height)
     {
@@ -72,19 +72,19 @@ public struct LayoutSize
         m_height *= heightScale;
     }
 
-    public LayoutSize ExpandedTo(LayoutSize other)
+    public readonly LayoutSize ExpandedTo(LayoutSize other)
     {
         return new LayoutSize(LayoutUnit.Max(m_width, other.m_width), LayoutUnit.Max(m_height, other.m_height));
     }
 
-    public LayoutSize ExpandedTo(IntSize other)
+    public readonly LayoutSize ExpandedTo(IntSize other)
     {
         return new LayoutSize(
             m_width > other.Width ? m_width : new LayoutUnit(other.Width),
             m_height > other.Height ? m_height : new LayoutUnit(other.Height));
     }
 
-    public LayoutSize ShrunkTo(LayoutSize other)
+    public readonly LayoutSize ShrunkTo(LayoutSize other)
     {
         return new LayoutSize(LayoutUnit.Min(m_width, other.m_width), LayoutUnit.Min(m_height, other.m_height));
     }
@@ -102,7 +102,7 @@ public struct LayoutSize
             m_height = minimumSize.Height;
     }
 
-    public LayoutSize TransposedSize()
+    public readonly LayoutSize TransposedSize()
     {
         return new LayoutSize(m_height, m_width);
     }

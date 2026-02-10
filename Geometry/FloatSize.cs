@@ -38,11 +38,11 @@ public struct FloatSize
     public float Width { get => m_width; set => m_width = value; }
     public float Height { get => m_height; set => m_height = value; }
 
-    public bool IsEmpty() => m_width <= 0 || m_height <= 0;
-    public bool IsZero() => m_width == 0 && m_height == 0;
-    public bool IsExpressibleAsIntSize() => m_width == (int)m_width && m_height == (int)m_height;
+    public readonly bool IsEmpty() => m_width <= 0 || m_height <= 0;
+    public readonly bool IsZero() => m_width == 0 && m_height == 0;
+    public readonly bool IsExpressibleAsIntSize() => m_width == (int)m_width && m_height == (int)m_height;
 
-    public float AspectRatio() => m_width / m_height;
+    public readonly float AspectRatio() => m_width / m_height;
 
     public void Expand(float width, float height)
     {
@@ -64,26 +64,32 @@ public struct FloatSize
         m_height = MathF.Floor(m_height * scale);
     }
 
-    public FloatSize ExpandedTo(FloatSize other)
+    public readonly FloatSize ExpandedTo(FloatSize other)
     {
         return new FloatSize(Math.Max(m_width, other.m_width), Math.Max(m_height, other.m_height));
     }
 
-    public FloatSize ShrunkTo(FloatSize other)
+    public readonly FloatSize ShrunkTo(FloatSize other)
     {
         return new FloatSize(Math.Min(m_width, other.m_width), Math.Min(m_height, other.m_height));
     }
 
-    public float DiagonalLength() => MathF.Sqrt(DiagonalLengthSquared());
-    public float DiagonalLengthSquared() => m_width * m_width + m_height * m_height;
+    public readonly float DiagonalLength() => MathF.Sqrt(DiagonalLengthSquared());
+    public readonly float DiagonalLengthSquared() => m_width * m_width + m_height * m_height;
 
-    public FloatSize TransposedSize() => new(m_height, m_width);
+    public readonly FloatSize TransposedSize() => new(m_height, m_width);
 
-    public FloatSize ScaledBy(float scale) => ScaledBy(scale, scale);
-    public FloatSize ScaledBy(float scaleX, float scaleY) => new(m_width * scaleX, m_height * scaleY);
+    public readonly FloatSize ScaledBy(float scale) => ScaledBy(scale, scale);
+    public readonly FloatSize ScaledBy(float scaleX, float scaleY) => new(m_width * scaleX, m_height * scaleY);
 
-    public override bool Equals(object obj) => obj is FloatSize size && this == size;
-    public override int GetHashCode() => HashCode.Combine(m_width, m_height);
+    public override readonly bool Equals(object? obj)
+    {
+        if(obj is null) return false;
+        
+        return obj is FloatSize size && this == size;
+    }
+
+    public override readonly int GetHashCode() => HashCode.Combine(m_width, m_height);
 
     public static FloatPoint operator +(IntPoint a, FloatSize b) => new(a.X + b.Width, a.Y + b.Height);
     public static FloatSize operator +(FloatSize a, FloatSize b) => new(a.Width + b.Width, a.Height + b.Height);

@@ -24,8 +24,8 @@ public struct IntPoint
 
     public static IntPoint Zero() { return new IntPoint(); }
 
-    public int X { get { return m_x; } set { m_x = value; } }
-    public int Y { get { return m_y; } set { m_y = value; } }
+    public int X { readonly get { return m_x; } set { m_x = value; } }
+    public int Y { readonly get { return m_y; } set { m_y = value; } }
 
     public void Move(IntSize s)
     {
@@ -51,17 +51,17 @@ public struct IntPoint
         m_y = (int)Math.Round(m_y * sy);
     }
 
-    public IntPoint ExpandedTo(IntPoint other)
+    public readonly IntPoint ExpandedTo(IntPoint other)
     {
         return new IntPoint(Math.Max(m_x, other.m_x), Math.Max(m_y, other.m_y));
     }
 
-    public IntPoint ShrunkTo(IntPoint other)
+    public readonly IntPoint ShrunkTo(IntPoint other)
     {
         return new IntPoint(Math.Min(m_x, other.m_x), Math.Min(m_y, other.m_y));
     }
 
-    public int DistanceSquaredToPoint(IntPoint other)
+    public readonly int DistanceSquaredToPoint(IntPoint other)
     {
         return (this - other).DiagonalLengthSquared();
     }
@@ -71,17 +71,19 @@ public struct IntPoint
         this = ExpandedTo(Zero());
     }
 
-    public IntPoint TransposedPoint()
+    public readonly IntPoint TransposedPoint()
     {
         return new IntPoint(m_y, m_x);
     }
 
-    public override bool Equals(object obj)
+    public override readonly bool Equals(object? obj)
     {
-        return obj is IntPoint && this == (IntPoint)obj;
+        if(obj is null) return false;
+        
+        return obj is IntPoint point && this == point;
     }
 
-    public override int GetHashCode()
+    public override readonly int GetHashCode()
     {
         return HashCode.Combine(X, Y);
     }

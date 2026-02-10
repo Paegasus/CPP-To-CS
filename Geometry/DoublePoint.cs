@@ -56,11 +56,11 @@ public struct DoublePoint
 
     public static DoublePoint Zero() => new();
 
-    public DoublePoint ExpandedTo(DoublePoint other) => new(Math.Max(m_x, other.m_x), Math.Max(m_y, other.m_y));
-    public DoublePoint ShrunkTo(DoublePoint other) => new(Math.Min(m_x, other.m_x), Math.Min(m_y, other.m_y));
+    public readonly DoublePoint ExpandedTo(DoublePoint other) => new(Math.Max(m_x, other.m_x), Math.Max(m_y, other.m_y));
+    public readonly DoublePoint ShrunkTo(DoublePoint other) => new(Math.Min(m_x, other.m_x), Math.Min(m_y, other.m_y));
 
-    public double X { get => m_x; set => m_x = value; }
-    public double Y { get => m_y; set => m_y = value; }
+    public double X { readonly get => m_x; set => m_x = value; }
+    public double Y { readonly get => m_y; set => m_y = value; }
 
     public void Move(DoubleSize s)
     {
@@ -86,10 +86,16 @@ public struct DoublePoint
         m_y *= sy;
     }
 
-    public DoublePoint ScaledBy(float scale) => new(m_x * scale, m_y * scale);
+    public readonly DoublePoint ScaledBy(float scale) => new(m_x * scale, m_y * scale);
 
-    public override bool Equals(object obj) => obj is DoublePoint point && this == point;
-    public override int GetHashCode() => HashCode.Combine(m_x, m_y);
+    public override readonly bool Equals(object? obj)
+    {
+        if(obj is null) return false;
+        
+        return obj is DoublePoint point && this == point;
+    }
+
+    public override readonly int GetHashCode() => HashCode.Combine(m_x, m_y);
 
     public static bool operator ==(DoublePoint a, DoublePoint b) => a.X == b.X && a.Y == b.Y;
     public static bool operator !=(DoublePoint a, DoublePoint b) => !(a == b);

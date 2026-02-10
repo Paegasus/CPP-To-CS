@@ -58,8 +58,8 @@ public struct FloatPoint
 
     public static FloatPoint NarrowPrecision(double x, double y) => new((float)x, (float)y);
 
-    public float X { get => m_x; set => m_x = value; }
-    public float Y { get => m_y; set => m_y = value; }
+    public float X { readonly get => m_x; set => m_x = value; }
+    public float Y { readonly get => m_y; set => m_y = value; }
 
     public void Set(float x, float y)
     {
@@ -115,21 +115,27 @@ public struct FloatPoint
         m_y *= sy;
     }
 
-    public float Dot(FloatPoint other) => m_x * other.X + m_y * other.Y;
+    public readonly float Dot(FloatPoint other) => m_x * other.X + m_y * other.Y;
 
-    public float SlopeAngleRadians() => (float)Math.Atan2(m_y, m_x);
-    public float Length() => (float)Math.Sqrt(LengthSquared());
-    public float LengthSquared() => m_x * m_x + m_y * m_y;
+    public readonly float SlopeAngleRadians() => (float)Math.Atan2(m_y, m_x);
+    public readonly float Length() => (float)Math.Sqrt(LengthSquared());
+    public readonly float LengthSquared() => m_x * m_x + m_y * m_y;
 
-    public FloatPoint ExpandedTo(FloatPoint other) => new(Math.Max(m_x, other.X), Math.Max(m_y, other.Y));
-    public FloatPoint ShrunkTo(FloatPoint other) => new(Math.Min(m_x, other.X), Math.Min(m_y, other.Y));
+    public readonly FloatPoint ExpandedTo(FloatPoint other) => new(Math.Max(m_x, other.X), Math.Max(m_y, other.Y));
+    public readonly FloatPoint ShrunkTo(FloatPoint other) => new(Math.Min(m_x, other.X), Math.Min(m_y, other.Y));
 
-    public FloatPoint TransposedPoint() => new(m_y, m_x);
+    public readonly FloatPoint TransposedPoint() => new(m_y, m_x);
 
-    public FloatPoint ScaledBy(float scale) => new(m_x * scale, m_y * scale);
+    public readonly FloatPoint ScaledBy(float scale) => new(m_x * scale, m_y * scale);
 
-    public override bool Equals(object obj) => obj is FloatPoint point && this == point;
-    public override int GetHashCode() => HashCode.Combine(m_x, m_y);
+    public override readonly bool Equals(object? obj)
+    {
+        if(obj is null) return false;
+        
+        return obj is FloatPoint point && this == point;
+    }
+
+    public override readonly int GetHashCode() => HashCode.Combine(m_x, m_y);
 
     public static FloatPoint operator +(FloatPoint a, FloatSize b) => new(a.X + b.Width, a.Y + b.Height);
     public static FloatPoint operator +(FloatPoint a, IntSize b) => new(a.X + b.Width, a.Y + b.Height);
