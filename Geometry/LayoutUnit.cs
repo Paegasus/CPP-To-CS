@@ -354,8 +354,35 @@ public struct LayoutUnit : IFixedPoint<int, uint>, IEquatable<LayoutUnit>
         return FromRawValue(result.RawValue);
     }
 
+    public static LayoutUnit operator /(int a, LayoutUnit b) => new LayoutUnit(a) / b;
+
     public static LayoutUnit operator +(LayoutUnit a, int b) => a + new LayoutUnit(b);
     public static LayoutUnit operator +(int a, LayoutUnit b) => new LayoutUnit(a) + b;
     public static LayoutUnit operator -(LayoutUnit a, int b) => a - new LayoutUnit(b);
     public static LayoutUnit operator -(int a, LayoutUnit b) => new LayoutUnit(a) - b;
+
+    public static LayoutUnit operator *(LayoutUnit a, LayoutUnit b)
+    {
+        long result = ((long)a.RawValue() * b.RawValue()) >> FractionalBits;
+        return FromRawValue(ClampRawValue(result));
+    }
+
+    public static LayoutUnit operator /(LayoutUnit a, LayoutUnit b)
+    {
+        if (b.RawValue() == 0)
+            return FromRawValue(a.RawValue() >= 0 ? RawValueMax : RawValueMin);
+        
+        long result = ((long)a.RawValue() << FractionalBits) / b.RawValue();
+        return FromRawValue(ClampRawValue(result));
+    }
+
+    /// <summary>
+    /// Returns the remainder after a division with integer results.
+    /// This calculates the modulo so that:
+    /// a = (int)(a / b) * b + IntMod(a, b).
+    /// </summary>
+    public static LayoutUnit IntMod(LayoutUnit a, LayoutUnit b)
+    {
+        return FromRawValue(a.RawValue() % b.RawValue());
+    }
 }
