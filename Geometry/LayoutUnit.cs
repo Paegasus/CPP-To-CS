@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics;
 using System.Numerics;
 using UI.Numerics;
@@ -21,7 +22,7 @@ namespace UI.Geometry;
 // this results in unwanted anti-aliasing.
 // When aligning to device pixels the edges are aligned to the nearest pixel and then the size is adjusted accordingly.
 // This ensures that the bottom/right edge and the total width/height is at most off-by-one.
-public struct LayoutUnit : IFixedPoint<int, uint>, IEquatable<LayoutUnit>
+public struct LayoutUnit : IFixedPoint<int, uint>, IEquatable<LayoutUnit>, IComparable<LayoutUnit>
 {
 	public const int FractionalBits = 6;
     public const int IntegralBits = sizeof(int) * 8 - FractionalBits;
@@ -289,6 +290,8 @@ public struct LayoutUnit : IFixedPoint<int, uint>, IEquatable<LayoutUnit>
 
     public readonly bool Equals(LayoutUnit other) => m_Value == other.m_Value;
 
+    public readonly int CompareTo(LayoutUnit other) => m_Value.CompareTo(other.m_Value);
+
     public override readonly int GetHashCode() => m_Value.GetHashCode();
 
     public static implicit operator double(LayoutUnit a) => a.ToDouble();
@@ -478,4 +481,7 @@ public struct LayoutUnit : IFixedPoint<int, uint>, IEquatable<LayoutUnit>
         // If the result crossed over to be positive, it should be clamped to zero.
         return r.RawValue() > 0 ? new LayoutUnit() : r;
     }
+
+    public static LayoutUnit Min(LayoutUnit a, LayoutUnit b) => a < b ? a : b;
+    public static LayoutUnit Max(LayoutUnit a, LayoutUnit b) => a > b ? a : b;
 }
