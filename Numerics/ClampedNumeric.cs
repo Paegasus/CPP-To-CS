@@ -9,10 +9,11 @@ namespace UI.Numerics;
 /// to the maximum or minimum value of the underlying type.
 ///
 /// This is the C# equivalent of the C++ ClampedNumeric class, designed to be
-/// idiomatic and performant in .NET. It uses generic math interfaces (`INumber<T>`)
-/// to provide a safe, generic, and efficient implementation of saturating arithmetic.
+/// idiomatic and performant in .NET. It uses generic math interfaces (`IBinaryInteger<T>`
+/// and `IMinMaxValue<T>`) to provide a safe, generic, and efficient implementation of
+/// saturating arithmetic for integer types.
 /// </summary>
-/// <typeparam name="T">An arithmetic type, such as int, float, or double.</typeparam>
+/// <typeparam name="T">An integer type that implements IBinaryInteger<T> and IMinMaxValue<T>.</typeparam>
 public readonly struct ClampedNumeric<T> : IEquatable<ClampedNumeric<T>>
     where T : struct, IBinaryInteger<T>, IMinMaxValue<T> // Restrict to integer types for now
 {
