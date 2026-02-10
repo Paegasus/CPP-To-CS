@@ -291,6 +291,10 @@ public struct LayoutUnit : IFixedPoint<int, uint>, IEquatable<LayoutUnit>
 
     public override readonly int GetHashCode() => m_Value.GetHashCode();
 
+    public static implicit operator double(LayoutUnit a) => a.ToDouble();
+    public static implicit operator float(LayoutUnit a) => a.ToFloat();
+    public static implicit operator bool(LayoutUnit a) => a.m_Value != 0;
+
     public static bool operator ==(LayoutUnit left, LayoutUnit right) => left.Equals(right);
     public static bool operator !=(LayoutUnit left, LayoutUnit right) => !left.Equals(right);
     public static bool operator <(LayoutUnit left, LayoutUnit right) => left.m_Value < right.m_Value;
