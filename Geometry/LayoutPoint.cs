@@ -150,7 +150,7 @@ public struct LayoutPoint
         // Handle potential null 'obj' safely
         if (obj is null) return false;
         
-        return obj is LayoutPoint && this == (LayoutPoint)obj;
+        return obj is LayoutPoint point && this == point;
     }
 
     public override int GetHashCode()
