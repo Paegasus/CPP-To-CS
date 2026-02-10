@@ -313,20 +313,29 @@ public struct LayoutUnit : IFixedPoint<int, uint>, IEquatable<LayoutUnit>
     public static bool operator !=(LayoutUnit a, int b) => a != new LayoutUnit(b);
     public static bool operator !=(int a, LayoutUnit b) => new LayoutUnit(a) != b;
 
-    public static double operator *(LayoutUnit a, double b) => a.ToDouble() * b;
-    public static float operator *(LayoutUnit a, float b) => a.ToFloat() * b;
-    public static float operator *(float a, LayoutUnit b) => a * b.ToFloat();
-    public static double operator *(double a, LayoutUnit b) => a * b.ToDouble();
-    public static float operator /(LayoutUnit a, float b) => a.ToFloat() / b;
-    public static double operator /(LayoutUnit a, double b) => a.ToDouble() / b;
-    public static float operator /(float a, LayoutUnit b) => a / b.ToFloat();
-    public static double operator /(double a, LayoutUnit b) => a / b.ToDouble();
-    public static double operator +(LayoutUnit a, double b) => a.ToDouble() + b;
+    // --- Floating-Point Operators ---
+
+    // Operators with LayoutUnit as the left operand return a new LayoutUnit.
+    // This allows for compound assignment (e.g., myLayoutUnit += 5.0f).
+    public static LayoutUnit operator +(LayoutUnit a, float b) => new(a.ToFloat() + b);
+    public static LayoutUnit operator +(LayoutUnit a, double b) => new(a.ToDouble() + b);
+    public static LayoutUnit operator -(LayoutUnit a, float b) => new(a.ToFloat() - b);
+    public static LayoutUnit operator -(LayoutUnit a, double b) => new(a.ToDouble() - b);
+    public static LayoutUnit operator *(LayoutUnit a, float b) => new(a.ToFloat() * b);
+    public static LayoutUnit operator *(LayoutUnit a, double b) => new(a.ToDouble() * b);
+    public static LayoutUnit operator /(LayoutUnit a, float b) => new(a.ToFloat() / b);
+    public static LayoutUnit operator /(LayoutUnit a, double b) => new(a.ToDouble() / b);
+
+    // Operators with a float/double as the left operand return a float/double.
+    // This preserves standard arithmetic behavior.
     public static float operator +(float a, LayoutUnit b) => a + b.ToFloat();
     public static double operator +(double a, LayoutUnit b) => a + b.ToDouble();
-    public static float operator -(LayoutUnit a, float b) => a.ToFloat() - b;
-    public static double operator -(LayoutUnit a, double b) => a.ToDouble() - b;
     public static float operator -(float a, LayoutUnit b) => a - b.ToFloat();
+    public static double operator -(double a, LayoutUnit b) => a - b.ToDouble();
+    public static float operator *(float a, LayoutUnit b) => a * b.ToFloat();
+    public static double operator *(double a, LayoutUnit b) => a * b.ToDouble();
+    public static float operator /(float a, LayoutUnit b) => a / b.ToFloat();
+    public static double operator /(double a, LayoutUnit b) => a / b.ToDouble();
 
     public static LayoutUnit operator +(LayoutUnit a, LayoutUnit b)
     {
