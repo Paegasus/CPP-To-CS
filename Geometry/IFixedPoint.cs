@@ -7,8 +7,14 @@ namespace UI.Geometry;
 // LayoutUnit gets boxed -> causing heap allocation
 
 public interface IFixedPoint<TSigned, TUnsigned>
- where TSigned : unmanaged, IBinaryInteger<TSigned>, IMinMaxValue<TSigned>
- where TUnsigned : unmanaged, IBinaryInteger<TUnsigned>, IMinMaxValue<TUnsigned>
+ where TSigned : 
+  unmanaged,
+  IBinaryInteger<TSigned>,
+  IMinMaxValue<TSigned>
+ where TUnsigned :
+  unmanaged,
+  IBinaryInteger<TUnsigned>,
+  IMinMaxValue<TUnsigned>
 {
     public TSigned RawValue();
     public void SetRawValue(int value);

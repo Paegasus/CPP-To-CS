@@ -4,89 +4,95 @@ namespace UI.Geometry;
 
 public struct DoublePoint
 {
-    private double m_x, m_y;
+    private double m_X, m_Y;
+
+    public double X { readonly get => m_X; set => m_X = value; }
+    public double Y { readonly get => m_Y; set => m_Y = value; }
 
     public DoublePoint()
     {
-        m_x = 0;
-        m_y = 0;
+        m_X = 0;
+        m_Y = 0;
     }
 
     public DoublePoint(double x, double y)
     {
-        m_x = x;
-        m_y = y;
+        m_X = x;
+        m_Y = y;
     }
 
     public DoublePoint(IntPoint p)
     {
-        m_x = p.X;
-        m_y = p.Y;
+        m_X = p.X;
+        m_Y = p.Y;
     }
 
     public DoublePoint(FloatPoint p)
     {
-        m_x = p.X;
-        m_y = p.Y;
+        m_X = p.X;
+        m_Y = p.Y;
     }
 
     public DoublePoint(LayoutPoint p)
     {
-        m_x = p.X.ToDouble();
-        m_y = p.Y.ToDouble();
+        m_X = p.X.ToDouble();
+        m_Y = p.Y.ToDouble();
     }
 
     public DoublePoint(IntSize size)
     {
-        m_x = size.Width;
-        m_y = size.Height;
+        m_X = size.Width;
+        m_Y = size.Height;
     }
 
     public DoublePoint(FloatSize size)
     {
-        m_x = size.Width;
-        m_y = size.Height;
+        m_X = size.Width;
+        m_Y = size.Height;
     }
 
     public DoublePoint(DoubleSize size)
     {
-        m_x = size.Width;
-        m_y = size.Height;
+        m_X = size.Width;
+        m_Y = size.Height;
     }
 
     public static DoublePoint Zero() => new();
 
-    public readonly DoublePoint ExpandedTo(DoublePoint other) => new(Math.Max(m_x, other.m_x), Math.Max(m_y, other.m_y));
-    public readonly DoublePoint ShrunkTo(DoublePoint other) => new(Math.Min(m_x, other.m_x), Math.Min(m_y, other.m_y));
+    public readonly DoublePoint ExpandedTo(DoublePoint other) => new(Math.Max(m_X, other.m_X), Math.Max(m_Y, other.m_Y));
+    public readonly DoublePoint ShrunkTo(DoublePoint other) => new(Math.Min(m_X, other.m_X), Math.Min(m_Y, other.m_Y));
 
-    public double X { readonly get => m_x; set => m_x = value; }
-    public double Y { readonly get => m_y; set => m_y = value; }
+    public void Set(double x, double y)
+    {
+        m_X = x;
+        m_Y = y;
+    }
 
     public void Move(DoubleSize s)
     {
-        m_x += s.Width;
-        m_y += s.Height;
+        m_X += s.Width;
+        m_Y += s.Height;
     }
 
     public void Move(double x, double y)
     {
-        m_x += x;
-        m_y += y;
+        m_X += x;
+        m_Y += y;
     }
 
     public void MoveBy(DoublePoint p)
     {
-        m_x += p.X;
-        m_y += p.Y;
+        m_X += p.X;
+        m_Y += p.Y;
     }
 
     public void Scale(float sx, float sy)
     {
-        m_x *= sx;
-        m_y *= sy;
+        m_X *= sx;
+        m_Y *= sy;
     }
 
-    public readonly DoublePoint ScaledBy(float scale) => new(m_x * scale, m_y * scale);
+    public readonly DoublePoint ScaledBy(float scale) => new(m_X * scale, m_Y * scale);
 
     public override readonly bool Equals(object? obj)
     {
@@ -95,7 +101,7 @@ public struct DoublePoint
         return obj is DoublePoint point && this == point;
     }
 
-    public override readonly int GetHashCode() => HashCode.Combine(m_x, m_y);
+    public override readonly int GetHashCode() => HashCode.Combine(m_X, m_Y);
 
     public static bool operator ==(DoublePoint a, DoublePoint b) => a.X == b.X && a.Y == b.Y;
     public static bool operator !=(DoublePoint a, DoublePoint b) => !(a == b);

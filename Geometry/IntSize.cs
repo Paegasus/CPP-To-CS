@@ -2,38 +2,37 @@ namespace UI.Geometry;
 
 public struct IntSize
 {
-    private int m_width, m_height;
+    private int m_Width, m_Height;
+
+    public int Width { readonly get => m_Width; set => m_Width = value; }
+    public int Height { readonly get => m_Height; set => m_Height = value; }
 
     public IntSize()
     {
-        m_width = 0;
-        m_height = 0;
+        m_Width = 0;
+        m_Height = 0;
     }
 
     public IntSize(int width, int height)
     {
-        m_width = width;
-        m_height = height;
+        m_Width = width;
+        m_Height = height;
     }
 
-    public int Width { readonly get { return m_width; } set { m_width = value; } }
-    public int Height { readonly get { return m_height; } set { m_height = value; } }
-
-    public readonly bool IsEmpty() => m_width <= 0 || m_height <= 0;
-    public readonly bool IsZero() => m_width == 0 && m_height == 0;
-
-    public readonly float AspectRatio() => (float)m_width / m_height;
+    public readonly bool IsEmpty() => m_Width <= 0 || m_Height <= 0;
+    public readonly bool IsZero() => m_Width == 0 && m_Height == 0;
+    public readonly float AspectRatio() => (float)m_Width / m_Height;
 
     public void Expand(int width, int height)
     {
-        m_width += width;
-        m_height += height;
+        m_Width += width;
+        m_Height += height;
     }
 
     public void Scale(float widthScale, float heightScale)
     {
-        m_width = (int)(m_width * widthScale);
-        m_height = (int)(m_height * heightScale);
+        m_Width = (int)(m_Width * widthScale);
+        m_Height = (int)(m_Height * heightScale);
     }
 
     public void Scale(float scale)
@@ -43,12 +42,12 @@ public struct IntSize
 
     public readonly IntSize ExpandedTo(IntSize other)
     {
-        return new IntSize(Math.Max(m_width, other.m_width), Math.Max(m_height, other.m_height));
+        return new IntSize(Math.Max(m_Width, other.m_Width), Math.Max(m_Height, other.m_Height));
     }
 
     public readonly IntSize ShrunkTo(IntSize other)
     {
-        return new IntSize(Math.Min(m_width, other.m_width), Math.Min(m_height, other.m_height));
+        return new IntSize(Math.Min(m_Width, other.m_Width), Math.Min(m_Height, other.m_Height));
     }
 
     public void ClampNegativeToZero()
@@ -58,25 +57,23 @@ public struct IntSize
 
     public void ClampToMinimumSize(IntSize minimumSize)
     {
-        if (m_width < minimumSize.Width)
-            m_width = minimumSize.Width;
-        if (m_height < minimumSize.Height)
-            m_height = minimumSize.Height;
+        if (m_Width < minimumSize.Width) m_Width = minimumSize.Width;
+        if (m_Height < minimumSize.Height) m_Height = minimumSize.Height;
     }
 
     public readonly ulong Area()
     {
-        return (ulong)m_width * (ulong)m_height;
+        return (ulong)m_Width * (ulong)m_Height;
     }
 
     public readonly int DiagonalLengthSquared()
     {
-        return m_width * m_width + m_height * m_height;
+        return m_Width * m_Width + m_Height * m_Height;
     }
 
     public readonly IntSize TransposedSize()
     {
-        return new IntSize(m_height, m_width);
+        return new IntSize(m_Height, m_Width);
     }
 
     public override readonly bool Equals(object? obj)
@@ -111,8 +108,5 @@ public struct IntSize
         return a.Width == b.Width && a.Height == b.Height;
     }
 
-    public static bool operator !=(IntSize a, IntSize b)
-    {
-        return !(a == b);
-    }
+    public static bool operator !=(IntSize a, IntSize b) { return !(a == b); }
 }

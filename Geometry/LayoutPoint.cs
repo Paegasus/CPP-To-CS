@@ -2,87 +2,87 @@ namespace UI.Geometry;
 
 public struct LayoutPoint
 {
-    private LayoutUnit m_x, m_y;
+    private LayoutUnit m_X, m_Y;
+
+    public LayoutUnit X { readonly get => m_X; set => m_X = value; }
+    public LayoutUnit Y { readonly get => m_Y; set => m_Y = value; }
 
     public LayoutPoint()
     {
-        m_x = new LayoutUnit();
-        m_y = new LayoutUnit();
+        m_X = new LayoutUnit();
+        m_Y = new LayoutUnit();
     }
 
     public LayoutPoint(LayoutUnit x, LayoutUnit y)
     {
-        m_x = x;
-        m_y = y;
+        m_X = x;
+        m_Y = y;
     }
 
     public LayoutPoint(IntPoint point)
     {
-        m_x = new LayoutUnit(point.X);
-        m_y = new LayoutUnit(point.Y);
+        m_X = new LayoutUnit(point.X);
+        m_Y = new LayoutUnit(point.Y);
     }
 
     public LayoutPoint(FloatPoint point)
     {
-        m_x = new LayoutUnit(point.X);
-        m_y = new LayoutUnit(point.Y);
+        m_X = new LayoutUnit(point.X);
+        m_Y = new LayoutUnit(point.Y);
     }
 
     public LayoutPoint(DoublePoint point)
     {
-        m_x = new LayoutUnit(point.X);
-        m_y = new LayoutUnit(point.Y);
+        m_X = new LayoutUnit(point.X);
+        m_Y = new LayoutUnit(point.Y);
     }
 
     public LayoutPoint(LayoutSize size)
     {
-        m_x = size.Width;
-        m_y = size.Height;
+        m_X = size.Width;
+        m_Y = size.Height;
     }
 
     public static LayoutPoint Zero() { return new LayoutPoint(); }
 
-    public LayoutUnit X { get { return m_x; } set { m_x = value; } }
-    public LayoutUnit Y { get { return m_y; } set { m_y = value; } }
-
     public void Move(LayoutSize s)
     {
-        m_x += s.Width;
-        m_y += s.Height;
+        m_X += s.Width;
+        m_Y += s.Height;
     }
 
     public void Move(IntSize s)
     {
-        m_x += s.Width;
-        m_y += s.Height;
+        m_X += s.Width;
+        m_Y += s.Height;
     }
 
     public void MoveBy(LayoutPoint offset)
     {
-        m_x += offset.X;
-        m_y += offset.Y;
+        m_X += offset.X;
+        m_Y += offset.Y;
     }
 
     public void Move(LayoutUnit dx, LayoutUnit dy)
     {
-        m_x += dx;
-        m_y += dy;
+        m_X += dx;
+        m_Y += dy;
     }
 
     public void Scale(float sx, float sy)
     {
-        m_x *= sx;
-        m_y *= sy;
+        m_X *= sx;
+        m_Y *= sy;
     }
 
-    public LayoutPoint ExpandedTo(LayoutPoint other)
+    public readonly LayoutPoint ExpandedTo(LayoutPoint other)
     {
-        return new LayoutPoint(LayoutUnit.Max(m_x, other.m_x), LayoutUnit.Max(m_y, other.m_y));
+        return new LayoutPoint(LayoutUnit.Max(m_X, other.m_X), LayoutUnit.Max(m_Y, other.m_Y));
     }
 
-    public LayoutPoint ShrunkTo(LayoutPoint other)
+    public readonly LayoutPoint ShrunkTo(LayoutPoint other)
     {
-        return new LayoutPoint(LayoutUnit.Min(m_x, other.m_x), LayoutUnit.Min(m_y, other.m_y));
+        return new LayoutPoint(LayoutUnit.Min(m_X, other.m_X), LayoutUnit.Min(m_Y, other.m_Y));
     }
 
     public void ClampNegativeToZero()
@@ -90,9 +90,9 @@ public struct LayoutPoint
         this = ExpandedTo(Zero());
     }
 
-    public LayoutPoint TransposedPoint()
+    public readonly LayoutPoint TransposedPoint()
     {
-        return new LayoutPoint(m_y, m_x);
+        return new LayoutPoint(m_Y, m_X);
     }
 
     public static LayoutPoint operator +(LayoutPoint a, LayoutSize b)
@@ -152,7 +152,7 @@ public struct LayoutPoint
         return obj is LayoutPoint point && this == point;
     }
 
-    public override int GetHashCode()
+    public override readonly int GetHashCode()
     {
         return HashCode.Combine(X, Y);
     }

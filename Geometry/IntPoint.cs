@@ -2,63 +2,63 @@ namespace UI.Geometry;
 
 public struct IntPoint
 {
-    private int m_x, m_y;
+    private int m_X, m_Y;
+
+    public int X { readonly get => m_X; set => m_X = value; }
+    public int Y { readonly get => m_Y; set => m_Y = value; }
 
     public IntPoint()
     {
-        m_x = 0;
-        m_y = 0;
+        m_X = 0;
+        m_Y = 0;
     }
 
     public IntPoint(int x, int y)
     {
-        m_x = x;
-        m_y = y;
+        m_X = x;
+        m_Y = y;
     }
 
     public IntPoint(IntSize size)
     {
-        m_x = size.Width;
-        m_y = size.Height;
+        m_X = size.Width;
+        m_Y = size.Height;
     }
 
     public static IntPoint Zero() { return new IntPoint(); }
 
-    public int X { readonly get { return m_x; } set { m_x = value; } }
-    public int Y { readonly get { return m_y; } set { m_y = value; } }
-
     public void Move(IntSize s)
     {
-        m_x += s.Width;
-        m_y += s.Height;
+        m_X += s.Width;
+        m_Y += s.Height;
     }
 
     public void MoveBy(IntPoint offset)
     {
-        m_x += offset.X;
-        m_y += offset.Y;
+        m_X += offset.X;
+        m_Y += offset.Y;
     }
 
     public void Move(int dx, int dy)
     {
-        m_x += dx;
-        m_y += dy;
+        m_X += dx;
+        m_Y += dy;
     }
 
     public void Scale(float sx, float sy)
     {
-        m_x = (int)Math.Round(m_x * sx);
-        m_y = (int)Math.Round(m_y * sy);
+        m_X = (int)Math.Round(m_X * sx);
+        m_Y = (int)Math.Round(m_Y * sy);
     }
 
     public readonly IntPoint ExpandedTo(IntPoint other)
     {
-        return new IntPoint(Math.Max(m_x, other.m_x), Math.Max(m_y, other.m_y));
+        return new IntPoint(Math.Max(m_X, other.m_X), Math.Max(m_Y, other.m_Y));
     }
 
     public readonly IntPoint ShrunkTo(IntPoint other)
     {
-        return new IntPoint(Math.Min(m_x, other.m_x), Math.Min(m_y, other.m_y));
+        return new IntPoint(Math.Min(m_X, other.m_X), Math.Min(m_Y, other.m_Y));
     }
 
     public readonly int DistanceSquaredToPoint(IntPoint other)
@@ -73,7 +73,7 @@ public struct IntPoint
 
     public readonly IntPoint TransposedPoint()
     {
-        return new IntPoint(m_y, m_x);
+        return new IntPoint(m_Y, m_X);
     }
 
     public override readonly bool Equals(object? obj)

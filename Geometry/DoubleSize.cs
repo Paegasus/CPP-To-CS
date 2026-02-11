@@ -4,53 +4,53 @@ namespace UI.Geometry;
 
 public struct DoubleSize
 {
-    private double m_width, m_height;
+    private double m_Width, m_Height;
+
+    public double Width { readonly get => m_Width; set => m_Width = value; }
+    public double Height { readonly get => m_Height; set => m_Height = value; }
 
     public DoubleSize()
     {
-        m_width = 0;
-        m_height = 0;
+        m_Width = 0;
+        m_Height = 0;
     }
 
     public DoubleSize(double width, double height)
     {
-        m_width = width;
-        m_height = height;
+        m_Width = width;
+        m_Height = height;
     }
 
     public DoubleSize(IntSize p)
     {
-        m_width = p.Width;
-        m_height = p.Height;
+        m_Width = p.Width;
+        m_Height = p.Height;
     }
 
     public DoubleSize(FloatSize p)
     {
-        m_width = p.Width;
-        m_height = p.Height;
+        m_Width = p.Width;
+        m_Height = p.Height;
     }
 
-    public double Width { readonly get => m_width; set => m_width = value; }
-    public double Height { readonly get => m_height; set => m_height = value; }
-
-    public readonly bool IsEmpty() => m_width <= 0 || m_height <= 0;
-    public readonly bool IsZero() => m_width == 0 && m_height == 0;
+    public readonly bool IsEmpty() => m_Width <= 0 || m_Height <= 0;
+    public readonly bool IsZero() => m_Width == 0 && m_Height == 0;
 
     public readonly DoubleSize ExpandedTo(DoubleSize other)
     {
-        return new DoubleSize(Math.Max(m_width, other.m_width), Math.Max(m_height, other.m_height));
+        return new DoubleSize(Math.Max(m_Width, other.m_Width), Math.Max(m_Height, other.m_Height));
     }
 
     public readonly DoubleSize ShrunkTo(DoubleSize other)
     {
-        return new DoubleSize(Math.Min(m_width, other.m_width), Math.Min(m_height, other.m_height));
+        return new DoubleSize(Math.Min(m_Width, other.m_Width), Math.Min(m_Height, other.m_Height));
     }
 
     public void Scale(float s) { Scale(s, s); }
     public void Scale(float sx, float sy)
     {
-        m_width *= sx;
-        m_height *= sy;
+        m_Width *= sx;
+        m_Height *= sy;
     }
 
     public override readonly bool Equals(object? obj)
@@ -60,7 +60,7 @@ public struct DoubleSize
         return obj is DoubleSize size && this == size;
     }
 
-    public override readonly int GetHashCode() => HashCode.Combine(m_width, m_height);
+    public override readonly int GetHashCode() => HashCode.Combine(m_Width, m_Height);
 
     public static DoubleSize operator +(DoubleSize a, DoubleSize b)
     {

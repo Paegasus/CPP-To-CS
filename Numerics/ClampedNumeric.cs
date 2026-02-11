@@ -14,14 +14,17 @@ namespace UI.Numerics;
 /// </summary>
 /// <typeparam name="T">An integer type that implements IBinaryInteger<T> and IMinMaxValue<T>.</typeparam>
 public readonly struct ClampedNumeric<T> : IEquatable<ClampedNumeric<T>>
-    where T : struct, IBinaryInteger<T>, IMinMaxValue<T> // Restrict to integer types for now
+    where T :
+     struct,
+     IBinaryInteger<T>,
+     IMinMaxValue<T> // Restrict to integer types for now
 {
-    private readonly T _value;
+    private readonly T m_Value;
 
     /// <summary>
     /// Gets the raw underlying value.
     /// </summary>
-    public T RawValue => _value;
+    public T RawValue => m_Value;
 
     /// <summary>
     /// Constructs a ClampedNumeric. The value is saturated on construction.
@@ -30,21 +33,21 @@ public readonly struct ClampedNumeric<T> : IEquatable<ClampedNumeric<T>>
     {
         // Although operators saturate, values can also be constructed from raw T,
         // so we must saturate here for consistency.
-        _value = Conversion.SaturatedCast<T, T>(value);
+        m_Value = Conversion.SaturatedCast<T, T>(value);
     }
 
-    public override string ToString() => _value.ToString() ?? string.Empty;
+    public override string ToString() => m_Value.ToString() ?? string.Empty;
     public override bool Equals(object? obj) => obj is ClampedNumeric<T> other && Equals(other);
-    public bool Equals(ClampedNumeric<T> other) => _value.Equals(other._value);
-    public override int GetHashCode() => _value.GetHashCode();
+    public bool Equals(ClampedNumeric<T> other) => m_Value.Equals(other.m_Value);
+    public override int GetHashCode() => m_Value.GetHashCode();
 
     // --- Comparison Operators ---
     public static bool operator ==(ClampedNumeric<T> left, ClampedNumeric<T> right) => left.Equals(right);
     public static bool operator !=(ClampedNumeric<T> left, ClampedNumeric<T> right) => !left.Equals(right);
-    public static bool operator <(ClampedNumeric<T> left, ClampedNumeric<T> right) => left._value < right._value;
-    public static bool operator <=(ClampedNumeric<T> left, ClampedNumeric<T> right) => left._value <= right._value;
-    public static bool operator >(ClampedNumeric<T> left, ClampedNumeric<T> right) => left._value > right._value;
-    public static bool operator >=(ClampedNumeric<T> left, ClampedNumeric<T> right) => left._value >= right._value;
+    public static bool operator <(ClampedNumeric<T> left, ClampedNumeric<T> right) => left.m_Value < right.m_Value;
+    public static bool operator <=(ClampedNumeric<T> left, ClampedNumeric<T> right) => left.m_Value <= right.m_Value;
+    public static bool operator >(ClampedNumeric<T> left, ClampedNumeric<T> right) => left.m_Value > right.m_Value;
+    public static bool operator >=(ClampedNumeric<T> left, ClampedNumeric<T> right) => left.m_Value >= right.m_Value;
 
     // --- Implicit and Explicit Conversions ---
     public static implicit operator ClampedNumeric<T>(T value) => new(value);
@@ -55,7 +58,7 @@ public readonly struct ClampedNumeric<T> : IEquatable<ClampedNumeric<T>>
 
     public static ClampedNumeric<T> operator -(ClampedNumeric<T> value)
     {
-        var val = value._value;
+        var val = value.m_Value;
         if (val == T.MinValue) return new ClampedNumeric<T>(T.MaxValue);
         return new ClampedNumeric<T>(-val);
     }
@@ -66,8 +69,8 @@ public readonly struct ClampedNumeric<T> : IEquatable<ClampedNumeric<T>>
     // --- Binary Operators ---
     public static ClampedNumeric<T> operator +(ClampedNumeric<T> left, ClampedNumeric<T> right)
     {
-        var a = left._value;
-        var b = right._value;
+        var a = left.m_Value;
+        var b = right.m_Value;
         if (T.IsPositive(b)) { if (a > T.MaxValue - b) return MaxValue; }
         else { if (a < T.MinValue - b) return MinValue; }
         return new ClampedNumeric<T>(a + b);
@@ -75,8 +78,8 @@ public readonly struct ClampedNumeric<T> : IEquatable<ClampedNumeric<T>>
 
     public static ClampedNumeric<T> operator -(ClampedNumeric<T> left, ClampedNumeric<T> right)
     {
-        var a = left._value;
-        var b = right._value;
+        var a = left.m_Value;
+        var b = right.m_Value;
         if (T.IsNegative(b)) { if (a > T.MaxValue + b) return MaxValue; }
         else { if (a < T.MinValue + b) return MinValue; }
         return new ClampedNumeric<T>(a - b);
@@ -84,8 +87,8 @@ public readonly struct ClampedNumeric<T> : IEquatable<ClampedNumeric<T>>
 
     public static ClampedNumeric<T> operator *(ClampedNumeric<T> left, ClampedNumeric<T> right)
     {
-        var a = left._value;
-        var b = right._value;
+        var a = left.m_Value;
+        var b = right.m_Value;
         if (T.IsZero(a) || T.IsZero(b)) return Zero;
         if (a == One) return right;
         if (b == One) return left;
@@ -102,8 +105,8 @@ public readonly struct ClampedNumeric<T> : IEquatable<ClampedNumeric<T>>
 
     public static ClampedNumeric<T> operator /(ClampedNumeric<T> left, ClampedNumeric<T> right)
     {
-        var a = left._value;
-        var b = right._value;
+        var a = left.m_Value;
+        var b = right.m_Value;
         if (T.IsZero(b)) 
         {
             if (T.IsZero(a)) return Zero;
@@ -115,19 +118,19 @@ public readonly struct ClampedNumeric<T> : IEquatable<ClampedNumeric<T>>
 
     public static ClampedNumeric<T> operator %(ClampedNumeric<T> left, ClampedNumeric<T> right)
     {
-        var a = left._value;
-        var b = right._value;
+        var a = left.m_Value;
+        var b = right.m_Value;
         if (T.IsZero(b) || (a == T.MinValue && b == -One)) return left; // Match C++ failure case
         return new ClampedNumeric<T>(a % b);
     }
 
-    public static ClampedNumeric<T> operator &(ClampedNumeric<T> left, ClampedNumeric<T> right) => new(left._value & right._value);
-    public static ClampedNumeric<T> operator |(ClampedNumeric<T> left, ClampedNumeric<T> right) => new(left._value | right._value);
-    public static ClampedNumeric<T> operator ^(ClampedNumeric<T> left, ClampedNumeric<T> right) => new(left._value ^ right._value);
+    public static ClampedNumeric<T> operator &(ClampedNumeric<T> left, ClampedNumeric<T> right) => new(left.m_Value & right.m_Value);
+    public static ClampedNumeric<T> operator |(ClampedNumeric<T> left, ClampedNumeric<T> right) => new(left.m_Value | right.m_Value);
+    public static ClampedNumeric<T> operator ^(ClampedNumeric<T> left, ClampedNumeric<T> right) => new(left.m_Value ^ right.m_Value);
 
     public static ClampedNumeric<T> operator <<(ClampedNumeric<T> left, int shift)
     {
-        var val = left._value;
+        var val = left.m_Value;
         if (shift <= 0) return left;
         int bitWidth = val.GetByteCount() * 8;
         if (shift >= bitWidth) return T.IsNegative(val) ? MinValue : MaxValue;
@@ -143,7 +146,7 @@ public readonly struct ClampedNumeric<T> : IEquatable<ClampedNumeric<T>>
     public static ClampedNumeric<T> operator >>(ClampedNumeric<T> left, int shift)
     {
         if (shift <= 0) return left;
-        return new ClampedNumeric<T>(left._value >> shift);
+        return new ClampedNumeric<T>(left.m_Value >> shift);
     }
 
     // -- Constants --

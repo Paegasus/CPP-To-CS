@@ -8,85 +8,85 @@ public enum AspectRatioFit
 
 public struct LayoutSize
 {
-    private LayoutUnit m_width, m_height;
+    private LayoutUnit m_Width, m_Height;
+
+    public LayoutUnit Width { readonly get => m_Width; set => m_Width = value; }
+    public LayoutUnit Height { readonly get => m_Height; set => m_Height = value; }
 
     public LayoutSize()
     {
-        m_width = new LayoutUnit();
-        m_height = new LayoutUnit();
+        m_Width = new LayoutUnit();
+        m_Height = new LayoutUnit();
     }
 
     public LayoutSize(IntSize size)
     {
-        m_width = new LayoutUnit(size.Width);
-        m_height = new LayoutUnit(size.Height);
+        m_Width = new LayoutUnit(size.Width);
+        m_Height = new LayoutUnit(size.Height);
     }
 
     public LayoutSize(LayoutUnit width, LayoutUnit height)
     {
-        m_width = width;
-        m_height = height;
+        m_Width = width;
+        m_Height = height;
     }
 
     public LayoutSize(FloatSize size)
     {
-        m_width = new LayoutUnit(size.Width);
-        m_height = new LayoutUnit(size.Height);
+        m_Width = new LayoutUnit(size.Width);
+        m_Height = new LayoutUnit(size.Height);
     }
 
     public LayoutSize(DoubleSize size)
     {
-        m_width = new LayoutUnit(size.Width);
-        m_height = new LayoutUnit(size.Height);
+        m_Width = new LayoutUnit(size.Width);
+        m_Height = new LayoutUnit(size.Height);
     }
 
-    public LayoutUnit Width { readonly get { return m_width; } set { m_width = value; } }
-    public LayoutUnit Height { readonly get { return m_height; } set { m_height = value; } }
+    public readonly bool IsEmpty() => m_Width.RawValue() <= 0 || m_Height.RawValue() <= 0;
+    public readonly bool IsZero() => m_Width.RawValue() == 0 && m_Height.RawValue() == 0;
 
-    public readonly bool IsEmpty() => m_width.RawValue() <= 0 || m_height.RawValue() <= 0;
-    public readonly bool IsZero() => m_width.RawValue() == 0 && m_height.RawValue() == 0;
-
-    public readonly float AspectRatio() => m_width.ToFloat() / m_height.ToFloat();
+    public readonly float AspectRatio() => m_Width.ToFloat() / m_Height.ToFloat();
 
     public void Expand(LayoutUnit width, LayoutUnit height)
     {
-        m_width += width;
-        m_height += height;
+        m_Width += width;
+        m_Height += height;
     }
 
     public void Shrink(LayoutUnit width, LayoutUnit height)
     {
-        m_width -= width;
-        m_height -= height;
+        m_Width -= width;
+        m_Height -= height;
     }
 
     public void Scale(float scale)
     {
-        m_width *= scale;
-        m_height *= scale;
+        m_Width *= scale;
+        m_Height *= scale;
     }
 
     public void Scale(float widthScale, float heightScale)
     {
-        m_width *= widthScale;
-        m_height *= heightScale;
+        m_Width *= widthScale;
+        m_Height *= heightScale;
     }
 
     public readonly LayoutSize ExpandedTo(LayoutSize other)
     {
-        return new LayoutSize(LayoutUnit.Max(m_width, other.m_width), LayoutUnit.Max(m_height, other.m_height));
+        return new LayoutSize(LayoutUnit.Max(m_Width, other.m_Width), LayoutUnit.Max(m_Height, other.m_Height));
     }
 
     public readonly LayoutSize ExpandedTo(IntSize other)
     {
         return new LayoutSize(
-            m_width > other.Width ? m_width : new LayoutUnit(other.Width),
-            m_height > other.Height ? m_height : new LayoutUnit(other.Height));
+            m_Width > other.Width ? m_Width : new LayoutUnit(other.Width),
+            m_Height > other.Height ? m_Height : new LayoutUnit(other.Height));
     }
 
     public readonly LayoutSize ShrunkTo(LayoutSize other)
     {
-        return new LayoutSize(LayoutUnit.Min(m_width, other.m_width), LayoutUnit.Min(m_height, other.m_height));
+        return new LayoutSize(LayoutUnit.Min(m_Width, other.m_Width), LayoutUnit.Min(m_Height, other.m_Height));
     }
 
     public void ClampNegativeToZero()
@@ -96,18 +96,16 @@ public struct LayoutSize
 
     public void ClampToMinimumSize(LayoutSize minimumSize)
     {
-        if (m_width < minimumSize.Width)
-            m_width = minimumSize.Width;
-        if (m_height < minimumSize.Height)
-            m_height = minimumSize.Height;
+        if (m_Width < minimumSize.Width) m_Width = minimumSize.Width;
+        if (m_Height < minimumSize.Height) m_Height = minimumSize.Height;
     }
 
     public readonly LayoutSize TransposedSize()
     {
-        return new LayoutSize(m_height, m_width);
+        return new LayoutSize(m_Height, m_Width);
     }
 
-    public LayoutSize FitToAspectRatio(LayoutSize aspectRatio, AspectRatioFit fit)
+    public readonly LayoutSize FitToAspectRatio(LayoutSize aspectRatio, AspectRatioFit fit)
     {
         float heightScale = Height.ToFloat() / aspectRatio.Height.ToFloat();
         float widthScale = Width.ToFloat() / aspectRatio.Width.ToFloat();
@@ -118,7 +116,7 @@ public struct LayoutSize
 
     public readonly LayoutSize Fraction()
     {
-        return new LayoutSize(m_width.Fraction(), m_height.Fraction());
+        return new LayoutSize(m_Width.Fraction(), m_Height.Fraction());
     }
 
     public override readonly bool Equals(object? obj)
@@ -128,7 +126,7 @@ public struct LayoutSize
         return obj is LayoutSize size && this == size;
     }
 
-    public override int GetHashCode()
+    public override readonly int GetHashCode()
     {
         return HashCode.Combine(Width, Height);
     }

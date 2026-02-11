@@ -1,4 +1,3 @@
-using System;
 using System.Diagnostics;
 using System.Numerics;
 using UI.Numerics;
@@ -112,7 +111,7 @@ public struct LayoutUnit : IFixedPoint<int, uint>, IEquatable<LayoutUnit>, IComp
 
 	public readonly uint ToUnsignedInteger()
 	{
-        // unchecked is required here to handle the conversion of negative values correctly
+        // unchecked is necessary here to handle the conversion of negative values correctly
 		unchecked
 		{
 			return (uint)(m_Value / FixedPointDenominator);

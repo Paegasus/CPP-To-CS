@@ -5,129 +5,129 @@ namespace UI.Geometry;
 
 public struct FloatPoint
 {
-    private float m_x, m_y;
+    private float m_X, m_Y;
+
+    public float X { readonly get => m_X; set => m_X = value; }
+    public float Y { readonly get => m_Y; set => m_Y = value; }
 
     public FloatPoint()
     {
-        m_x = 0;
-        m_y = 0;
+        m_X = 0;
+        m_Y = 0;
     }
 
     public FloatPoint(float x, float y)
     {
-        m_x = x;
-        m_y = y;
+        m_X = x;
+        m_Y = y;
     }
 
     public FloatPoint(IntPoint p)
     {
-        m_x = p.X;
-        m_y = p.Y;
+        m_X = p.X;
+        m_Y = p.Y;
     }
     
     public FloatPoint(DoublePoint p)
     {
-        m_x = (float) p.X;
-        m_y = (float) p.Y;
+        m_X = (float) p.X;
+        m_Y = (float) p.Y;
     }
     
     public FloatPoint(LayoutPoint p)
     {
-        m_x = p.X.ToFloat();
-        m_y = p.Y.ToFloat();
+        m_X = p.X.ToFloat();
+        m_Y = p.Y.ToFloat();
     }
 
     public FloatPoint(FloatSize size)
     {
-        m_x = size.Width;
-        m_y = size.Height;
+        m_X = size.Width;
+        m_Y = size.Height;
     }
     
     public FloatPoint(LayoutSize size)
     {
-        m_x = size.Width.ToFloat();
-        m_y = size.Height.ToFloat();
+        m_X = size.Width.ToFloat();
+        m_Y = size.Height.ToFloat();
     }
 
     public FloatPoint(IntSize size)
     {
-        m_x = size.Width;
-        m_y = size.Height;
+        m_X = size.Width;
+        m_Y = size.Height;
     }
 
     public static FloatPoint Zero() => new();
 
     public static FloatPoint NarrowPrecision(double x, double y) => new((float)x, (float)y);
 
-    public float X { readonly get => m_x; set => m_x = value; }
-    public float Y { readonly get => m_y; set => m_y = value; }
-
     public void Set(float x, float y)
     {
-        m_x = x;
-        m_y = y;
+        m_X = x;
+        m_Y = y;
     }
-
+    
     public void Move(float dx, float dy)
     {
-        m_x += dx;
-        m_y += dy;
+        m_X += dx;
+        m_Y += dy;
     }
 
     public void Move(IntSize s)
     {
-        m_x += s.Width;
-        m_y += s.Height;
+        m_X += s.Width;
+        m_Y += s.Height;
     }
     
     public void Move(LayoutSize s)
     {
-        m_x += s.Width.ToFloat();
-        m_y += s.Height.ToFloat();
+        m_X += s.Width.ToFloat();
+        m_Y += s.Height.ToFloat();
     }
 
     public void Move(FloatSize s)
     {
-        m_x += s.Width;
-        m_y += s.Height;
+        m_X += s.Width;
+        m_Y += s.Height;
     }
 
     public void MoveBy(IntPoint p)
     {
-        m_x += p.X;
-        m_y += p.Y;
+        m_X += p.X;
+        m_Y += p.Y;
     }
     
     public void MoveBy(LayoutPoint p)
     {
-        m_x += p.X.ToFloat();
-        m_y += p.Y.ToFloat();
+        m_X += p.X.ToFloat();
+        m_Y += p.Y.ToFloat();
     }
 
     public void MoveBy(FloatPoint p)
     {
-        m_x += p.X;
-        m_y += p.Y;
+        m_X += p.X;
+        m_Y += p.Y;
     }
 
     public void Scale(float sx, float sy)
     {
-        m_x *= sx;
-        m_y *= sy;
+        m_X *= sx;
+        m_Y *= sy;
     }
 
-    public readonly float Dot(FloatPoint other) => m_x * other.X + m_y * other.Y;
+    public readonly float Dot(FloatPoint other) => m_X * other.X + m_Y * other.Y;
 
-    public readonly float SlopeAngleRadians() => (float)Math.Atan2(m_y, m_x);
+    public readonly float SlopeAngleRadians() => (float)Math.Atan2(m_Y, m_X);
     public readonly float Length() => (float)Math.Sqrt(LengthSquared());
-    public readonly float LengthSquared() => m_x * m_x + m_y * m_y;
+    public readonly float LengthSquared() => m_X * m_X + m_Y * m_Y;
 
-    public readonly FloatPoint ExpandedTo(FloatPoint other) => new(Math.Max(m_x, other.X), Math.Max(m_y, other.Y));
-    public readonly FloatPoint ShrunkTo(FloatPoint other) => new(Math.Min(m_x, other.X), Math.Min(m_y, other.Y));
+    public readonly FloatPoint ExpandedTo(FloatPoint other) => new(Math.Max(m_X, other.X), Math.Max(m_Y, other.Y));
+    public readonly FloatPoint ShrunkTo(FloatPoint other) => new(Math.Min(m_X, other.X), Math.Min(m_Y, other.Y));
 
-    public readonly FloatPoint TransposedPoint() => new(m_y, m_x);
+    public readonly FloatPoint TransposedPoint() => new(m_Y, m_X);
 
-    public readonly FloatPoint ScaledBy(float scale) => new(m_x * scale, m_y * scale);
+    public readonly FloatPoint ScaledBy(float scale) => new(m_X * scale, m_Y * scale);
 
     public override readonly bool Equals(object? obj)
     {
@@ -136,7 +136,7 @@ public struct FloatPoint
         return obj is FloatPoint point && this == point;
     }
 
-    public override readonly int GetHashCode() => HashCode.Combine(m_x, m_y);
+    public override readonly int GetHashCode() => HashCode.Combine(m_X, m_Y);
 
     public static FloatPoint operator +(FloatPoint a, FloatSize b) => new(a.X + b.Width, a.Y + b.Height);
     public static FloatPoint operator +(FloatPoint a, IntSize b) => new(a.X + b.Width, a.Y + b.Height);
@@ -163,11 +163,11 @@ public struct FloatPoint
 
     public static implicit operator SKPoint(FloatPoint point)
     {
-        return new SKPoint(point.m_x, point.m_y);
+        return new SKPoint(point.m_X, point.m_Y);
     }
 
     public override readonly string ToString()
     {
-        return $"FloatPoint({m_x}, {m_y})";
+        return $"FloatPoint({m_X}, {m_Y})";
     }
 }
