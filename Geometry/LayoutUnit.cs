@@ -285,7 +285,12 @@ public struct LayoutUnit : IFixedPoint<int, uint>, IEquatable<LayoutUnit>, IComp
         return formatted;
     }
 
-    public override readonly bool Equals(object? obj) => obj is LayoutUnit other && Equals(other);
+    public override readonly bool Equals(object? obj)
+    {
+        if(obj is null) return false;
+        
+        return obj is LayoutUnit other && Equals(other);
+    }
 
     public readonly bool Equals(LayoutUnit other) => m_Value == other.m_Value;
 
