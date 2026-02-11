@@ -9,24 +9,24 @@ public struct IntRect
     private IntSize m_size;
     
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private IntRect intersection(ref IntRect a, ref IntRect b) // C++: const IntRect& a, const IntRect& b
+    private readonly IntRect Intersection(in IntRect a, in IntRect b)
     {
         IntRect c = a;
-        c.Intersect(ref b);
+        c.Intersect(in b);
         return c;
     }
 
-    private void Intersect(ref IntRect other)
+    private void Intersect(in IntRect other)
     {
         throw new NotImplementedException();
     }
     
-    private void Unite(ref IntRect other)
+    private void Unite(in IntRect other)
     {
         throw new NotImplementedException();
     }
 
-    private void UniteIfNonZero(ref IntRect other)
+    private void UniteIfNonZero(in IntRect other)
     {
         throw new NotImplementedException();
     }

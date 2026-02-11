@@ -19,7 +19,7 @@ public struct IntPoint
         m_Y = y;
     }
 
-    public IntPoint(IntSize size)
+    public IntPoint(in IntSize size)
     {
         m_X = size.Width;
         m_Y = size.Height;
@@ -27,13 +27,13 @@ public struct IntPoint
 
     public static IntPoint Zero() { return new IntPoint(); }
 
-    public void Move(IntSize s)
+    public void Move(in IntSize s)
     {
         m_X += s.Width;
         m_Y += s.Height;
     }
 
-    public void MoveBy(IntPoint offset)
+    public void MoveBy(in IntPoint offset)
     {
         m_X += offset.X;
         m_Y += offset.Y;
@@ -51,17 +51,17 @@ public struct IntPoint
         m_Y = (int)Math.Round(m_Y * sy);
     }
 
-    public readonly IntPoint ExpandedTo(IntPoint other)
+    public readonly IntPoint ExpandedTo(in IntPoint other)
     {
         return new IntPoint(Math.Max(m_X, other.m_X), Math.Max(m_Y, other.m_Y));
     }
 
-    public readonly IntPoint ShrunkTo(IntPoint other)
+    public readonly IntPoint ShrunkTo(in IntPoint other)
     {
         return new IntPoint(Math.Min(m_X, other.m_X), Math.Min(m_Y, other.m_Y));
     }
 
-    public readonly int DistanceSquaredToPoint(IntPoint other)
+    public readonly int DistanceSquaredToPoint(in IntPoint other)
     {
         return (this - other).DiagonalLengthSquared();
     }
@@ -123,7 +123,7 @@ public struct IntPoint
         return !(a == b);
     }
 
-    public static IntSize ToIntSize(IntPoint a)
+    public static IntSize ToIntSize(in IntPoint a)
     {
         return new IntSize(a.X, a.Y);
     }

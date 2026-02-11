@@ -40,12 +40,12 @@ public struct IntSize
         Scale(scale, scale);
     }
 
-    public readonly IntSize ExpandedTo(IntSize other)
+    public readonly IntSize ExpandedTo(in IntSize other)
     {
         return new IntSize(Math.Max(m_Width, other.m_Width), Math.Max(m_Height, other.m_Height));
     }
 
-    public readonly IntSize ShrunkTo(IntSize other)
+    public readonly IntSize ShrunkTo(in IntSize other)
     {
         return new IntSize(Math.Min(m_Width, other.m_Width), Math.Min(m_Height, other.m_Height));
     }
@@ -55,7 +55,7 @@ public struct IntSize
         this = ExpandedTo(new IntSize());
     }
 
-    public void ClampToMinimumSize(IntSize minimumSize)
+    public void ClampToMinimumSize(in IntSize minimumSize)
     {
         if (m_Width < minimumSize.Width) m_Width = minimumSize.Width;
         if (m_Height < minimumSize.Height) m_Height = minimumSize.Height;

@@ -298,42 +298,42 @@ public struct LayoutUnit : IFixedPoint<int, uint>, IEquatable<LayoutUnit>, IComp
 
     public override readonly int GetHashCode() => m_Value.GetHashCode();
 
-    public static implicit operator double(LayoutUnit a) => a.ToDouble();
-    public static implicit operator float(LayoutUnit a) => a.ToFloat();
-    public static implicit operator bool(LayoutUnit a) => a.m_Value != 0;
+    public static implicit operator double(in LayoutUnit a) => a.ToDouble();
+    public static implicit operator float(in LayoutUnit a) => a.ToFloat();
+    public static implicit operator bool(in LayoutUnit a) => a.m_Value != 0;
 
-    public static bool operator ==(LayoutUnit left, LayoutUnit right) => left.Equals(right);
-    public static bool operator !=(LayoutUnit left, LayoutUnit right) => !left.Equals(right);
-    public static bool operator <(LayoutUnit left, LayoutUnit right) => left.m_Value < right.m_Value;
-    public static bool operator <=(LayoutUnit left, LayoutUnit right) => left.m_Value <= right.m_Value;
-    public static bool operator >(LayoutUnit left, LayoutUnit right) => left.m_Value > right.m_Value;
-    public static bool operator >=(LayoutUnit left, LayoutUnit right) => left.m_Value >= right.m_Value;
+    public static bool operator ==(in LayoutUnit left, in LayoutUnit right) => left.Equals(right);
+    public static bool operator !=(in LayoutUnit left, in LayoutUnit right) => !left.Equals(right);
+    public static bool operator <(in LayoutUnit left, in LayoutUnit right) => left.m_Value < right.m_Value;
+    public static bool operator <=(in LayoutUnit left, in LayoutUnit right) => left.m_Value <= right.m_Value;
+    public static bool operator >(in LayoutUnit left, in LayoutUnit right) => left.m_Value > right.m_Value;
+    public static bool operator >=(in LayoutUnit left, in LayoutUnit right) => left.m_Value >= right.m_Value;
 
-    public static bool operator <=(LayoutUnit a, int b) => a <= new LayoutUnit(b);
-    public static bool operator <=(int a, LayoutUnit b) => new LayoutUnit(a) <= b;
-    public static bool operator >=(LayoutUnit a, int b) => a >= new LayoutUnit(b);
-    public static bool operator >=(int a, LayoutUnit b) => new LayoutUnit(a) >= b;
-    public static bool operator <(LayoutUnit a, int b) => a < new LayoutUnit(b);
-    public static bool operator <(int a, LayoutUnit b) => new LayoutUnit(a) < b;
-    public static bool operator >(LayoutUnit a, int b) => a > new LayoutUnit(b);
-    public static bool operator >(int a, LayoutUnit b) => new LayoutUnit(a) > b;
-    public static bool operator ==(LayoutUnit a, int b) => a == new LayoutUnit(b);
-    public static bool operator ==(int a, LayoutUnit b) => new LayoutUnit(a) == b;
-    public static bool operator !=(LayoutUnit a, int b) => a != new LayoutUnit(b);
-    public static bool operator !=(int a, LayoutUnit b) => new LayoutUnit(a) != b;
+    public static bool operator <=(in LayoutUnit a, int b) => a <= new LayoutUnit(b);
+    public static bool operator <=(int a, in LayoutUnit b) => new LayoutUnit(a) <= b;
+    public static bool operator >=(in LayoutUnit a, int b) => a >= new LayoutUnit(b);
+    public static bool operator >=(int a, in LayoutUnit b) => new LayoutUnit(a) >= b;
+    public static bool operator <(in LayoutUnit a, int b) => a < new LayoutUnit(b);
+    public static bool operator <(int a, in LayoutUnit b) => new LayoutUnit(a) < b;
+    public static bool operator >(in LayoutUnit a, int b) => a > new LayoutUnit(b);
+    public static bool operator >(int a, in LayoutUnit b) => new LayoutUnit(a) > b;
+    public static bool operator ==(in LayoutUnit a, int b) => a == new LayoutUnit(b);
+    public static bool operator ==(int a, in LayoutUnit b) => new LayoutUnit(a) == b;
+    public static bool operator !=(in LayoutUnit a, int b) => a != new LayoutUnit(b);
+    public static bool operator !=(int a, in LayoutUnit b) => new LayoutUnit(a) != b;
 
     // --- Floating-Point Operators ---
 
     // Operators with LayoutUnit as the left operand return a new LayoutUnit.
     // This allows for compound assignment (e.g., myLayoutUnit += 5.0f).
-    public static LayoutUnit operator +(LayoutUnit a, float b) => new(a.ToFloat() + b);
-    public static LayoutUnit operator +(LayoutUnit a, double b) => new(a.ToDouble() + b);
-    public static LayoutUnit operator -(LayoutUnit a, float b) => new(a.ToFloat() - b);
-    public static LayoutUnit operator -(LayoutUnit a, double b) => new(a.ToDouble() - b);
-    public static LayoutUnit operator *(LayoutUnit a, float b) => new(a.ToFloat() * b);
-    public static LayoutUnit operator *(LayoutUnit a, double b) => new(a.ToDouble() * b);
-    public static LayoutUnit operator /(LayoutUnit a, float b) => new(a.ToFloat() / b);
-    public static LayoutUnit operator /(LayoutUnit a, double b) => new(a.ToDouble() / b);
+    public static LayoutUnit operator +(in LayoutUnit a, float b) => new(a.ToFloat() + b);
+    public static LayoutUnit operator +(in LayoutUnit a, double b) => new(a.ToDouble() + b);
+    public static LayoutUnit operator -(in LayoutUnit a, float b) => new(a.ToFloat() - b);
+    public static LayoutUnit operator -(in LayoutUnit a, double b) => new(a.ToDouble() - b);
+    public static LayoutUnit operator *(in LayoutUnit a, float b) => new(a.ToFloat() * b);
+    public static LayoutUnit operator *(in LayoutUnit a, double b) => new(a.ToDouble() * b);
+    public static LayoutUnit operator /(in LayoutUnit a, float b) => new(a.ToFloat() / b);
+    public static LayoutUnit operator /(in LayoutUnit a, double b) => new(a.ToDouble() / b);
 
     // Operators with a float/double as the left operand return a float/double.
     // This preserves standard arithmetic behavior.
@@ -346,7 +346,7 @@ public struct LayoutUnit : IFixedPoint<int, uint>, IEquatable<LayoutUnit>, IComp
     public static float operator /(float a, LayoutUnit b) => a / b.ToFloat();
     public static double operator /(double a, LayoutUnit b) => a / b.ToDouble();
 
-    public static LayoutUnit operator -(LayoutUnit a)
+    public static LayoutUnit operator -(in LayoutUnit a)
     {
         // This is implemented to match the C++ behavior of two's complement
         // integer negation, where -int.MinValue is int.MinValue. The unchecked
@@ -357,56 +357,56 @@ public struct LayoutUnit : IFixedPoint<int, uint>, IEquatable<LayoutUnit>, IComp
         }
     }
 
-    public static LayoutUnit operator ++(LayoutUnit a)
+    public static LayoutUnit operator ++(in LayoutUnit a)
     {
         return a + new LayoutUnit(1);
     }
 
-    public static LayoutUnit operator --(LayoutUnit a)
+    public static LayoutUnit operator --(in LayoutUnit a)
     {
         return a - new LayoutUnit(1);
     }
 
-    public static LayoutUnit operator +(LayoutUnit a, LayoutUnit b)
+    public static LayoutUnit operator +(in LayoutUnit a, in LayoutUnit b)
     {
         ClampedNumeric<int> result = new ClampedNumeric<int>(a.RawValue()) + new ClampedNumeric<int>(b.RawValue());
         return FromRawValue(result.RawValue);
     }
 
-    public static LayoutUnit operator -(LayoutUnit a, LayoutUnit b)
+    public static LayoutUnit operator -(in LayoutUnit a, in LayoutUnit b)
     {
         ClampedNumeric<int> result = new ClampedNumeric<int>(a.RawValue()) - new ClampedNumeric<int>(b.RawValue());
         return FromRawValue(result.RawValue);
     }
 
-    public static LayoutUnit operator *(LayoutUnit a, int b)
+    public static LayoutUnit operator *(in LayoutUnit a, int b)
     {
         ClampedNumeric<int> result = new ClampedNumeric<int>(a.RawValue()) * new ClampedNumeric<int>(b);
         return FromRawValue(result.RawValue);
     }
 
-    public static LayoutUnit operator *(int a, LayoutUnit b) => b * a;
+    public static LayoutUnit operator *(int a, in LayoutUnit b) => b * a;
 
-    public static LayoutUnit operator /(LayoutUnit a, int b)
+    public static LayoutUnit operator /(in LayoutUnit a, int b)
     {
         ClampedNumeric<int> result = new ClampedNumeric<int>(a.RawValue()) / new ClampedNumeric<int>(b);
         return FromRawValue(result.RawValue);
     }
 
-    public static LayoutUnit operator /(int a, LayoutUnit b) => new LayoutUnit(a) / b;
+    public static LayoutUnit operator /(int a, in LayoutUnit b) => new LayoutUnit(a) / b;
 
-    public static LayoutUnit operator +(LayoutUnit a, int b) => a + new LayoutUnit(b);
-    public static LayoutUnit operator +(int a, LayoutUnit b) => new LayoutUnit(a) + b;
-    public static LayoutUnit operator -(LayoutUnit a, int b) => a - new LayoutUnit(b);
-    public static LayoutUnit operator -(int a, LayoutUnit b) => new LayoutUnit(a) - b;
+    public static LayoutUnit operator +(in LayoutUnit a, int b) => a + new LayoutUnit(b);
+    public static LayoutUnit operator +(int a, in LayoutUnit b) => new LayoutUnit(a) + b;
+    public static LayoutUnit operator -(in LayoutUnit a, int b) => a - new LayoutUnit(b);
+    public static LayoutUnit operator -(int a, in LayoutUnit b) => new LayoutUnit(a) - b;
 
-    public static LayoutUnit operator *(LayoutUnit a, LayoutUnit b)
+    public static LayoutUnit operator *(in LayoutUnit a, in LayoutUnit b)
     {
         long result = ((long)a.RawValue() * b.RawValue()) >> FractionalBits;
         return FromRawValue(ClampRawValue(result));
     }
 
-    public static LayoutUnit operator /(LayoutUnit a, LayoutUnit b)
+    public static LayoutUnit operator /(in LayoutUnit a, in LayoutUnit b)
     {
         if (b.RawValue() == 0)
             return FromRawValue(a.RawValue() >= 0 ? RawValueMax : RawValueMin);
@@ -420,14 +420,15 @@ public struct LayoutUnit : IFixedPoint<int, uint>, IEquatable<LayoutUnit>, IComp
     /// This calculates the modulo so that:
     /// a = (int)(a / b) * b + IntMod(a, b).
     /// </summary>
-    public static LayoutUnit IntMod(LayoutUnit a, LayoutUnit b)
+    public static LayoutUnit IntMod(in LayoutUnit a, in LayoutUnit b)
     {
         return FromRawValue(a.RawValue() % b.RawValue());
     }
 
-    public static int SnapSizeToPixel(LayoutUnit size, LayoutUnit location)
+    public static int SnapSizeToPixel(in LayoutUnit size, in LayoutUnit location)
     {
         LayoutUnit fraction = location.Fraction();
+        
         int result = (fraction + size).Round() - fraction.Round();
 
         // This check handles cases where a LayoutUnit is small but non-zero.
@@ -441,7 +442,7 @@ public struct LayoutUnit : IFixedPoint<int, uint>, IEquatable<LayoutUnit>, IComp
         return result;
     }
 
-    public static int SnapSizeToPixelAllowingZero(LayoutUnit size, LayoutUnit location)
+    public static int SnapSizeToPixelAllowingZero(in LayoutUnit size, in LayoutUnit location)
     {
         LayoutUnit fraction = location.Fraction();
         return (fraction + size).Round() - fraction.Round();
@@ -450,7 +451,7 @@ public struct LayoutUnit : IFixedPoint<int, uint>, IEquatable<LayoutUnit>, IComp
     /// <summary>
     /// Returns (a * b) / c.
     /// </summary>
-    public static LayoutUnit MulDiv(LayoutUnit a, LayoutUnit b, LayoutUnit c)
+    public static LayoutUnit MulDiv(in LayoutUnit a, in LayoutUnit b, in LayoutUnit c)
     {
         if (c.RawValue() == 0) return FromRawValue(a.RawValue() >= 0 ? RawValueMax : RawValueMin);
 
@@ -461,7 +462,7 @@ public struct LayoutUnit : IFixedPoint<int, uint>, IEquatable<LayoutUnit>, IComp
     /// <summary>
     /// Returns (a * b) / c.
     /// </summary>
-    public static LayoutUnit MulDiv(LayoutUnit a, int b, int c)
+    public static LayoutUnit MulDiv(in LayoutUnit a, int b, int c)
     {
         if (c == 0) return FromRawValue(a.RawValue() >= 0 ? RawValueMax : RawValueMin);
 
@@ -473,7 +474,7 @@ public struct LayoutUnit : IFixedPoint<int, uint>, IEquatable<LayoutUnit>, IComp
     /// Rounds |a| down to the nearest multiple of |b|.
     /// The rounding is towards zero.
     /// </summary>
-    public static LayoutUnit RoundDownToMultiple(LayoutUnit a, LayoutUnit b)
+    public static LayoutUnit RoundDownToMultiple(in LayoutUnit a, in LayoutUnit b)
     {
         if (b.RawValue() <= 0) return new LayoutUnit(); // Return 0
 
@@ -486,6 +487,6 @@ public struct LayoutUnit : IFixedPoint<int, uint>, IEquatable<LayoutUnit>, IComp
         return r.RawValue() > 0 ? new LayoutUnit() : r;
     }
 
-    public static LayoutUnit Min(LayoutUnit a, LayoutUnit b) => a < b ? a : b;
-    public static LayoutUnit Max(LayoutUnit a, LayoutUnit b) => a > b ? a : b;
+    public static LayoutUnit Min(in LayoutUnit a, in LayoutUnit b) => a < b ? a : b;
+    public static LayoutUnit Max(in LayoutUnit a, in LayoutUnit b) => a > b ? a : b;
 }

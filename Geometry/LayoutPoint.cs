@@ -13,31 +13,31 @@ public struct LayoutPoint
         m_Y = new LayoutUnit();
     }
 
-    public LayoutPoint(LayoutUnit x, LayoutUnit y)
+    public LayoutPoint(in LayoutUnit x, in LayoutUnit y)
     {
         m_X = x;
         m_Y = y;
     }
 
-    public LayoutPoint(IntPoint point)
+    public LayoutPoint(in IntPoint point)
     {
         m_X = new LayoutUnit(point.X);
         m_Y = new LayoutUnit(point.Y);
     }
 
-    public LayoutPoint(FloatPoint point)
+    public LayoutPoint(in FloatPoint point)
     {
         m_X = new LayoutUnit(point.X);
         m_Y = new LayoutUnit(point.Y);
     }
 
-    public LayoutPoint(DoublePoint point)
+    public LayoutPoint(in DoublePoint point)
     {
         m_X = new LayoutUnit(point.X);
         m_Y = new LayoutUnit(point.Y);
     }
 
-    public LayoutPoint(LayoutSize size)
+    public LayoutPoint(in LayoutSize size)
     {
         m_X = size.Width;
         m_Y = size.Height;
@@ -45,25 +45,25 @@ public struct LayoutPoint
 
     public static LayoutPoint Zero() { return new LayoutPoint(); }
 
-    public void Move(LayoutSize s)
+    public void Move(in LayoutSize s)
     {
         m_X += s.Width;
         m_Y += s.Height;
     }
 
-    public void Move(IntSize s)
+    public void Move(in IntSize s)
     {
         m_X += s.Width;
         m_Y += s.Height;
     }
 
-    public void MoveBy(LayoutPoint offset)
+    public void MoveBy(in LayoutPoint offset)
     {
         m_X += offset.X;
         m_Y += offset.Y;
     }
 
-    public void Move(LayoutUnit dx, LayoutUnit dy)
+    public void Move(in LayoutUnit dx, in LayoutUnit dy)
     {
         m_X += dx;
         m_Y += dy;
@@ -75,12 +75,12 @@ public struct LayoutPoint
         m_Y *= sy;
     }
 
-    public readonly LayoutPoint ExpandedTo(LayoutPoint other)
+    public readonly LayoutPoint ExpandedTo(in LayoutPoint other)
     {
         return new LayoutPoint(LayoutUnit.Max(m_X, other.m_X), LayoutUnit.Max(m_Y, other.m_Y));
     }
 
-    public readonly LayoutPoint ShrunkTo(LayoutPoint other)
+    public readonly LayoutPoint ShrunkTo(in LayoutPoint other)
     {
         return new LayoutPoint(LayoutUnit.Min(m_X, other.m_X), LayoutUnit.Min(m_Y, other.m_Y));
     }
@@ -157,67 +157,67 @@ public struct LayoutPoint
         return HashCode.Combine(X, Y);
     }
 
-    public static LayoutPoint ToPoint(LayoutSize size)
+    public static LayoutPoint ToPoint(in LayoutSize size)
     {
         return new LayoutPoint(size.Width, size.Height);
     }
 
-    public static LayoutPoint ToLayoutPoint(LayoutSize p)
+    public static LayoutPoint ToLayoutPoint(in LayoutSize p)
     {
         return new LayoutPoint(p.Width, p.Height);
     }
 
-    public static LayoutSize ToSize(LayoutPoint a)
+    public static LayoutSize ToSize(in LayoutPoint a)
     {
         return new LayoutSize(a.X, a.Y);
     }
 
-    public static IntPoint FlooredIntPoint(LayoutPoint point)
+    public static IntPoint FlooredIntPoint(in LayoutPoint point)
     {
         return new IntPoint(point.X.Floor(), point.Y.Floor());
     }
 
-    public static IntPoint RoundedIntPoint(LayoutPoint point)
+    public static IntPoint RoundedIntPoint(in LayoutPoint point)
     {
         return new IntPoint(point.X.Round(), point.Y.Round());
     }
 
-    public static IntPoint CeiledIntPoint(LayoutPoint point)
+    public static IntPoint CeiledIntPoint(in LayoutPoint point)
     {
         return new IntPoint(point.X.Ceil(), point.Y.Ceil());
     }
 
-    public static LayoutPoint FlooredLayoutPoint(FloatPoint p)
+    public static LayoutPoint FlooredLayoutPoint(in FloatPoint p)
     {
         return new LayoutPoint(LayoutUnit.FromFloatFloor(p.X), LayoutUnit.FromFloatFloor(p.Y));
     }
 
-    public static LayoutPoint CeiledLayoutPoint(FloatPoint p)
+    public static LayoutPoint CeiledLayoutPoint(in FloatPoint p)
     {
         return new LayoutPoint(LayoutUnit.FromFloatCeil(p.X), LayoutUnit.FromFloatCeil(p.Y));
     }
 
-    public static IntSize PixelSnappedIntSize(LayoutSize s, LayoutPoint p)
+    public static IntSize PixelSnappedIntSize(in LayoutSize s, LayoutPoint p)
     {
         return new IntSize(LayoutUnit.SnapSizeToPixel(s.Width, p.X), LayoutUnit.SnapSizeToPixel(s.Height, p.Y));
     }
 
-    public static LayoutPoint RoundedLayoutPoint(FloatPoint p)
+    public static LayoutPoint RoundedLayoutPoint(in FloatPoint p)
     {
         return new LayoutPoint(p);
     }
 
-    public static IntSize RoundedIntSize(LayoutPoint p)
+    public static IntSize RoundedIntSize(in LayoutPoint p)
     {
         return new IntSize(p.X.Round(), p.Y.Round());
     }
 
-    public static LayoutSize ToLayoutSize(LayoutPoint p)
+    public static LayoutSize ToLayoutSize(in LayoutPoint p)
     {
         return new LayoutSize(p.X, p.Y);
     }
 
-    public static LayoutPoint FlooredLayoutPoint(FloatSize s)
+    public static LayoutPoint FlooredLayoutPoint(in FloatSize s)
     {
         return FlooredLayoutPoint(new FloatPoint(s));
     }

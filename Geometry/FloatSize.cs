@@ -21,13 +21,13 @@ public struct FloatSize
         m_Height = height;
     }
 
-    public FloatSize(IntSize size)
+    public FloatSize(in IntSize size)
     {
         m_Width = size.Width;
         m_Height = size.Height;
     }
 
-    public FloatSize(LayoutSize size)
+    public FloatSize(in LayoutSize size)
     {
         m_Width = size.Width.ToFloat();
         m_Height = size.Height.ToFloat();
@@ -64,12 +64,12 @@ public struct FloatSize
         m_Height = MathF.Floor(m_Height * scale);
     }
 
-    public readonly FloatSize ExpandedTo(FloatSize other)
+    public readonly FloatSize ExpandedTo(in FloatSize other)
     {
         return new FloatSize(Math.Max(m_Width, other.m_Width), Math.Max(m_Height, other.m_Height));
     }
 
-    public readonly FloatSize ShrunkTo(FloatSize other)
+    public readonly FloatSize ShrunkTo(in FloatSize other)
     {
         return new FloatSize(Math.Min(m_Width, other.m_Width), Math.Min(m_Height, other.m_Height));
     }
@@ -101,8 +101,8 @@ public struct FloatSize
     public static bool operator ==(FloatSize a, FloatSize b) => a.Width == b.Width && a.Height == b.Height;
     public static bool operator !=(FloatSize a, FloatSize b) => !(a == b);
 
-    public static IntSize RoundedIntSize(FloatSize p) => new(MathExtras.ClampTo(MathF.Round(p.Width)), MathExtras.ClampTo(MathF.Round(p.Height)));
-    public static IntSize FlooredIntSize(FloatSize p) => new(MathExtras.ClampTo(MathF.Floor(p.Width)), MathExtras.ClampTo(MathF.Floor(p.Height)));
-    public static IntSize ExpandedIntSize(FloatSize p) => new(MathExtras.ClampTo(MathF.Ceiling(p.Width)), MathExtras.ClampTo(MathF.Ceiling(p.Height)));
-    public static IntPoint FlooredIntPoint(FloatSize p) => new(MathExtras.ClampTo(MathF.Floor(p.Width)), MathExtras.ClampTo(MathF.Floor(p.Height)));
+    public static IntSize RoundedIntSize(in FloatSize p) => new(MathExtras.ClampTo(MathF.Round(p.Width)), MathExtras.ClampTo(MathF.Round(p.Height)));
+    public static IntSize FlooredIntSize(in FloatSize p) => new(MathExtras.ClampTo(MathF.Floor(p.Width)), MathExtras.ClampTo(MathF.Floor(p.Height)));
+    public static IntSize ExpandedIntSize(in FloatSize p) => new(MathExtras.ClampTo(MathF.Ceiling(p.Width)), MathExtras.ClampTo(MathF.Ceiling(p.Height)));
+    public static IntPoint FlooredIntPoint(in FloatSize p) => new(MathExtras.ClampTo(MathF.Floor(p.Width)), MathExtras.ClampTo(MathF.Floor(p.Height)));
 }

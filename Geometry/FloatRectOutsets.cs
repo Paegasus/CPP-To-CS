@@ -29,7 +29,7 @@ public struct FloatRectOutsets
     }
 
     // Change outsets to be at least as large as other.
-    public void Unite(ref FloatRectOutsets other) // C++: const FloatRectOutsets& other
+    public void Unite(in FloatRectOutsets other) // C++: const FloatRectOutsets& other
     {
         m_Top = Math.Max(m_Top, other.m_Top);
         m_Right = Math.Max(m_Right, other.m_Right);

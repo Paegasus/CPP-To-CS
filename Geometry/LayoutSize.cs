@@ -19,25 +19,25 @@ public struct LayoutSize
         m_Height = new LayoutUnit();
     }
 
-    public LayoutSize(IntSize size)
+    public LayoutSize(in IntSize size)
     {
         m_Width = new LayoutUnit(size.Width);
         m_Height = new LayoutUnit(size.Height);
     }
 
-    public LayoutSize(LayoutUnit width, LayoutUnit height)
+    public LayoutSize(in LayoutUnit width, in LayoutUnit height)
     {
         m_Width = width;
         m_Height = height;
     }
 
-    public LayoutSize(FloatSize size)
+    public LayoutSize(in FloatSize size)
     {
         m_Width = new LayoutUnit(size.Width);
         m_Height = new LayoutUnit(size.Height);
     }
 
-    public LayoutSize(DoubleSize size)
+    public LayoutSize(in DoubleSize size)
     {
         m_Width = new LayoutUnit(size.Width);
         m_Height = new LayoutUnit(size.Height);
@@ -48,13 +48,13 @@ public struct LayoutSize
 
     public readonly float AspectRatio() => m_Width.ToFloat() / m_Height.ToFloat();
 
-    public void Expand(LayoutUnit width, LayoutUnit height)
+    public void Expand(in LayoutUnit width, in LayoutUnit height)
     {
         m_Width += width;
         m_Height += height;
     }
 
-    public void Shrink(LayoutUnit width, LayoutUnit height)
+    public void Shrink(in LayoutUnit width, in LayoutUnit height)
     {
         m_Width -= width;
         m_Height -= height;
@@ -72,19 +72,19 @@ public struct LayoutSize
         m_Height *= heightScale;
     }
 
-    public readonly LayoutSize ExpandedTo(LayoutSize other)
+    public readonly LayoutSize ExpandedTo(in LayoutSize other)
     {
         return new LayoutSize(LayoutUnit.Max(m_Width, other.m_Width), LayoutUnit.Max(m_Height, other.m_Height));
     }
 
-    public readonly LayoutSize ExpandedTo(IntSize other)
+    public readonly LayoutSize ExpandedTo(in IntSize other)
     {
         return new LayoutSize(
             m_Width > other.Width ? m_Width : new LayoutUnit(other.Width),
             m_Height > other.Height ? m_Height : new LayoutUnit(other.Height));
     }
 
-    public readonly LayoutSize ShrunkTo(LayoutSize other)
+    public readonly LayoutSize ShrunkTo(in LayoutSize other)
     {
         return new LayoutSize(LayoutUnit.Min(m_Width, other.m_Width), LayoutUnit.Min(m_Height, other.m_Height));
     }
@@ -94,7 +94,7 @@ public struct LayoutSize
         this = ExpandedTo(new LayoutSize());
     }
 
-    public void ClampToMinimumSize(LayoutSize minimumSize)
+    public void ClampToMinimumSize(in LayoutSize minimumSize)
     {
         if (m_Width < minimumSize.Width) m_Width = minimumSize.Width;
         if (m_Height < minimumSize.Height) m_Height = minimumSize.Height;
@@ -105,7 +105,7 @@ public struct LayoutSize
         return new LayoutSize(m_Height, m_Width);
     }
 
-    public readonly LayoutSize FitToAspectRatio(LayoutSize aspectRatio, AspectRatioFit fit)
+    public readonly LayoutSize FitToAspectRatio(in LayoutSize aspectRatio, AspectRatioFit fit)
     {
         float heightScale = Height.ToFloat() / aspectRatio.Height.ToFloat();
         float widthScale = Width.ToFloat() / aspectRatio.Width.ToFloat();
@@ -181,17 +181,17 @@ public struct LayoutSize
         return new FloatPoint(a.X + b.Width, a.Y + b.Height);
     }
 
-    public static IntSize FlooredIntSize(LayoutSize s)
+    public static IntSize FlooredIntSize(in LayoutSize s)
     {
         return new IntSize(s.Width.Floor(), s.Height.Floor());
     }
 
-    public static IntSize RoundedIntSize(LayoutSize s)
+    public static IntSize RoundedIntSize(in LayoutSize s)
     {
         return new IntSize(s.Width.Round(), s.Height.Round());
     }
 
-    public static LayoutSize RoundedLayoutSize(FloatSize s)
+    public static LayoutSize RoundedLayoutSize(in FloatSize s)
     {
         return new LayoutSize(s);
     }
