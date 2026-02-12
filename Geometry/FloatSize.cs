@@ -41,7 +41,7 @@ public struct FloatSize
 
     public static FloatSize NarrowPrecision(double width, double height)
     {
-        return new FloatSize((float)width, (float)height);
+        return new FloatSize(ClampTo<float>(width), ClampTo<float>(height));
     }
 
     public readonly bool IsEmpty() => m_Width <= 0 || m_Height <= 0;
@@ -51,7 +51,10 @@ public struct FloatSize
         return Math.Abs(m_Width) < epsilon && Math.Abs(m_Height) < epsilon;
     }
 
-    public readonly bool IsExpressibleAsIntSize() => m_Width == (int)m_Width && m_Height == (int)m_Height;
+    public readonly bool IsExpressibleAsIntSize()
+    {
+        return IsWithinIntRange(m_Width) && IsWithinIntRange(m_Height);
+    }
 
     public readonly float AspectRatio() => m_Width / m_Height;
 
