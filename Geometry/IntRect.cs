@@ -7,129 +7,127 @@ namespace UI.Geometry;
 
 public struct IntRect
 {
-    private IntPoint m_location;
-    private IntSize m_size;
+    private IntPoint m_Location;
+    private IntSize m_Size;
     
     public IntRect(int x, int y, int width, int height)
     {
-        m_location = new IntPoint(x, y);
-        m_size = new IntSize(width, height);
+        m_Location = new IntPoint(x, y);
+        m_Size = new IntSize(width, height);
     }
 
     public IntRect(in IntPoint location, in IntSize size)
     {
-        m_location = location;
-        m_size = size;
+        m_Location = location;
+        m_Size = size;
     }
     
-    public IntRect(in FloatRect r)
+    public IntRect(in FloatRect rect)
     {
-        m_location = new IntPoint(MathExtras.ClampTo(r.x()), MathExtras.ClampTo(r.y()));
-        m_size = new IntSize(MathExtras.ClampTo(r.width()), MathExtras.ClampTo(r.height()));
+        m_Location = new IntPoint(MathExtras.ClampTo(rect.x()), MathExtras.ClampTo(rect.y()));
+        m_Size = new IntSize(MathExtras.ClampTo(rect.width()), MathExtras.ClampTo(rect.height()));
     }
 
     // Note: verify if we're doing this correctly
-    public IntRect(in LayoutRect r)
+    public IntRect(in LayoutRect rect)
     {
-        m_location = new IntPoint(r.x().ToInteger(), r.y().ToInteger());
-        m_size = new IntSize(r.width().ToInteger(), r.height().ToInteger());
+        m_Location = new IntPoint(rect.x().ToInteger(), rect.y().ToInteger());
+        m_Size = new IntSize(rect.width().ToInteger(), rect.height().ToInteger());
     }
 
-    public readonly IntPoint location() { return m_location; }
-    public readonly IntSize size() { return m_size; }
+    public readonly IntPoint Location() { return m_Location; }
+    public readonly IntSize Size() { return m_Size; }
 
-    public void setLocation(in IntPoint location) { m_location = location; }
-    public void setSize(in IntSize size) { m_size = size; }
+    public void SetLocation(in IntPoint location) { m_Location = location; }
+    public void SetSize(in IntSize size) { m_Size = size; }
+    
+    public int X { readonly get => m_Location.X; set => m_Location.X = value; }
+    public int Y { readonly get => m_Location.Y; set => m_Location.Y = value; }
+    public readonly int MaxX => X + Width;
+    public readonly int MaxY => Y + Height;
+    public readonly int Width => m_Size.Width;
+    public readonly int Height => m_Size.Height;
 
-    public readonly int x() { return m_location.X; }
-    public readonly int y() { return m_location.Y; }
-    public readonly int maxX() { return x() + width(); }
-    public readonly int maxY() { return y() + height(); }
-    public readonly int width() { return m_size.Width; }
-    public readonly int height() { return m_size.Height; }
+    public void SetWidth(int width) { m_Size.Width = width; }
+    public void SetHeight(int height) { m_Size.Height = height; }
 
-    public void setX(int x) { m_location.X = x; }
-    public void setY(int y) { m_location.Y = y; }
-    public void setWidth(int width) { m_size.Width = width; }
-    public void setHeight(int height) { m_size.Height = height; }
-
-    public readonly bool isEmpty() { return m_size.IsEmpty(); }
+    public readonly bool IsEmpty() { return m_Size.IsEmpty(); }
 
     // NOTE: The result is rounded to integer values, and thus may be not the exact center point.
-    public readonly IntPoint center() { return new IntPoint(x() + width() / 2, y() + height() / 2); }
+    public readonly IntPoint Center() { return new IntPoint(X + Width / 2, Y + Height / 2); }
 
-    public void move(in IntSize size) { m_location += size; }
-    public void moveBy(in IntPoint offset) { m_location.Move(offset.X, offset.Y); }
-    public void move(int dx, int dy) { m_location.Move(dx, dy); }
+    public void Move(in IntSize size) { m_Location += size; }
+    public void MoveBy(in IntPoint offset) { m_Location.Move(offset.X, offset.Y); }
+    public void Move(int dx, int dy) { m_Location.Move(dx, dy); }
 
-    public void expand(in IntSize size) { m_size += size; }
-    public void expand(int dw, int dh) { m_size.Expand(dw, dh); }
-    public void contract(in IntSize size) { m_size -= size; }
-    public void contract(int dw, int dh) { m_size.Expand(-dw, -dh); }
+    public void Expand(in IntSize size) { m_Size += size; }
+    public void Expand(int dw, int dh) { m_Size.Expand(dw, dh); }
+    public void Contract(in IntSize size) { m_Size -= size; }
+    public void Contract(int dw, int dh) { m_Size.Expand(-dw, -dh); }
 
-    public void shiftXEdgeTo(int edge)
+    public void ShiftXEdgeTo(int edge)
     {
-        int delta = edge - x();
-        setX(edge);
-        setWidth(Math.Max(0, width() - delta));
+        int delta = edge - X;
+        X = edge;
+        SetWidth(Math.Max(0, Width - delta));
     }
 
-    public void shiftMaxXEdgeTo(int edge)
+    public void ShiftMaxXEdgeTo(int edge)
     {
-        int delta = edge - maxX();
-        setWidth(Math.Max(0, width() + delta));
+        int delta = edge - MaxX;
+        SetWidth(Math.Max(0, Width + delta));
     }
 
-    public void shiftYEdgeTo(int edge)
+    public void ShiftYEdgeTo(int edge)
     {
-        int delta = edge - y();
-        setY(edge);
-        setHeight(Math.Max(0, height() - delta));
+        int delta = edge - Y;
+        Y = edge;
+        SetHeight(Math.Max(0, Height - delta));
     }
 
-    public void shiftMaxYEdgeTo(int edge)
+    public void ShiftMaxYEdgeTo(int edge)
     {
-        int delta = edge - maxY();
-        setHeight(Math.Max(0, height() + delta));
+        int delta = edge - MaxY;
+        SetHeight(Math.Max(0, Height + delta));
     }
 
-    public readonly IntPoint minXMinYCorner() { return m_location; } // typically topLeft
-    public readonly IntPoint maxXMinYCorner() { return new IntPoint(m_location.X + m_size.Width, m_location.Y); } // typically topRight
-    public readonly IntPoint minXMaxYCorner() { return new IntPoint(m_location.X, m_location.Y + m_size.Height); } // typically bottomLeft
-    public readonly IntPoint maxXMaxYCorner() { return new IntPoint(m_location.X + m_size.Width, m_location.Y + m_size.Height); } // typically bottomRight
+    public readonly IntPoint MinXMinYCorner() { return m_Location; } // typically topLeft
+    public readonly IntPoint MaxXMinYCorner() { return new IntPoint(m_Location.X + m_Size.Width, m_Location.Y); } // typically topRight
+    public readonly IntPoint MinXMaxYCorner() { return new IntPoint(m_Location.X, m_Location.Y + m_Size.Height); } // typically bottomLeft
+    public readonly IntPoint MaxXMaxYCorner() { return new IntPoint(m_Location.X + m_Size.Width, m_Location.Y + m_Size.Height); } // typically bottomRight
 
-    public readonly bool intersects(in IntRect other)
+    public readonly bool Intersects(in IntRect other)
     {
         // Checking emptiness handles negative widths as well as zero.
-        return !isEmpty() && !other.isEmpty()
-            && x() < other.maxX() && other.x() < maxX()
-            && y() < other.maxY() && other.y() < maxY();
+        return !IsEmpty() && !other.IsEmpty()
+            && X < other.MaxX && other.X < MaxX
+            && Y < other.MaxY && other.Y < MaxY;
     }
 
-    public readonly bool contains(in IntRect other)
+    public readonly bool Contains(in IntRect other)
     {
-        return x() <= other.x() && maxX() >= other.maxX()
-        && y() <= other.y() && maxY() >= other.maxY();
+        return X <= other.X && MaxX >= other.MaxX
+            && Y <= other.Y && MaxY >= other.MaxY;
     }
 
     // This checks to see if the rect contains x,y in the traditional sense.
     // Equivalent to checking if the rect contains a 1x1 rect below and to the right of (px,py).
-    public readonly bool contains(int px, int py)
+    public readonly bool Contains(int px, int py)
     {
-        return px >= x() && px < maxX() && py >= y() && py < maxY();
+        return px >= X && px < MaxX && py >= Y && py < MaxY;
     }
 
-    public readonly bool contains(in IntPoint point)
+    public readonly bool Contains(in IntPoint point)
     {
-        return contains(point.X, point.Y);
+        return Contains(point.X, point.Y);
     }
 
-    public void intersect(in IntRect other)
+    public void Intersect(in IntRect other)
     {
-        int left = Math.Max(x(), other.x());
-        int top = Math.Max(y(), other.y());
-        int right = Math.Min(maxX(), other.maxX());
-        int bottom = Math.Min(maxY(), other.maxY());
+        int left = Math.Max(X, other.X);
+        int top = Math.Max(Y, other.Y);
+        int right = Math.Min(MaxX, other.MaxX);
+        int bottom = Math.Min(MaxY, other.MaxY);
 
         // Return a clean empty rectangle for non-intersecting cases.
         if (left >= right || top >= bottom)
@@ -140,163 +138,160 @@ public struct IntRect
             bottom = 0;
         }
 
-        m_location.X = left;
-        m_location.Y = top;
-        m_size.Width = right - left;
-        m_size.Height = bottom - top;
+        m_Location.X = left;
+        m_Location.Y = top;
+        m_Size.Width = right - left;
+        m_Size.Height = bottom - top;
     }
 
-    public void unite(in IntRect other)
+    public void Unite(in IntRect other)
     {
         // Handle empty special cases first.
-        if (other.isEmpty()) return;
+        if (other.IsEmpty()) return;
         
-        if (isEmpty())
+        if (IsEmpty())
         {
-            m_location = other.m_location;
-            m_size = other.m_size;
+            m_Location = other.m_Location;
+            m_Size = other.m_Size;
 
             return;
         }
 
-        uniteEvenIfEmpty(other);
+        UniteEvenIfEmpty(other);
     }
 
-    public void uniteIfNonZero(in IntRect other)
+    public void UniteIfNonZero(in IntRect other)
     {
         // Handle empty special cases first.
-        if (other.width() == 0 && other.height() == 0)
-            return;
+        if (other.Width == 0 && other.Height == 0) return;
         
-        if (width() == 0 && height() == 0)
+        if (Width == 0 && Height == 0)
         {
-            m_location = other.m_location;
-            m_size = other.m_size;
+            m_Location = other.m_Location;
+            m_Size = other.m_Size;
 
             return;
         }
         
-        uniteEvenIfEmpty(other);
+        UniteEvenIfEmpty(other);
     }
 
     // Besides non-empty rects, this method also unites empty rects (as points or line segments).
     // For example, union of (100, 100, 0x0) and (200, 200, 50x0) is (100, 100, 150x100).
-    public void uniteEvenIfEmpty(in IntRect other)
+    public void UniteEvenIfEmpty(in IntRect other)
     {
-        int left = Math.Min(x(), other.x());
-        int top = Math.Min(y(), other.y());
-        int right = Math.Max(maxX(), other.maxX());
-        int bottom = Math.Max(maxY(), other.maxY());
+        int left = Math.Min(X, other.X);
+        int top = Math.Min(Y, other.Y);
+        int right = Math.Max(MaxX, other.MaxX);
+        int bottom = Math.Max(MaxY, other.MaxY);
 
-        m_location.X = left;
-        m_location.Y = top;
-        m_size.Width = right - left;
-        m_size.Height = bottom - top;
+        m_Location.X = left;
+        m_Location.Y = top;
+        m_Size.Width = right - left;
+        m_Size.Height = bottom - top;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static IntRect intersection(in IntRect a, in IntRect b)
+    public static IntRect Intersection(in IntRect a, in IntRect b)
     {
         IntRect c = a;
-        c.intersect(b);
+        c.Intersect(b);
         return c;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static IntRect unionRect(in IntRect a, in IntRect b)
+    public static IntRect UnionRect(in IntRect a, in IntRect b)
     {
         IntRect c = a;
-        c.unite(b);
+        c.Unite(b);
         return c;
     }
 
-    public static IntRect unionRect(List<IntRect> rects) // (const Vector<IntRect>& rects)
+    public static IntRect UnionRect(ReadOnlySpan<IntRect> rects)
     {
         IntRect result = new();
 
-        var count = rects.Count;
-
-        for (var i = 0; i < count; ++i)
+        for (var i = 0; i < rects.Length; ++i)
         
-            result.unite(rects[i]);
+            result.Unite(rects[i]);
 
         return result;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static IntRect unionRectEvenIfEmpty(in IntRect a, in IntRect b)
+    public static IntRect UnionRectEvenIfEmpty(in IntRect a, in IntRect b)
     {
         IntRect c = a;
-        c.uniteEvenIfEmpty(b);
+        c.UniteEvenIfEmpty(b);
         return c;
     }
 
-    IntRect unionRectEvenIfEmpty(List<IntRect> rects) // (const Vector<IntRect>& rects)
+    public static IntRect UnionRectEvenIfEmpty(ReadOnlySpan<IntRect> rects)
     {
-        var count = rects.Count;
-
-        if (count == 0) return new IntRect();
+        if (rects.Length == 0) return new IntRect();
 
         IntRect result = rects[0];
 
-        for (var i = 1; i < count; ++i)
+        for (var i = 1; i < rects.Length; ++i)
 
-            result.uniteEvenIfEmpty(rects[i]);
+            result.UniteEvenIfEmpty(rects[i]);
 
         return result;
     }
 
-    public void inflateX(int dx)
+    public void InflateX(int dx)
     {
-        m_location.X = m_location.X - dx;
-        m_size.Width = m_size.Width + dx + dx;
+        m_Location.X -= dx;
+        m_Size.Width = m_Size.Width + dx + dx;
     }
 
-    public void inflateY(int dy)
+    public void InflateY(int dy)
     {
-        m_location.Y = m_location.Y - dy;
-        m_size.Height = m_size.Height + dy + dy;
+        m_Location.Y -= dy;
+        m_Size.Height = m_Size.Height + dy + dy;
     }
 
-    public void inflate(int d)
+    public void Inflate(int d)
     {
-        inflateX(d); inflateY(d);
+        InflateX(d); InflateY(d);
     }
 
-    public void scale(float s)
+    public void Scale(float s)
     {
-        m_location.X = (int)(x() * s);
-        m_location.Y = (int)(y() * s);
-        m_size.Width = (int)(width() * s);
-        m_size.Height = (int)(height() * s);
+        m_Location.X = (int)(X * s);
+        m_Location.Y = (int)(Y * s);
+        m_Size.Width = (int)(Width * s);
+        m_Size.Height = (int)(Height * s);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    static int distanceToInterval(int pos, int start, int end)
+    static int DistanceToInterval(int pos, int start, int end)
     {
         if (pos < start)
             return start - pos;
+
         if (pos > end)
             return end - pos;
+        
         return 0;
     }
 
-    public readonly IntSize differenceToPoint(in IntPoint point)
+    public readonly IntSize DifferenceToPoint(in IntPoint point)
     {
-        int xdistance = distanceToInterval(point.X, x(), maxX());
-        int ydistance = distanceToInterval(point.Y, y(), maxY());
+        int xDistance = DistanceToInterval(point.X, X, MaxX);
+        int yDistance = DistanceToInterval(point.Y, Y, MaxY);
 
-        return new IntSize(xdistance, ydistance);
+        return new IntSize(xDistance, yDistance);
     }
 
-    public readonly int distanceSquaredToPoint(in IntPoint p)
+    public readonly int DistanceSquaredToPoint(in IntPoint p)
     {
-        return differenceToPoint(p).DiagonalLengthSquared();
+        return DifferenceToPoint(p).DiagonalLengthSquared();
     }
 
-    public readonly IntRect transposedRect()
+    public readonly IntRect TransposedRect()
     {
-        return new IntRect(m_location.TransposedPoint(), m_size.TransposedSize());
+        return new IntRect(m_Location.TransposedPoint(), m_Size.TransposedSize());
     }
 
     // don't do this implicitly since it's lossy
@@ -313,17 +308,17 @@ public struct IntRect
 
     public static implicit operator SKRect(in IntRect rect)
     {
-        return new SKRect(rect.x(), rect.y(), rect.maxX(), rect.maxY());
+        return new SKRect(rect.X, rect.Y, rect.MaxX, rect.MaxY);
     }
 
     public static implicit operator SKRectI(in IntRect rect)
     {
-        return new SKRectI(rect.x(), rect.y(), rect.maxX(), rect.maxY());
+        return new SKRectI(rect.X, rect.Y, rect.MaxX, rect.MaxY);
     }
 
     public static bool operator ==(in IntRect a, in IntRect b)
     {
-        return a.m_location == b.m_location && a.m_size == b.m_size;
+        return a.m_Location == b.m_Location && a.m_Size == b.m_Size;
     }
 
     public static bool operator !=(in IntRect a, in IntRect b)
@@ -335,7 +330,7 @@ public struct IntRect
 
     public readonly bool Equals(in IntRect other) => this == other;
 
-    public override readonly int GetHashCode() => HashCode.Combine(m_location, m_size);
+    public override readonly int GetHashCode() => HashCode.Combine(m_Location, m_Size);
 
 #if DEBUG
     // Prints the rect to the screen.
