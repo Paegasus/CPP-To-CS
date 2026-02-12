@@ -1,4 +1,3 @@
-using UI.Numerics;
 using SkiaSharp;
 
 using static UI.Numerics.MathExtras;
@@ -29,6 +28,12 @@ public struct FloatSize
     }
 
     public FloatSize(in IntSize size)
+    {
+        m_Width = size.Width;
+        m_Height = size.Height;
+    }
+
+    public FloatSize(in SKSize size)
     {
         m_Width = size.Width;
         m_Height = size.Height;
@@ -115,7 +120,7 @@ public struct FloatSize
     public static IntSize FlooredIntSize(in FloatSize p) => new(ClampTo<int>(MathF.Floor(p.Width)), ClampTo<int>(MathF.Floor(p.Height)));
     public static IntSize ExpandedIntSize(in FloatSize p) => new(ClampTo<int>(MathF.Ceiling(p.Width)), ClampTo<int>(MathF.Ceiling(p.Height)));
     public static IntPoint FlooredIntPoint(in FloatSize p) => new(ClampTo<int>(MathF.Floor(p.Width)), ClampTo<int>(MathF.Floor(p.Height)));
-    
+
     public static implicit operator SKSize(in FloatSize size)
     {
         return new SKSize(size.m_Width, size.m_Height);
