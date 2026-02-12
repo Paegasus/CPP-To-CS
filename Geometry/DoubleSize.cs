@@ -4,6 +4,10 @@ namespace UI.Geometry;
 
 public struct DoubleSize
 {
+    // Machine epsilon for IEEE-754 double
+	// Equivalent to std::numeric_limits<double>::epsilon()
+	private static readonly double epsilon = Math.Pow(2, -52);
+
     private double m_Width, m_Height;
 
     public double Width { readonly get => m_Width; set => m_Width = value; }
@@ -43,8 +47,8 @@ public struct DoubleSize
 
     public readonly bool IsZero()
     {
-        return Math.Abs(m_Width) < double.Epsilon &&
-               Math.Abs(m_Height) < double.Epsilon;
+        return Math.Abs(m_Width) < epsilon &&
+               Math.Abs(m_Height) < epsilon;
     }
 
     public readonly DoubleSize ExpandedTo(in DoubleSize other)
