@@ -24,8 +24,8 @@ public struct IntRect
     
     public IntRect(in FloatRect rect)
     {
-        m_Location = new IntPoint(MathExtras.ClampTo(rect.X), MathExtras.ClampTo(rect.Y));
-        m_Size = new IntSize(MathExtras.ClampTo(rect.Width), MathExtras.ClampTo(rect.Height));
+        m_Location = new IntPoint(MathExtras.ClampTo<int>(rect.X), MathExtras.ClampTo<int>(rect.Y));
+        m_Size = new IntSize(MathExtras.ClampTo<int>(rect.Width), MathExtras.ClampTo<int>(rect.Height));
     }
 
     public IntRect(in LayoutRect rect)

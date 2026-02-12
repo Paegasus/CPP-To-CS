@@ -148,11 +148,11 @@ public struct FloatPoint
 
     public static float operator *(FloatPoint a, FloatPoint b) => a.Dot(b);
     
-    public static IntPoint RoundedIntPoint(in FloatPoint p) => new(MathExtras.ClampTo(MathF.Round(p.X)), MathExtras.ClampTo(MathF.Round(p.Y)));
-    public static IntSize RoundedIntSize(in FloatPoint p) => new(MathExtras.ClampTo(MathF.Round(p.X)), MathExtras.ClampTo(MathF.Round(p.Y)));
-    public static IntPoint FlooredIntPoint(in FloatPoint p) => new(MathExtras.ClampTo(MathF.Floor(p.X)), MathExtras.ClampTo(MathF.Floor(p.Y)));
-    public static IntPoint CeiledIntPoint(in FloatPoint p) => new(MathExtras.ClampTo(MathF.Ceiling(p.X)), MathExtras.ClampTo(MathF.Ceiling(p.Y)));
-    public static IntSize FlooredIntSize(in FloatPoint p) => new(MathExtras.ClampTo(MathF.Floor(p.X)), MathExtras.ClampTo(MathF.Floor(p.Y)));
+    public static IntPoint RoundedIntPoint(in FloatPoint p) => new(MathExtras.ClampTo<int>(MathF.Round(p.X)), MathExtras.ClampTo<int>(MathF.Round(p.Y)));
+    public static IntSize RoundedIntSize(in FloatPoint p) => new(MathExtras.ClampTo<int>(MathF.Round(p.X)), MathExtras.ClampTo<int>(MathF.Round(p.Y)));
+    public static IntPoint FlooredIntPoint(in FloatPoint p) => new(MathExtras.ClampTo<int>(MathF.Floor(p.X)), MathExtras.ClampTo<int>(MathF.Floor(p.Y)));
+    public static IntPoint CeiledIntPoint(in FloatPoint p) => new(MathExtras.ClampTo<int>(MathF.Ceiling(p.X)), MathExtras.ClampTo<int>(MathF.Ceiling(p.Y)));
+    public static IntSize FlooredIntSize(in FloatPoint p) => new(MathExtras.ClampTo<int>(MathF.Floor(p.X)), MathExtras.ClampTo<int>(MathF.Floor(p.Y)));
 
     public static FloatSize ToFloatSize(in FloatPoint a) => new(a.X, a.Y);
 
