@@ -83,7 +83,7 @@ public struct FloatSize
         return new FloatSize(Math.Min(m_Width, other.m_Width), Math.Min(m_Height, other.m_Height));
     }
 
-    public readonly float DiagonalLength() => MathF.Sqrt(DiagonalLengthSquared());
+    public readonly float DiagonalLength() => float.Hypot(m_Width, m_Height);
     public readonly float DiagonalLengthSquared() => m_Width * m_Width + m_Height * m_Height;
 
     public readonly FloatSize TransposedSize() => new(m_Height, m_Width);
