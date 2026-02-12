@@ -28,7 +28,6 @@ public struct IntRect
         m_Size = new IntSize(MathExtras.ClampTo(rect.width()), MathExtras.ClampTo(rect.height()));
     }
 
-    // Note: verify if we're doing this correctly
     public IntRect(in LayoutRect rect)
     {
         m_Location = new IntPoint(rect.x().ToInteger(), rect.y().ToInteger());
