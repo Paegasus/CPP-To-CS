@@ -129,12 +129,7 @@ public struct FloatPoint
 
     public readonly FloatPoint ScaledBy(float scale) => new(m_X * scale, m_Y * scale);
 
-    public override readonly bool Equals(object? obj)
-    {
-        if(obj is null) return false;
-        
-        return obj is FloatPoint point && this == point;
-    }
+    public override readonly bool Equals(object? obj) => obj is FloatPoint point && this == point;
 
     public override readonly int GetHashCode() => HashCode.Combine(m_X, m_Y);
 

@@ -119,12 +119,7 @@ public struct LayoutSize
         return new LayoutSize(m_Width.Fraction(), m_Height.Fraction());
     }
 
-    public override readonly bool Equals(object? obj)
-    {
-        if(obj is null) return false;
-        
-        return obj is LayoutSize size && this == size;
-    }
+    public override readonly bool Equals(object? obj) => obj is LayoutSize size && this == size;
 
     public override readonly int GetHashCode()
     {

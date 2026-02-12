@@ -76,12 +76,7 @@ public struct IntSize
         return new IntSize(m_Height, m_Width);
     }
 
-    public override readonly bool Equals(object? obj)
-    {
-        if(obj is null) return false;
-        
-        return obj is IntSize size && this == size;
-    }
+    public override readonly bool Equals(object? obj) => obj is IntSize size && this == size;
 
     public override readonly int GetHashCode()
     {

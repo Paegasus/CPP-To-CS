@@ -76,12 +76,7 @@ public struct IntPoint
         return new IntPoint(m_Y, m_X);
     }
 
-    public override readonly bool Equals(object? obj)
-    {
-        if(obj is null) return false;
-        
-        return obj is IntPoint point && this == point;
-    }
+    public override readonly bool Equals(object? obj) => obj is IntPoint point && this == point;
 
     public override readonly int GetHashCode()
     {

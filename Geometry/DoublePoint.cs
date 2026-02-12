@@ -94,12 +94,7 @@ public struct DoublePoint
 
     public readonly DoublePoint ScaledBy(float scale) => new(m_X * scale, m_Y * scale);
 
-    public override readonly bool Equals(object? obj)
-    {
-        if(obj is null) return false;
-        
-        return obj is DoublePoint point && this == point;
-    }
+    public override readonly bool Equals(object? obj) => obj is DoublePoint point && this == point;
 
     public override readonly int GetHashCode() => HashCode.Combine(m_X, m_Y);
 

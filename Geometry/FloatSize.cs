@@ -82,12 +82,7 @@ public struct FloatSize
     public readonly FloatSize ScaledBy(float scale) => ScaledBy(scale, scale);
     public readonly FloatSize ScaledBy(float scaleX, float scaleY) => new(m_Width * scaleX, m_Height * scaleY);
 
-    public override readonly bool Equals(object? obj)
-    {
-        if(obj is null) return false;
-        
-        return obj is FloatSize size && this == size;
-    }
+    public override readonly bool Equals(object? obj) => obj is FloatSize size && this == size;
 
     public override readonly int GetHashCode() => HashCode.Combine(m_Width, m_Height);
 

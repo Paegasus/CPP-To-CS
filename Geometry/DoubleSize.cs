@@ -53,12 +53,7 @@ public struct DoubleSize
         m_Height *= sy;
     }
 
-    public override readonly bool Equals(object? obj)
-    {
-        if(obj is null) return false;
-        
-        return obj is DoubleSize size && this == size;
-    }
+    public override readonly bool Equals(object? obj) => obj is DoubleSize size && this == size;
 
     public override readonly int GetHashCode() => HashCode.Combine(m_Width, m_Height);
 

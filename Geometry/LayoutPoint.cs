@@ -145,12 +145,7 @@ public struct LayoutPoint
         return !(a == b);
     }
 
-    public override readonly bool Equals(object? obj)
-    {
-        if(obj is null) return false;
-        
-        return obj is LayoutPoint point && this == point;
-    }
+    public override readonly bool Equals(object? obj) => obj is LayoutPoint point && this == point;
 
     public override readonly int GetHashCode()
     {
