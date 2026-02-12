@@ -98,6 +98,10 @@ public struct DoublePoint
 
     public override readonly int GetHashCode() => HashCode.Combine(m_X, m_Y);
 
+    public static implicit operator DoublePoint(in IntPoint p) => new(p);
+    public static implicit operator DoublePoint(in FloatPoint p) => new(p);
+    public static implicit operator DoublePoint(in LayoutPoint p) => new(p);
+
     public static bool operator ==(DoublePoint a, DoublePoint b) => a.X == b.X && a.Y == b.Y;
     public static bool operator !=(DoublePoint a, DoublePoint b) => !(a == b);
 

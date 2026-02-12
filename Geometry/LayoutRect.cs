@@ -4,22 +4,16 @@ namespace UI.Geometry;
 
 public struct LayoutRect
 {
-    private LayoutPoint m_location;
-    private LayoutSize m_size;
+    private LayoutPoint m_Location;
+    private LayoutSize m_Size;
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public readonly LayoutUnit x() { return m_location.X; }
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public readonly LayoutUnit y() { return m_location.Y; }
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public readonly LayoutUnit maxX() { return x() + width(); }
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public readonly LayoutUnit maxY() { return y() + height(); }
-    public readonly LayoutUnit width() { return m_size.Width; }
-    public readonly LayoutUnit height() { return m_size.Height; }
+    public LayoutUnit X { readonly get => m_Location.X; set => m_Location.X = value; }
+    public LayoutUnit Y { readonly get => m_Location.Y; set => m_Location.Y = value; }
+    public readonly LayoutUnit MaxX => X + Width;
+    public readonly LayoutUnit MaxY => Y + Height;
+    public readonly LayoutUnit Width => m_Size.Width;
+    public readonly LayoutUnit Height => m_Size.Height;
 
-    public LayoutRect()
-    {
-        
-    }
+    public readonly LayoutPoint Location() { return m_Location; }
+    public readonly LayoutSize Size() { return m_Size; }
 }

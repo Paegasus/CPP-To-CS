@@ -57,6 +57,10 @@ public struct DoubleSize
 
     public override readonly int GetHashCode() => HashCode.Combine(m_Width, m_Height);
 
+    public static implicit operator DoubleSize(in IntSize s) => new(s);
+    public static implicit operator DoubleSize(in FloatSize s) => new(s);
+    public static implicit operator DoubleSize(in LayoutSize s) => new(s);
+
     public static DoubleSize operator +(DoubleSize a, DoubleSize b)
     {
         return new DoubleSize(a.Width + b.Width, a.Height + b.Height);

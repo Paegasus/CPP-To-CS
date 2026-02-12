@@ -24,14 +24,14 @@ public struct IntRect
     
     public IntRect(in FloatRect rect)
     {
-        m_Location = new IntPoint(MathExtras.ClampTo(rect.x()), MathExtras.ClampTo(rect.y()));
-        m_Size = new IntSize(MathExtras.ClampTo(rect.width()), MathExtras.ClampTo(rect.height()));
+        m_Location = new IntPoint(MathExtras.ClampTo(rect.X), MathExtras.ClampTo(rect.Y));
+        m_Size = new IntSize(MathExtras.ClampTo(rect.Width), MathExtras.ClampTo(rect.Height));
     }
 
     public IntRect(in LayoutRect rect)
     {
-        m_Location = new IntPoint(rect.x().ToInteger(), rect.y().ToInteger());
-        m_Size = new IntSize(rect.width().ToInteger(), rect.height().ToInteger());
+        m_Location = new IntPoint(rect.X.ToInteger(), rect.Y.ToInteger());
+        m_Size = new IntSize(rect.Width.ToInteger(), rect.Height.ToInteger());
     }
 
     public readonly IntPoint Location() { return m_Location; }

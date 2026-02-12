@@ -2,15 +2,24 @@ using SkiaSharp;
 
 namespace UI.Geometry;
 
+enum ContainsMode
+{
+    InsideOrOnStroke,
+    InsideButNotOnStroke
+}
+
 public struct FloatRect
 {
-    private FloatPoint m_location;
-    private FloatSize m_size;
+    private FloatPoint m_Location;
+    private FloatSize m_Size;
 
-    public readonly float x() { return m_location.X; }
-    public readonly float y() { return m_location.Y; }
-    public readonly float maxX() { return x() + width(); }
-    public readonly float maxY() { return y() + height(); }
-    public readonly float width() { return m_size.Width; }
-    public readonly float height() { return m_size.Height; }
+    public float X { readonly get => m_Location.X; set => m_Location.X = value; }
+    public float Y { readonly get => m_Location.Y; set => m_Location.Y = value; }
+    public readonly float MaxX => X + Width;
+    public readonly float MaxY => Y + Height;
+    public readonly float Width => m_Size.Width;
+    public readonly float Height => m_Size.Height;
+
+    public readonly FloatPoint Location() { return m_Location; }
+    public readonly FloatSize Size() { return m_Size; }
 }
