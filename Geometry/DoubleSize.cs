@@ -33,6 +33,12 @@ public struct DoubleSize
         m_Height = p.Height;
     }
 
+    public DoubleSize(in LayoutSize size)
+    {
+        m_Width = size.Width.ToDouble();
+        m_Height = size.Height.ToDouble();
+    }
+
     public readonly bool IsEmpty() => m_Width <= 0 || m_Height <= 0;
     public readonly bool IsZero() => m_Width == 0 && m_Height == 0;
 
