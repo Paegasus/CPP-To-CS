@@ -9,21 +9,19 @@ public struct IntRect
 {
     private IntPoint m_location;
     private IntSize m_size;
-
-    public IntRect() { }
     
-    public IntRect(in IntPoint location, in IntSize size)
-    {
-        m_location = location;
-        m_size = size;
-    }
-
     public IntRect(int x, int y, int width, int height)
     {
         m_location = new IntPoint(x, y);
         m_size = new IntSize(width, height);
     }
 
+    public IntRect(in IntPoint location, in IntSize size)
+    {
+        m_location = location;
+        m_size = size;
+    }
+    
     public IntRect(in FloatRect r)
     {
         m_location = new IntPoint(MathExtras.ClampTo(r.x()), MathExtras.ClampTo(r.y()));
@@ -302,15 +300,15 @@ public struct IntRect
     }
 
     // don't do this implicitly since it's lossy
-    public static explicit operator IntRect(in FloatRect r)
+    public static explicit operator IntRect(in FloatRect rect)
     {
-        return new IntRect((int)r.x(), (int)r.y(), (int)r.width(), (int)r.height());
+        return new IntRect(rect);
     }
 
     // don't do this implicitly since it's lossy
-    public static explicit operator IntRect(in LayoutRect r)
+    public static explicit operator IntRect(in LayoutRect rect)
     {
-        return new IntRect((int)r.x(), (int)r.y(), (int)r.width(), (int)r.height());
+        return new IntRect(rect);
     }
 
     public static implicit operator SKRect(in IntRect rect)
