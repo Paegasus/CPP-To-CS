@@ -336,8 +336,7 @@ public struct IntRect
     // Prints the rect to the screen.
     public readonly void Show()
     {
-        //new LayoutRect(this).show();
-        throw new NotImplementedException();
+        //new LayoutRect(this).show(); // Not implemented yet
     }
 #endif
 }
