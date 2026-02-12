@@ -40,7 +40,12 @@ public struct DoubleSize
     }
 
     public readonly bool IsEmpty() => m_Width <= 0 || m_Height <= 0;
-    public readonly bool IsZero() => m_Width == 0 && m_Height == 0;
+
+    public readonly bool IsZero()
+    {
+        return Math.Abs(m_Width) < double.Epsilon &&
+               Math.Abs(m_Height) < double.Epsilon;
+    }
 
     public readonly DoubleSize ExpandedTo(in DoubleSize other)
     {
