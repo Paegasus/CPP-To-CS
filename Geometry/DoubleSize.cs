@@ -61,7 +61,17 @@ public struct DoubleSize
         return new DoubleSize(Math.Min(m_Width, other.m_Width), Math.Min(m_Height, other.m_Height));
     }
 
-    public void Scale(float s) { Scale(s, s); }
+    public void Expand(float width, float height)
+    {
+        m_Width += width;
+        m_Height += height;
+    }
+
+    public void Scale(float s)
+    {
+        Scale(s, s);
+    }
+
     public void Scale(float sx, float sy)
     {
         m_Width *= sx;
