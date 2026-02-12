@@ -14,6 +14,6 @@ public struct LayoutRect
     public readonly LayoutUnit Width => m_Size.Width;
     public readonly LayoutUnit Height => m_Size.Height;
 
-    public readonly LayoutPoint Location() { return m_Location; }
-    public readonly LayoutSize Size() { return m_Size; }
+    public readonly LayoutPoint Location => m_Location;
+    public readonly LayoutSize Size => m_Size;
 }

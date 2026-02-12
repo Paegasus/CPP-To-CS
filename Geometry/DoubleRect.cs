@@ -28,19 +28,19 @@ public struct DoubleRect
     
     public DoubleRect(in IntRect r)
     {
-        m_Location = r.Location();
-        m_Size = r.Size();
+        m_Location = r.Location;
+        m_Size = r.Size;
     }
     
     public DoubleRect(in FloatRect r)
     {
-        m_Location = r.Location();
-        m_Size = r.Size();
+        m_Location = r.Location;
+        m_Size = r.Size;
     }
     
     public DoubleRect(in LayoutRect r)
     {
-        m_Location = r.Location();
-        m_Size = r.Size();
+        m_Location = r.Location;
+        m_Size = r.Size;
     }
 }

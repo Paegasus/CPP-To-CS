@@ -34,8 +34,8 @@ public struct IntRect
         m_Size = new IntSize(rect.Width.ToInteger(), rect.Height.ToInteger());
     }
 
-    public readonly IntPoint Location() { return m_Location; }
-    public readonly IntSize Size() { return m_Size; }
+    public readonly IntPoint Location => m_Location;
+    public readonly IntSize Size => m_Size;
 
     public void SetLocation(in IntPoint location) { m_Location = location; }
     public void SetSize(in IntSize size) { m_Size = size; }

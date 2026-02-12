@@ -20,6 +20,6 @@ public struct FloatRect
     public readonly float Width => m_Size.Width;
     public readonly float Height => m_Size.Height;
 
-    public readonly FloatPoint Location() { return m_Location; }
-    public readonly FloatSize Size() { return m_Size; }
+    public readonly FloatPoint Location => m_Location;
+    public readonly FloatSize Size => m_Size;
 }
