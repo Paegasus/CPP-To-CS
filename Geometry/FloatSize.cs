@@ -4,6 +4,10 @@ namespace UI.Geometry;
 
 public struct FloatSize
 {
+    // Machine epsilon for IEEE-754 float
+	// Equivalent to std::numeric_limits<float>::epsilon()
+    private static readonly float epsilon = (float)Math.Pow(2, -23);
+
     private float m_Width, m_Height;
 
     public float Width { readonly get => m_Width; set => m_Width = value; }
@@ -39,7 +43,12 @@ public struct FloatSize
     }
 
     public readonly bool IsEmpty() => m_Width <= 0 || m_Height <= 0;
-    public readonly bool IsZero() => m_Width == 0 && m_Height == 0;
+
+    public readonly bool IsZero()
+    {
+        return Math.Abs(m_Width) < epsilon && Math.Abs(m_Height) < epsilon;
+    }
+
     public readonly bool IsExpressibleAsIntSize() => m_Width == (int)m_Width && m_Height == (int)m_Height;
 
     public readonly float AspectRatio() => m_Width / m_Height;
