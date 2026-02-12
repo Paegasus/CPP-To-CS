@@ -6,7 +6,7 @@ public struct DoubleSize
 {
     // Machine epsilon for IEEE-754 double
 	// Equivalent to std::numeric_limits<double>::epsilon()
-	private static readonly double epsilon = Math.Pow(2, 23);
+	private static readonly double epsilon = Math.Pow(2, -52);
 
     private double m_Width, m_Height;
 
