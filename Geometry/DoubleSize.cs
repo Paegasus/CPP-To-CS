@@ -50,17 +50,7 @@ public struct DoubleSize
         return Math.Abs(m_Width) < epsilon &&
                Math.Abs(m_Height) < epsilon;
     }
-
-    public readonly DoubleSize ExpandedTo(in DoubleSize other)
-    {
-        return new DoubleSize(Math.Max(m_Width, other.m_Width), Math.Max(m_Height, other.m_Height));
-    }
-
-    public readonly DoubleSize ShrunkTo(in DoubleSize other)
-    {
-        return new DoubleSize(Math.Min(m_Width, other.m_Width), Math.Min(m_Height, other.m_Height));
-    }
-
+    
     public void Expand(float width, float height)
     {
         m_Width += width;
