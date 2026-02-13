@@ -3,29 +3,34 @@ using SkiaSharp;
 
 using UI.Numerics;
 
+using static UI.Numerics.MathExtras;
+
 namespace UI.Geometry;
 
 public struct IntRect
 {
     private IntPoint m_Location;
     private IntSize m_Size;
-    
-    public IntRect(int x, int y, int width, int height)
-    {
-        m_Location = new IntPoint(x, y);
-        m_Size = new IntSize(width, height);
-    }
 
+    public IntPoint Location { readonly get => m_Location; set => m_Location = value; }
+    public IntSize Size { readonly get => m_Size; set => m_Size = value; }
+    
     public IntRect(in IntPoint location, in IntSize size)
     {
         m_Location = location;
         m_Size = size;
     }
+
+    public IntRect(int x, int y, int width, int height)
+    {
+        m_Location = new IntPoint(x, y);
+        m_Size = new IntSize(width, height);
+    }
     
     public IntRect(in FloatRect rect)
     {
-        m_Location = new IntPoint(MathExtras.ClampTo<int>(rect.X), MathExtras.ClampTo<int>(rect.Y));
-        m_Size = new IntSize(MathExtras.ClampTo<int>(rect.Width), MathExtras.ClampTo<int>(rect.Height));
+        m_Location = new IntPoint(ClampTo<int>(rect.X), ClampTo<int>(rect.Y));
+        m_Size = new IntSize(ClampTo<int>(rect.Width), ClampTo<int>(rect.Height));
     }
 
     public IntRect(in LayoutRect rect)
@@ -34,12 +39,6 @@ public struct IntRect
         m_Size = new IntSize(rect.Width.ToInteger(), rect.Height.ToInteger());
     }
 
-    public readonly IntPoint Location => m_Location;
-    public readonly IntSize Size => m_Size;
-
-    public void SetLocation(in IntPoint location) { m_Location = location; }
-    public void SetSize(in IntSize size) { m_Size = size; }
-    
     public int X { readonly get => m_Location.X; set => m_Location.X = value; }
     public int Y { readonly get => m_Location.Y; set => m_Location.Y = value; }
     public readonly int MaxX => X + Width;

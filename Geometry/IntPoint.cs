@@ -75,6 +75,11 @@ public struct IntPoint
     {
         return new IntPoint(m_Y, m_X);
     }
+    
+    public static IntSize ToIntSize(in IntPoint a)
+    {
+        return new IntSize(a.X, a.Y);
+    }
 
     public override readonly bool Equals(object? obj) => obj is IntPoint point && this == point;
 
@@ -116,10 +121,5 @@ public struct IntPoint
     public static bool operator !=(IntPoint a, IntPoint b)
     {
         return !(a == b);
-    }
-
-    public static IntSize ToIntSize(in IntPoint a)
-    {
-        return new IntSize(a.X, a.Y);
     }
 }
