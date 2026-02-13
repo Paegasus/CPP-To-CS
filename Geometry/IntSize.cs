@@ -110,4 +110,6 @@ public struct IntSize
     }
 
     public static bool operator !=(IntSize a, IntSize b) { return !(a == b); }
+
+    public static implicit operator LayoutSize(in IntSize s) => new(s);
 }

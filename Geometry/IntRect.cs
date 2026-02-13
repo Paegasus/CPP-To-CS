@@ -15,6 +15,13 @@ public struct IntRect
     public IntPoint Location { readonly get => m_Location; set => m_Location = value; }
     public IntSize Size { readonly get => m_Size; set => m_Size = value; }
 
+    public int X { readonly get => m_Location.X; set => m_Location.X = value; }
+    public int Y { readonly get => m_Location.Y; set => m_Location.Y = value; }
+    public int Width { readonly get => m_Size.Width; set => m_Size.Width = value; }
+    public int Height { readonly get => m_Size.Height; set => m_Size.Height = value; }
+    public readonly int MaxX => X + Width;
+    public readonly int MaxY => Y + Height;
+
     public IntRect(in IntPoint location, in IntSize size)
     {
         m_Location = location;
@@ -38,13 +45,6 @@ public struct IntRect
         m_Location = new IntPoint(rect.X.ToInteger(), rect.Y.ToInteger());
         m_Size = new IntSize(rect.Width.ToInteger(), rect.Height.ToInteger());
     }
-
-    public int X { readonly get => m_Location.X; set => m_Location.X = value; }
-    public int Y { readonly get => m_Location.Y; set => m_Location.Y = value; }
-    public int Width { readonly get => m_Size.Width; set => m_Size.Width = value; }
-    public int Height { readonly get => m_Size.Height; set => m_Size.Height = value; }
-    public readonly int MaxX => X + Width;
-    public readonly int MaxY => Y + Height;
 
     public readonly bool IsEmpty() { return m_Size.IsEmpty(); }
 
@@ -146,8 +146,10 @@ public struct IntRect
         
         if (IsEmpty())
         {
-            m_Location = other.m_Location;
-            m_Size = other.m_Size;
+            //m_Location = other.m_Location;
+            //m_Size = other.m_Size;
+
+            this = other;
 
             return;
         }
@@ -162,8 +164,10 @@ public struct IntRect
         
         if (Width == 0 && Height == 0)
         {
-            m_Location = other.m_Location;
-            m_Size = other.m_Size;
+            //m_Location = other.m_Location;
+            //m_Size = other.m_Size;
+
+            this = other;
 
             return;
         }
@@ -331,7 +335,7 @@ public struct IntRect
     // Prints the rect to the screen.
     public readonly void Show()
     {
-        //new LayoutRect(this).show(); // Not implemented yet
+        new LayoutRect(this).Show();
     }
 #endif
 }

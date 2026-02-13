@@ -122,4 +122,6 @@ public struct IntPoint
     {
         return !(a == b);
     }
+
+    public static implicit operator LayoutPoint(in IntPoint p) => new(p);
 }
