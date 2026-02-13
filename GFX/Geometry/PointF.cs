@@ -113,26 +113,26 @@ public struct PointF : IComparable<PointF>, IEquatable<PointF>
     // For use in collections (SortedSet, Dictionary keys, etc.)
     public override readonly int GetHashCode() => HashCode.Combine(y, x);
 
-    public readonly int CompareTo(PointF other)
+    public readonly int CompareTo(in PointF other)
     {
         int yComparison = y.CompareTo(other.y);
         return yComparison != 0 ? yComparison : x.CompareTo(other.x);
     }
 
-    public readonly bool Equals(PointF other) => x == other.x && y == other.y;
+    public readonly bool Equals(in PointF other) => x == other.x && y == other.y;
 
     public override readonly bool Equals(object? obj) => obj is PointF other && Equals(other);
 
     // A point is less than another point if its y-value is closer to the origin.
     // If the y-values are the same, then point with the x-value closer to the origin is considered less than the other.
     // This comparison is required to use PointF in sets, or sorted vectors.
-    public static bool operator < (PointF left, PointF right) => left.CompareTo(right) < 0;
-    public static bool operator > (PointF left, PointF right) => left.CompareTo(right) > 0;
-    public static bool operator <= (PointF left, PointF right) => left.CompareTo(right) <= 0;
-    public static bool operator >= (PointF left, PointF right) => left.CompareTo(right) >= 0;
+    public static bool operator < (in PointF left, in PointF right) => left.CompareTo(right) < 0;
+    public static bool operator > (in PointF left, in PointF right) => left.CompareTo(right) > 0;
+    public static bool operator <= (in PointF left, in PointF right) => left.CompareTo(right) <= 0;
+    public static bool operator >= (in PointF left, in PointF right) => left.CompareTo(right) >= 0;
 
-    public static bool operator == (PointF left, PointF right) => left.Equals(right);
-    public static bool operator != (PointF left, PointF right) => !left.Equals(right);
+    public static bool operator == (in PointF left, in PointF right) => left.Equals(right);
+    public static bool operator != (in PointF left, in PointF right) => !left.Equals(right);
 
     public static PointF operator + (PointF lhs, in Vector2DF rhs)
     {
