@@ -2,7 +2,7 @@ namespace UI.GFX.Geometry;
 
 using static Numerics.ClampedMath;
 
-public struct PointF : IComparable<PointF>
+public struct PointF : IComparable<PointF>, IEquatable<PointF>
 {
     private float x_, y_;
 
@@ -79,25 +79,6 @@ public struct PointF : IComparable<PointF>
         return new Vector2DF(x_, y_);
     }
 
-    // For use in collections (SortedSet, Dictionary keys, etc.)
-    public override readonly int GetHashCode() => HashCode.Combine(y_, x_);
-
-    public readonly int CompareTo(PointF other)
-    {
-        int yComparison = y_.CompareTo(other.y_);
-        return yComparison != 0 ? yComparison : x_.CompareTo(other.x_);
-    }
-
-    public override readonly bool Equals(object? obj) => obj is PointF other && CompareTo(other) == 0;
-    
-    // A point is less than another point if its y-value is closer to the origin.
-    // If the y-values are the same, then point with the x-value closer to the origin is considered less than the other.
-    // This comparison is required to use PointF in sets, or sorted vectors.
-    public static bool operator < (PointF left, PointF right) => left.CompareTo(right) < 0;
-    public static bool operator > (PointF left, PointF right) => left.CompareTo(right) > 0;
-    public static bool operator <= (PointF left, PointF right) => left.CompareTo(right) <= 0;
-    public static bool operator >= (PointF left, PointF right) => left.CompareTo(right) >= 0;
-
     public void Scale(float scale)
     {
         Scale(scale, scale);
@@ -145,4 +126,28 @@ public struct PointF : IComparable<PointF>
     {
         return $"{x},{y}";
     }
+
+    // For use in collections (SortedSet, Dictionary keys, etc.)
+    public override readonly int GetHashCode() => HashCode.Combine(y, x);
+
+    public readonly int CompareTo(PointF other)
+    {
+        int yComparison = y.CompareTo(other.y);
+        return yComparison != 0 ? yComparison : x.CompareTo(other.x);
+    }
+
+    public readonly bool Equals(PointF other) => x == other.x && y == other.y;
+
+    public override readonly bool Equals(object? obj) => obj is PointF other && Equals(other);
+
+    // A point is less than another point if its y-value is closer to the origin.
+    // If the y-values are the same, then point with the x-value closer to the origin is considered less than the other.
+    // This comparison is required to use PointF in sets, or sorted vectors.
+    public static bool operator < (PointF left, PointF right) => left.CompareTo(right) < 0;
+    public static bool operator > (PointF left, PointF right) => left.CompareTo(right) > 0;
+    public static bool operator <= (PointF left, PointF right) => left.CompareTo(right) <= 0;
+    public static bool operator >= (PointF left, PointF right) => left.CompareTo(right) >= 0;
+
+    public static bool operator ==(PointF left, PointF right) => left.Equals(right);
+    public static bool operator !=(PointF left, PointF right) => !left.Equals(right);
 }
