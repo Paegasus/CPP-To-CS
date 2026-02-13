@@ -9,14 +9,8 @@ public static class ClampedMath
         long result = (long)x + y;
 
         // Now, check if the long result fits back into an int.
-        if (result > int.MaxValue)
-        {
-            return int.MaxValue;
-        }
-        if (result < int.MinValue)
-        {
-            return int.MinValue;
-        }
+        if (result > int.MaxValue) return int.MaxValue;
+        if (result < int.MinValue) return int.MinValue;
 
         // The result is within the valid range for an int.
         return (int)result;
