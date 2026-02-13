@@ -57,10 +57,16 @@ public struct IntSize
 
     public void ClampToMinimumSize(in IntSize minimumSize)
     {
-        if (m_Width < minimumSize.Width) m_Width = minimumSize.Width;
-        if (m_Height < minimumSize.Height) m_Height = minimumSize.Height;
+        if (m_Width < minimumSize.Width)
+
+            m_Width = minimumSize.Width;
+
+        if (m_Height < minimumSize.Height)
+
+            m_Height = minimumSize.Height;
     }
 
+    // Return area in a ulong to avoid overflow.
     public readonly ulong Area()
     {
         return (ulong)m_Width * (ulong)m_Height;
