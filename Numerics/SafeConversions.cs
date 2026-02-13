@@ -48,4 +48,43 @@ public static class SafeConversions
         // The "strictness" must be enforced at compile time.
         return TDest.CreateTruncating(value);
     }
+
+    // floating -> integral conversions that saturate and thus can actually return
+    // an integral type.
+    //
+    // Generally, what you want is saturated_cast<Dst>(std::nearbyint(x)), which
+    // rounds correctly according to IEEE-754 (round to nearest, ties go to nearest
+    // even number; this avoids bias). If your code is performance-critical
+    // and you are sure that you will never overflow, you can use std::lrint()
+    // or std::llrint(), which return a long or long long directly.
+    //
+    // Below are convenience functions around similar patterns, except that
+    // they round in nonstandard directions and will generally be slower.
+
+    // Rounds towards negative infinity (i.e., down).
+    public static int ClampFloor(float value)
+    {
+        return SaturatedCast<int, float>(MathF.Floor(value));
+    }
+
+    // Rounds towards positive infinity (i.e., up).
+    public static int ClampCeil(float value)
+    {
+        return SaturatedCast<int, float>(MathF.Ceiling(value));
+    }
+
+    // Rounds towards nearest integer, with ties away from zero.
+    // This means that 0.5 will be rounded to 1 and 1.5 will be rounded to 2.
+    // Similarly, -0.5 will be rounded to -1 and -1.5 will be rounded to -2.
+    //
+    // This is normally not what you want accuracy-wise (it introduces a small bias
+    // away from zero), and it is not the fastest option, but it is frequently what
+    // existing code expects. Compare with saturated_cast<Dst>(std::nearbyint(x))
+    // or std::lrint(x), which would round 0.5 and -0.5 to 0 but 1.5 to 2 and
+    // -1.5 to -2.
+    public static int ClampRound(float value)
+    {
+        float rounded = MathF.Round(value);
+        return SaturatedCast<int, float>(rounded);
+    }
 }
