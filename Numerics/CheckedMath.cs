@@ -6,7 +6,7 @@ namespace UI.Numerics;
 public static class CheckedMath
 {
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool CheckedAdd(int x, int y, out T result)
+    public static bool CheckedAdd(int x, int y, out int result)
     {
         int sum = x + y;
 
@@ -22,7 +22,7 @@ public static class CheckedMath
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool CheckedAdd(uint x, uint y, out T result)
+    public static bool CheckedAdd(uint x, uint y, out uint result)
     {
         uint sum = x + y;
 
