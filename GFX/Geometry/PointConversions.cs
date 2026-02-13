@@ -6,7 +6,6 @@ public static class PointConversions
 {
     public static Point ToFlooredPoint(in PointF point)
     {
-        
         return new Point(ClampFloor(point.x), ClampFloor(point.y));
     }
 
