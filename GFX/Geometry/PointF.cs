@@ -105,6 +105,38 @@ public struct PointF : IComparable<PointF>, IEquatable<PointF>
         return distance < allowed_distance;
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static PointF PointAtOffsetFromOrigin(in Vector2DF offset_from_origin)
+    {
+        return new PointF(offset_from_origin.x, offset_from_origin.y);
+    }
+
+
+    public static PointF ScalePoint(in PointF p, float x_scale, float y_scale)
+    {
+        PointF scaled_p = new()
+        {
+            x_ = p.x,
+            y_ = p.y 
+        };
+
+        scaled_p.Scale(x_scale, y_scale);
+
+        return scaled_p;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static PointF ScalePoint(in PointF p, float scale)
+    {
+        return ScalePoint(p, scale, scale);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static PointF TransposePoint(in PointF p)
+    {
+        return new PointF(p.y, p.x);
+    }
+
     public override readonly string ToString()
     {
         return $"{x},{y}";
