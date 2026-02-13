@@ -134,7 +134,7 @@ public struct PointF : IComparable<PointF>, IEquatable<PointF>
     public static bool operator == (in PointF left, in PointF right) => left.Equals(right);
     public static bool operator != (in PointF left, in PointF right) => !left.Equals(right);
 
-    public static PointF operator + (PointF lhs, in Vector2DF rhs)
+    public static PointF operator + (in PointF lhs, in Vector2DF rhs)
     {
         PointF result = new(lhs.x, lhs.y);
 
@@ -143,7 +143,7 @@ public struct PointF : IComparable<PointF>, IEquatable<PointF>
         
         return result;
     }
-
+    
     public static PointF operator - (in PointF lhs, in Vector2DF rhs)
     {
         PointF result = new(lhs.x, lhs.y);
