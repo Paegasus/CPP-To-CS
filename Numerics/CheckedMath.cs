@@ -1,3 +1,5 @@
+using System.Numerics;
+
 namespace UI.Numerics;
 
 public static class CheckedMath
@@ -33,4 +35,104 @@ public static class CheckedMath
         result = (int)tempResult;
         return true; // Signal success.
     }
+
+    public static bool CheckedAdd<T>(T x, T y, out T result)
+    where T : IBinaryInteger<T>, IMinMaxValue<T>
+    {
+        T sum = x + y;
+
+        if (T.IsNegative(T.MinValue)) // signed types have negative MinValue
+        {
+            // Signed overflow: ((sum ^ x) & (sum ^ y)) < 0
+            if (((sum ^ x) & (sum ^ y)) < T.Zero)
+            {
+                result = T.Zero;
+                return false;
+            }
+        }
+        else
+        {
+            // Unsigned overflow: wraparound makes sum smaller than an operand.
+            if (sum < x)
+            {
+                result = T.Zero;
+                return false;
+            }
+        }
+
+        result = sum;
+        return true;
+    }
+
+    /*
+    public static bool CheckedAdd<T>(T x, T y, out T result)
+    where T : IBinaryInteger<T>, ISignedNumber<T>
+    {
+        T sum = x + y;
+
+        // Overflow if x and y have same sign, but sum has different sign.
+        // ((sum ^ x) & (sum ^ y)) < 0
+        if (((sum ^ x) & (sum ^ y)) < T.Zero)
+        {
+            result = T.Zero;
+            return false;
+        }
+
+        result = sum;
+        return true;
+    }
+
+    public static bool CheckedAdd<T>(T x, T y, out T result)
+    where T : IBinaryInteger<T>, IUnsignedNumber<T>
+    {
+        T sum = x + y;
+
+        // Unsigned overflow if wrapping happened.
+        if (sum < x)
+        {
+            result = T.Zero;
+            return false;
+        }
+
+        result = sum;
+        return true;
+    }
+    */
+
+    /*
+    public static bool CheckedAdd<T>(T x, T y, out T result)
+    where T : IBinaryInteger<T>
+    {
+        // Unsigned add always wraps in 2's complement arithmetic.
+        T sum = x + y;
+
+        if (T.IsSigned(x))
+        {
+            // Signed overflow check:
+            // overflow if x and y have same sign but sum has different sign.
+            //
+            // Equivalent to: ((sum ^ x) & (sum ^ y)) < 0
+            T overflowBits = (sum ^ x) & (sum ^ y);
+
+            if (overflowBits < T.Zero)
+            {
+                result = T.Zero;
+                return false;
+            }
+        }
+        else
+        {
+            // Unsigned overflow check:
+            // overflow if sum < either operand (carry out happened).
+            if (sum < x || sum < y)
+            {
+                result = T.Zero;
+                return false;
+            }
+        }
+
+        result = sum;
+        return true;
+    }
+    */
 }
