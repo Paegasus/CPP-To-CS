@@ -6,15 +6,14 @@ namespace UI.Numerics;
 public static class CheckedMath
 {
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool CheckedAdd_Signed<T>(T x, T y, out T result)
-    where T : IBinaryInteger<T>, ISignedNumber<T>
+    public static bool CheckedAdd(int x, int y, out T result)
     {
-        T sum = x + y;
+        int sum = x + y;
 
-        // Overflow if x and y have same sign, but sum has different sign. ((sum ^ x) & (sum ^ y)) < 0
-        if (((sum ^ x) & (sum ^ y)) < T.Zero)
+        // Overflow if x and y have same sign, but sum has different sign.
+        if (((sum ^ x) & (sum ^ y)) < 0)
         {
-            result = T.Zero;
+            result = 0;
             return false;
         }
 
@@ -23,15 +22,14 @@ public static class CheckedMath
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool CheckedAdd_Unsigned<T>(T x, T y, out T result)
-    where T : IBinaryInteger<T>, IUnsignedNumber<T>
+    public static bool CheckedAdd(uint x, uint y, out T result)
     {
-        T sum = x + y;
+        uint sum = x + y;
 
         // Unsigned overflow if wrapping happened.
         if (sum < x)
         {
-            result = T.Zero;
+            result = 0;
             return false;
         }
 
