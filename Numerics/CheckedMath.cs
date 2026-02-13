@@ -1,4 +1,5 @@
 using System.Numerics;
+using System.Runtime.CompilerServices;
 
 namespace UI.Numerics;
 
@@ -32,6 +33,7 @@ public static class CheckedMath
         return true;
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool CheckedAdd_Signed<T>(T x, T y, out T result)
     where T : IBinaryInteger<T>, ISignedNumber<T>
     {
@@ -49,6 +51,7 @@ public static class CheckedMath
         return true;
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool CheckedAdd_Unsigned<T>(T x, T y, out T result)
     where T : IBinaryInteger<T>, IUnsignedNumber<T>
     {
