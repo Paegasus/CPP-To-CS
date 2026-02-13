@@ -95,8 +95,9 @@ public struct PointF : IComparable<PointF>, IEquatable<PointF>
     // |allowed_distance|.
     public readonly bool IsWithinDistance(in PointF rhs, float allowed_distance)
     {
+#if DEBUG
         //DCHECK(allowed_distance > 0);
-
+#endif
         float diff_x = x_ - rhs.x;
         float diff_y = y_ - rhs.y;
         float distance = MathF.Sqrt(diff_x * diff_x + diff_y * diff_y);
