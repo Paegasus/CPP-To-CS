@@ -18,11 +18,55 @@ public struct LayoutRect
 
     public readonly LayoutUnit MaxX => X + Width;
     public readonly LayoutUnit MaxY => Y + Height;
-    
+
+    public LayoutRect(in LayoutPoint location, in LayoutSize size)
+    {
+        m_Location = location;
+        m_Size = size;
+    }
+
+    public LayoutRect(LayoutUnit x, LayoutUnit y, LayoutUnit width, LayoutUnit height)
+    {
+        m_Location = new LayoutPoint(x, y);
+        m_Size = new LayoutSize(width, height);
+    }
+
+    public LayoutRect(in FloatPoint location, in FloatSize size)
+    {
+        m_Location = location;
+        m_Size = size;
+    }
+
+    public LayoutRect(in DoublePoint location, in DoubleSize size)
+    {
+        m_Location = location;
+        m_Size = size;
+    }
+
+    public LayoutRect(in IntPoint location, in IntSize size)
+    {
+        m_Location = location;
+        m_Size = size;
+    }
+
     public LayoutRect(in IntRect rect)
     {
         m_Location = rect.Location;
         m_Size = rect.Size;
+    }
+
+    // don't do this implicitly since it's lossy
+    public LayoutRect(in FloatRect r)
+    {
+        m_Location = new LayoutPoint(r.Location);
+        m_Size = new LayoutSize(r.Size);
+    }
+
+    // don't do this implicitly since it's lossy
+    public LayoutRect(in DoubleRect r)
+    {
+        m_Location = new LayoutPoint(r.Location);
+        m_Size = new LayoutSize(r.Size);
     }
 
 #if DEBUG
