@@ -110,14 +110,9 @@ public struct PointF : IComparable<PointF>, IEquatable<PointF>
         return new PointF(offset_from_origin.x, offset_from_origin.y);
     }
 
-
     public static PointF ScalePoint(in PointF p, float x_scale, float y_scale)
     {
-        PointF scaled_p = new()
-        {
-            x_ = p.x,
-            y_ = p.y 
-        };
+        PointF scaled_p = p;
 
         scaled_p.Scale(x_scale, y_scale);
 
