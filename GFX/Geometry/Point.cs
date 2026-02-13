@@ -34,7 +34,7 @@ public struct Point : IComparable<Point>
         y_ = ClampAdd(y_, delta_y);
     }
 
-    public static Point operator + (Point point, in  Vector2D vector)
+    public static Point operator + (in Point point, in  Vector2D vector)
     {
         return new Point
         {
@@ -43,7 +43,7 @@ public struct Point : IComparable<Point>
         };
     }
 
-    public static Point operator - (Point point, in  Vector2D vector)
+    public static Point operator - (in Point point, in  Vector2D vector)
     {
         return new Point
         {
@@ -103,4 +103,14 @@ public struct Point : IComparable<Point>
     public static bool operator > (Point left, Point right) => left.CompareTo(right) > 0;
     public static bool operator <= (Point left, Point right) => left.CompareTo(right) <= 0;
     public static bool operator >= (Point left, Point right) => left.CompareTo(right) >= 0;
+
+    public static bool operator ==(in Point left, in Point right)
+    {
+        return left.Equals(right);
+    }
+
+    public static bool operator !=(in Point left, in Point right)
+    {
+        return !(left == right);
+    }
 }
