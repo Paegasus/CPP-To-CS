@@ -140,4 +140,9 @@ public struct PointF : IComparable<PointF>
 
         return distance < allowed_distance;
     }
+
+    public override readonly string ToString()
+    {
+        return $"{x},{y}";
+    }
 }
