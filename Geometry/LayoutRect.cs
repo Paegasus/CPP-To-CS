@@ -66,6 +66,20 @@ public struct LayoutRect
         m_Location = new LayoutPoint(r.Location);
         m_Size = new LayoutSize(r.Size);
     }
+    
+    public readonly IntPoint PixelSnappedLocation()
+    {
+        return roundedIntPoint(m_location);
+    }
+
+    public readonly IntSize PixelSnappedSize()
+    {
+        return IntSize(snapSizeToPixel(m_size.width(), m_location.x()), snapSizeToPixel(m_size.height(), m_location.y()));
+    }
+
+
+
+
 
     // don't do this implicitly since it's lossy
     public static explicit operator LayoutRect(in FloatRect rect)
