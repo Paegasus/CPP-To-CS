@@ -1,5 +1,7 @@
 namespace UI.GFX.Geometry;
 
+using static Numerics.ClampedMath;
+
 // A point has an x and y coordinate.
 public struct Point
 {
@@ -26,9 +28,9 @@ public struct Point
         y_ = y;
     }
 
-    void Offset(int delta_x, int delta_y)
+    public void Offset(int delta_x, int delta_y)
     {
-        //x_ = base::ClampAdd(x_, delta_x);
-        //y_ = base::ClampAdd(y_, delta_y);
+        x_ = ClampAdd(x_, delta_x);
+        y_ = ClampAdd(y_, delta_y);
     }
 }
