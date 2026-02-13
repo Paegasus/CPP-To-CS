@@ -2,7 +2,7 @@ namespace UI.GFX.Geometry;
 
 using static Numerics.ClampedMath;
 
-public struct PointF
+public struct PointF : IComparable<PointF>
 {
     private float x_, y_;
 
@@ -67,5 +67,77 @@ public struct PointF
     {
         x_ = Math.Max(x_, other.x_);
         y_ = Math.Max(y_, other.y_);
+    }
+
+    public readonly bool IsOrigin()
+    {
+        return x_ == 0 && y_ == 0;
+    }
+    
+    public readonly Vector2DF OffsetFromOrigin()
+    {
+        return new Vector2DF(x_, y_);
+    }
+
+    // For use in collections (SortedSet, Dictionary keys, etc.)
+    public override readonly int GetHashCode() => HashCode.Combine(y_, x_);
+
+    public readonly int CompareTo(PointF other)
+    {
+        int yComparison = y_.CompareTo(other.y_);
+        return yComparison != 0 ? yComparison : x_.CompareTo(other.x_);
+    }
+
+    public override readonly bool Equals(object? obj) => obj is PointF other && CompareTo(other) == 0;
+    
+    // A point is less than another point if its y-value is closer to the origin.
+    // If the y-values are the same, then point with the x-value closer to the origin is considered less than the other.
+    // This comparison is required to use PointF in sets, or sorted vectors.
+    public static bool operator < (PointF left, PointF right) => left.CompareTo(right) < 0;
+    public static bool operator > (PointF left, PointF right) => left.CompareTo(right) > 0;
+    public static bool operator <= (PointF left, PointF right) => left.CompareTo(right) <= 0;
+    public static bool operator >= (PointF left, PointF right) => left.CompareTo(right) >= 0;
+
+    public void Scale(float scale)
+    {
+        Scale(scale, scale);
+    }
+
+    public void Scale(float x_scale, float y_scale)
+    {
+        SetPoint(x * x_scale, y * y_scale);
+    }
+
+    // Scales each component by the inverse of the given scales.
+    public void InvScale(float inv_x_scale, float inv_y_scale)
+    {
+        x_ /= inv_x_scale;
+        y_ /= inv_y_scale;
+    }
+
+    // Scales the point by the inverse of the given scale.
+    public void InvScale(float inv_scale)
+    {
+        InvScale(inv_scale, inv_scale);
+    }
+    
+    public void Transpose()
+    {
+        // Swap x_ and y_ (using tuple deconstruction swap)
+        (x_, y_) = (y_, x_);
+    }
+
+    // Uses the Pythagorean theorem to determine the straight line distance
+    // between the two points, and returns true if it is less than
+    // |allowed_distance|.
+    public readonly bool IsWithinDistance(in PointF rhs, float allowed_distance)
+    {
+        //DCHECK(allowed_distance > 0);
+
+        float diff_x = x_ - rhs.x;
+        float diff_y = y_ - rhs.y;
+        float distance = MathF.Sqrt(diff_x * diff_x + diff_y * diff_y);
+
+        return distance < allowed_distance;
     }
 }
