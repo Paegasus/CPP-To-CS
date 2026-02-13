@@ -64,8 +64,7 @@ public static class CheckedMath
         return true;
     }
 
-    /*
-    public static bool CheckedAdd<T>(T x, T y, out T result)
+    public static bool CheckedAdd_Signed<T>(T x, T y, out T result)
     where T : IBinaryInteger<T>, ISignedNumber<T>
     {
         T sum = x + y;
@@ -82,7 +81,7 @@ public static class CheckedMath
         return true;
     }
 
-    public static bool CheckedAdd<T>(T x, T y, out T result)
+    public static bool CheckedAdd_Unsigned<T>(T x, T y, out T result)
     where T : IBinaryInteger<T>, IUnsignedNumber<T>
     {
         T sum = x + y;
@@ -97,42 +96,4 @@ public static class CheckedMath
         result = sum;
         return true;
     }
-    */
-
-    /*
-    public static bool CheckedAdd<T>(T x, T y, out T result)
-    where T : IBinaryInteger<T>
-    {
-        // Unsigned add always wraps in 2's complement arithmetic.
-        T sum = x + y;
-
-        if (T.IsSigned(x))
-        {
-            // Signed overflow check:
-            // overflow if x and y have same sign but sum has different sign.
-            //
-            // Equivalent to: ((sum ^ x) & (sum ^ y)) < 0
-            T overflowBits = (sum ^ x) & (sum ^ y);
-
-            if (overflowBits < T.Zero)
-            {
-                result = T.Zero;
-                return false;
-            }
-        }
-        else
-        {
-            // Unsigned overflow check:
-            // overflow if sum < either operand (carry out happened).
-            if (sum < x || sum < y)
-            {
-                result = T.Zero;
-                return false;
-            }
-        }
-
-        result = sum;
-        return true;
-    }
-    */
 }
