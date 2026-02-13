@@ -1,5 +1,6 @@
 namespace UI.GFX.Geometry;
 
+using System.Runtime.CompilerServices;
 using static Numerics.ClampedMath;
 
 public struct PointF : IComparable<PointF>, IEquatable<PointF>
@@ -37,24 +38,6 @@ public struct PointF : IComparable<PointF>, IEquatable<PointF>
     {
         x_ += delta_x;
         y_ += delta_y;
-    }
-
-    public static PointF operator + (PointF point, in Vector2DF vector)
-    {
-        return new PointF
-        {
-            x_ = point.x_ += vector.x,
-            y_ = point.y_ += vector.y,
-        };
-    }
-    
-    public static PointF operator - (PointF point, in Vector2DF vector)
-    {
-        return new PointF
-        {
-            x_ = point.x_ -= vector.x,
-            y_ = point.y_ -= vector.y,
-        };
     }
 
     public void SetToMin(in PointF other)
@@ -148,6 +131,32 @@ public struct PointF : IComparable<PointF>, IEquatable<PointF>
     public static bool operator <= (PointF left, PointF right) => left.CompareTo(right) <= 0;
     public static bool operator >= (PointF left, PointF right) => left.CompareTo(right) >= 0;
 
-    public static bool operator ==(PointF left, PointF right) => left.Equals(right);
-    public static bool operator !=(PointF left, PointF right) => !left.Equals(right);
+    public static bool operator == (PointF left, PointF right) => left.Equals(right);
+    public static bool operator != (PointF left, PointF right) => !left.Equals(right);
+
+    public static PointF operator + (PointF lhs, in Vector2DF rhs)
+    {
+        PointF result = new(lhs.x, lhs.y);
+
+        result.x += rhs.x;
+        result.y += rhs.y;
+        
+        return result;
+    }
+
+    public static PointF operator - (in PointF lhs, in Vector2DF rhs)
+    {
+        PointF result = new(lhs.x, lhs.y);
+        
+        result.x -= rhs.x;
+        result.y -= rhs.y;
+
+        return result;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Vector2DF operator - (in PointF lhs, in PointF rhs)
+    {
+        return new Vector2DF(lhs.x - rhs.x, lhs.y - rhs.y);
+    }
 }
