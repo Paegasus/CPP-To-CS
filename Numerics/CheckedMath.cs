@@ -8,13 +8,16 @@ public static class CheckedMath
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool CheckedAdd(int x, int y, out int result)
     {
+        // The addition is performed in a standard unchecked context, which wraps on overflow.
         int sum = x + y;
 
-        // Overflow if x and y have same sign, but sum has different sign.
+        // For signed integers, overflow occurs if the operands have the same sign
+        // and the result has a different sign. This bitwise check is a highly
+        // optimized, branch-free way to detect that condition.
         if (((sum ^ x) & (sum ^ y)) < 0)
         {
             result = 0;
-            return false;
+            return false; // Overflow occurred.
         }
 
         result = sum;
@@ -26,11 +29,12 @@ public static class CheckedMath
     {
         uint sum = x + y;
 
-        // Unsigned overflow if wrapping happened.
+        // For unsigned integers, overflow occurs if the result of the addition
+        // is smaller than either of the operands.
         if (sum < x)
         {
             result = 0;
-            return false;
+            return false; // Overflow occurred.
         }
 
         result = sum;
