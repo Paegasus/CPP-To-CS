@@ -190,54 +190,6 @@ public struct IntRect
         m_Size.Height = bottom - top;
     }
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static IntRect Intersection(in IntRect a, in IntRect b)
-    {
-        IntRect c = a;
-        c.Intersect(b);
-        return c;
-    }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static IntRect UnionRect(in IntRect a, in IntRect b)
-    {
-        IntRect c = a;
-        c.Unite(b);
-        return c;
-    }
-
-    public static IntRect UnionRect(ReadOnlySpan<IntRect> rects)
-    {
-        IntRect result = new();
-
-        for (var i = 0; i < rects.Length; ++i)
-        
-            result.Unite(rects[i]);
-
-        return result;
-    }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static IntRect UnionRectEvenIfEmpty(in IntRect a, in IntRect b)
-    {
-        IntRect c = a;
-        c.UniteEvenIfEmpty(b);
-        return c;
-    }
-
-    public static IntRect UnionRectEvenIfEmpty(ReadOnlySpan<IntRect> rects)
-    {
-        if (rects.Length == 0) return new IntRect();
-
-        IntRect result = rects[0];
-
-        for (var i = 1; i < rects.Length; ++i)
-
-            result.UniteEvenIfEmpty(rects[i]);
-
-        return result;
-    }
-
     public void InflateX(int dx)
     {
         m_Location.X -= dx;
@@ -254,7 +206,7 @@ public struct IntRect
     {
         InflateX(d); InflateY(d);
     }
-
+    
     public void Scale(float s)
     {
         m_Location.X = (int)(X * s);
@@ -291,6 +243,55 @@ public struct IntRect
     public readonly IntRect TransposedRect()
     {
         return new IntRect(m_Location.TransposedPoint(), m_Size.TransposedSize());
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static IntRect Intersection(in IntRect a, in IntRect b)
+    {
+        IntRect c = a;
+        c.Intersect(b);
+        return c;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static IntRect UnionRect(in IntRect a, in IntRect b)
+    {
+        IntRect c = a;
+        c.Unite(b);
+        return c;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static IntRect UnionRect(ReadOnlySpan<IntRect> rects)
+    {
+        IntRect result = new();
+
+        for (var i = 0; i < rects.Length; ++i)
+        
+            result.Unite(rects[i]);
+
+        return result;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static IntRect UnionRectEvenIfEmpty(in IntRect a, in IntRect b)
+    {
+        IntRect c = a;
+        c.UniteEvenIfEmpty(b);
+        return c;
+    }
+
+    public static IntRect UnionRectEvenIfEmpty(ReadOnlySpan<IntRect> rects)
+    {
+        if (rects.Length == 0) return new IntRect();
+
+        IntRect result = rects[0];
+
+        for (var i = 1; i < rects.Length; ++i)
+
+            result.UniteEvenIfEmpty(rects[i]);
+
+        return result;
     }
 
     // don't do this implicitly since it's lossy
