@@ -14,7 +14,7 @@ public struct IntRect
 
     public IntPoint Location { readonly get => m_Location; set => m_Location = value; }
     public IntSize Size { readonly get => m_Size; set => m_Size = value; }
-    
+
     public IntRect(in IntPoint location, in IntSize size)
     {
         m_Location = location;
@@ -41,13 +41,10 @@ public struct IntRect
 
     public int X { readonly get => m_Location.X; set => m_Location.X = value; }
     public int Y { readonly get => m_Location.Y; set => m_Location.Y = value; }
+    public int Width { readonly get => m_Size.Width; set => m_Size.Width = value; }
+    public int Height { readonly get => m_Size.Height; set => m_Size.Height = value; }
     public readonly int MaxX => X + Width;
     public readonly int MaxY => Y + Height;
-    public readonly int Width => m_Size.Width;
-    public readonly int Height => m_Size.Height;
-
-    public void SetWidth(int width) { m_Size.Width = width; }
-    public void SetHeight(int height) { m_Size.Height = height; }
 
     public readonly bool IsEmpty() { return m_Size.IsEmpty(); }
 
@@ -67,26 +64,26 @@ public struct IntRect
     {
         int delta = edge - X;
         X = edge;
-        SetWidth(Math.Max(0, Width - delta));
+        Width = Math.Max(0, Width - delta);
     }
 
     public void ShiftMaxXEdgeTo(int edge)
     {
         int delta = edge - MaxX;
-        SetWidth(Math.Max(0, Width + delta));
+        Width = Math.Max(0, Width + delta);
     }
 
     public void ShiftYEdgeTo(int edge)
     {
         int delta = edge - Y;
         Y = edge;
-        SetHeight(Math.Max(0, Height - delta));
+        Height = Math.Max(0, Height - delta);
     }
 
     public void ShiftMaxYEdgeTo(int edge)
     {
         int delta = edge - MaxY;
-        SetHeight(Math.Max(0, Height + delta));
+        Height = Math.Max(0, Height + delta);
     }
 
     public readonly IntPoint MinXMinYCorner() { return m_Location; } // typically topLeft
