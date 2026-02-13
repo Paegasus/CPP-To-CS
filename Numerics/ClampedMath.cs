@@ -1,7 +1,10 @@
+using System.Runtime.CompilerServices;
+
 namespace UI.Numerics;
 
 public static class ClampedMath
 {
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static int ClampAdd(int x, int y)
     {
         // Use 'long' to perform the addition, as it can hold any result
