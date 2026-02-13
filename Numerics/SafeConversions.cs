@@ -5,7 +5,7 @@ namespace UI.Numerics;
 /// <summary>
 /// Provides safe and explicit numeric conversion methods.
 /// </summary>
-public static class Conversion
+public static class SafeConversions
 {
     /// <summary>
     /// Converts a value from a source type to a destination type, saturating
