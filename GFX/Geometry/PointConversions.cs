@@ -4,16 +4,16 @@ public static class PointConversions
 {
     public static Point ToFlooredPoint(in PointF point)
     {
-        return Point(base::ClampFloor(point.x()), base::ClampFloor(point.y()));
+        return new Point(ClampFloor(point.x), ClampFloor(point.y));
     }
 
     public static Point ToCeiledPoint(in PointF point)
     {
-        return Point(base::ClampCeil(point.x()), base::ClampCeil(point.y()));
+        return new Point(ClampCeil(point.x), ClampCeil(point.y));
     }
 
     public static Point ToRoundedPoint(in PointF point)
     {
-        return Point(base::ClampRound(point.x()), base::ClampRound(point.y()));
+        return new Point(ClampRound(point.x), ClampRound(point.y));
     }
 }

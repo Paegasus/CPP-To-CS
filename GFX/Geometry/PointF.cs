@@ -1,7 +1,6 @@
 namespace UI.GFX.Geometry;
 
 using System.Runtime.CompilerServices;
-using static Numerics.ClampedMath;
 
 public struct PointF : IComparable<PointF>, IEquatable<PointF>
 {
