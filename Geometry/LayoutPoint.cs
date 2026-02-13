@@ -216,4 +216,7 @@ public struct LayoutPoint
     {
         return FlooredLayoutPoint(new FloatPoint(s));
     }
+
+    public static implicit operator LayoutPoint(in FloatPoint point) => new(point);
+    public static implicit operator LayoutPoint(in DoublePoint point) => new(point);
 }

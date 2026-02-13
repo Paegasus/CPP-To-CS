@@ -54,19 +54,29 @@ public struct LayoutRect
         m_Location = rect.Location;
         m_Size = rect.Size;
     }
-
-    // don't do this implicitly since it's lossy
+    
     public LayoutRect(in FloatRect r)
     {
         m_Location = new LayoutPoint(r.Location);
         m_Size = new LayoutSize(r.Size);
     }
 
-    // don't do this implicitly since it's lossy
     public LayoutRect(in DoubleRect r)
     {
         m_Location = new LayoutPoint(r.Location);
         m_Size = new LayoutSize(r.Size);
+    }
+
+    // don't do this implicitly since it's lossy
+    public static explicit operator LayoutRect(in FloatRect rect)
+    {
+        return new LayoutRect(rect);
+    }
+
+    // don't do this implicitly since it's lossy
+    public static explicit operator LayoutRect(in DoubleRect rect)
+    {
+        return new LayoutRect(rect);
     }
 
 #if DEBUG

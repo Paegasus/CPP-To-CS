@@ -190,4 +190,7 @@ public struct LayoutSize
     {
         return new LayoutSize(s);
     }
+
+    public static implicit operator LayoutSize(in FloatSize size) => new(size);
+    public static implicit operator LayoutSize(in DoubleSize size) => new(size);
 }

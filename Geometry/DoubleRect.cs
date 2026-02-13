@@ -7,6 +7,9 @@ public struct DoubleRect
     private DoublePoint m_Location;
     private DoubleSize m_Size;
 
+    public readonly DoublePoint Location => m_Location;
+    public readonly DoubleSize Size => m_Size;
+
     public double X { readonly get => m_Location.X; set => m_Location.X = value; }
     public double Y { readonly get => m_Location.Y; set => m_Location.Y = value; }
     public readonly double MaxX => X + Width;
