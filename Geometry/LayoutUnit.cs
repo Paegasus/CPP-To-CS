@@ -2,6 +2,8 @@ using System.Diagnostics;
 using System.Numerics;
 using UI.Numerics;
 
+using static UI.Numerics.SafeConversions;
+
 namespace UI.Geometry;
 
 // LayoutUnit implements the IFixedPoint interface,
@@ -132,17 +134,17 @@ public struct LayoutUnit : IFixedPoint<int, uint>, IEquatable<LayoutUnit>, IComp
 	// I'm not sure if we should keep it in LayoutUnit, there might be a better place for it.
 	public static int ClampRawValue<T>(T value) where T : IBinaryInteger<T>
 	{
-        return Conversion.SaturatedCast<int, T>(value);
+        return SaturatedCast<int, T>(value);
 	}
 
     public static int ClampRawValue(float value)
     {
-        return Conversion.SaturatedCast<int, float>(value);
+        return SaturatedCast<int, float>(value);
     }
 
     public static int ClampRawValue(double value)
     {
-        return Conversion.SaturatedCast<int, double>(value);
+        return SaturatedCast<int, double>(value);
     }
 
 	public static LayoutUnit FromRawValue(int value)
