@@ -116,7 +116,7 @@ public struct Size : IEquatable<Size>
         if (x_scale == 1.0f && y_scale == 1.0f)
             return size;
 
-        return ToCeiledSize(ScaleSize(SizeF(size), x_scale, y_scale));
+        return ToCeiledSize(SizeF.ScaleSize((SizeF)size, x_scale, y_scale));
     }
     
     public static Size ScaleToCeiledSize(in Size size, float scale)
@@ -124,7 +124,7 @@ public struct Size : IEquatable<Size>
         if (scale == 1.0f)
             return size;
 
-        return ToCeiledSize(ScaleSize(SizeF(size), scale, scale));
+        return ToCeiledSize(SizeF.ScaleSize((SizeF)size, scale, scale));
     }
 
     public static Size ScaleToFlooredSize(in Size size, float x_scale, float y_scale)
@@ -132,7 +132,7 @@ public struct Size : IEquatable<Size>
         if (x_scale == 1.0f && y_scale == 1.0f)
             return size;
 
-        return ToFlooredSize(SizeF.ScaleSize(SizeF(size), x_scale, y_scale));
+        return ToFlooredSize(SizeF.ScaleSize((SizeF)size, x_scale, y_scale));
     }
 
     public static Size ScaleToFlooredSize(in Size size, float scale)
@@ -140,7 +140,7 @@ public struct Size : IEquatable<Size>
         if (scale == 1.0f)
             return size;
 
-        return ToFlooredSize(SizeF.ScaleSize(new SizeF(size), scale, scale));
+        return ToFlooredSize(SizeF.ScaleSize((SizeF)size, scale, scale));
     }
 
     public static Size ScaleToRoundedSize(in Size size, float x_scale, float y_scale)
@@ -148,7 +148,7 @@ public struct Size : IEquatable<Size>
         if (x_scale == 1.0f && y_scale == 1.0f)
             return size;
 
-        return ToRoundedSize(SizeF.ScaleSize(SizeF(size), x_scale, y_scale));
+        return ToRoundedSize(SizeF.ScaleSize((SizeF)size, x_scale, y_scale));
     }
 
     public static Size ScaleToRoundedSize(in Size size, float scale)
@@ -156,6 +156,6 @@ public struct Size : IEquatable<Size>
         if (scale == 1.0f)
             return size;
 
-        return ToRoundedSize(SizeF.ScaleSize(SizeF(size), scale, scale));
+        return ToRoundedSize(SizeF.ScaleSize((SizeF)size, scale, scale));
     }
 }
