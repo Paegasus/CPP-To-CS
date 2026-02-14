@@ -98,7 +98,7 @@ public struct Vector2D
         return result;
     }
 
-    // This function
+    // This function in C++ has the following steps: saturated negate wrapper (if value is MinValue returns MaxValue) -> ClampedNumeric constructor -> saturated_cast
     /*
     public static Vector2D operator - (in Vector2D v)
     {
