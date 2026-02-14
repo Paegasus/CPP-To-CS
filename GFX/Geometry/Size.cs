@@ -1,5 +1,7 @@
-using System;
 using UI.Numerics;
+
+using static UI.Numerics.ClampedMath;
+using static UI.GFX.Geometry.SizeConversions;
 
 namespace UI.GFX.Geometry;
 
@@ -43,8 +45,8 @@ public struct Size : IEquatable<Size>
 
     public void Enlarge(int growWidth, int growHeight)
     {
-        width = ClampedMath.ClampAdd(width_, growWidth);
-        height = ClampedMath.ClampAdd(height_, growHeight);
+        width = ClampAdd(width_, growWidth);
+        height = ClampAdd(height_, growHeight);
     }
 
     public void SetToMin(in Size other)
@@ -65,8 +67,8 @@ public struct Size : IEquatable<Size>
     }
 
     /// <summary>
-    /// Returns the area. This method will throw an OverflowException if the area
-    /// exceeds the bounds of a 32-bit integer.
+    /// Returns the area. This method will throw an OverflowException
+    /// if the area exceeds the bounds of a 32-bit integer.
     /// </summary>
     public readonly int GetArea()
     {
@@ -107,5 +109,53 @@ public struct Size : IEquatable<Size>
     public static Size TransposeSize(in Size s)
     {
         return new Size(s.height_, s.width_);
+    }
+
+    public static Size ScaleToCeiledSize(in Size size, float x_scale, float y_scale)
+    {
+        if (x_scale == 1.0f && y_scale == 1.0f)
+            return size;
+
+        return ToCeiledSize(ScaleSize(SizeF(size), x_scale, y_scale));
+    }
+    
+    public static Size ScaleToCeiledSize(in Size size, float scale)
+    {
+        if (scale == 1.0f)
+            return size;
+
+        return ToCeiledSize(ScaleSize(SizeF(size), scale, scale));
+    }
+
+    public static Size ScaleToFlooredSize(in Size size, float x_scale, float y_scale)
+    {
+        if (x_scale == 1.0f && y_scale == 1.0f)
+            return size;
+
+        return ToFlooredSize(SizeF.ScaleSize(SizeF(size), x_scale, y_scale));
+    }
+
+    public static Size ScaleToFlooredSize(in Size size, float scale)
+    {
+        if (scale == 1.0f)
+            return size;
+
+        return ToFlooredSize(SizeF.ScaleSize(new SizeF(size), scale, scale));
+    }
+
+    public static Size ScaleToRoundedSize(in Size size, float x_scale, float y_scale)
+    {
+        if (x_scale == 1.0f && y_scale == 1.0f)
+            return size;
+
+        return ToRoundedSize(SizeF.ScaleSize(SizeF(size), x_scale, y_scale));
+    }
+
+    public static Size ScaleToRoundedSize(in Size size, float scale)
+    {
+        if (scale == 1.0f)
+            return size;
+
+        return ToRoundedSize(SizeF.ScaleSize(SizeF(size), scale, scale));
     }
 }
