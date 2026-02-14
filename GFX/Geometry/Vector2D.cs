@@ -55,10 +55,7 @@ public struct Vector2D
     // Gives the square of the diagonal length of the vector. Since this is
     // cheaper to compute than Length(), it is useful when you want to compare
     // relative lengths of different vectors without needing the actual lengths.
-    public readonly long LengthSquared()
-    {
-        return (long)x_ * x_ + (long)y_ * y_;
-    }
+    public readonly long LengthSquared() => (long)x_ * x_ + (long)y_ * y_;
 
     // Gives the diagonal length of the vector.
     public readonly float Length()
@@ -85,17 +82,13 @@ public struct Vector2D
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector2D operator +(in Vector2D lhs, in Vector2D rhs)
     {
-        Vector2D result = new(lhs.x_, lhs.y_);
-        result.Add(rhs);
-        return result;
+        return new Vector2D(lhs.x_ + rhs.x_, lhs.y_ + rhs.y_);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector2D operator -(in Vector2D lhs, in Vector2D rhs)
     {
-        Vector2D result = new(lhs.x_, lhs.y_);
-        result.Subtract(rhs);
-        return result;
+        return new Vector2D(lhs.x_ - rhs.x_, lhs.y_ - rhs.y_);
     }
 
     // This function in C++ has the following steps: saturated negate wrapper (if value is MinValue returns MaxValue) -> ClampedNumeric constructor -> saturated_cast
