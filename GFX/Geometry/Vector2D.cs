@@ -55,13 +55,13 @@ public struct Vector2D
     // Gives the square of the diagonal length of the vector. Since this is
     // cheaper to compute than Length(), it is useful when you want to compare
     // relative lengths of different vectors without needing the actual lengths.
-    public long LengthSquared()
+    public readonly long LengthSquared()
     {
         return (long)x_ * x_ + (long)y_ * y_;
     }
 
     // Gives the diagonal length of the vector.
-    public float Length()
+    public readonly float Length()
     {
         return (float)Math.Sqrt((double)LengthSquared());
     }
@@ -75,9 +75,13 @@ public struct Vector2D
 
     public readonly bool Equals(Vector2D other) => x_ == other.x_ && y_ == other.y_;
 
+    public override readonly bool Equals(object? obj) => obj is Vector2D other && Equals(other);
+
+    public override readonly int GetHashCode() => HashCode.Combine(y_, x_);
+
     public static bool operator == (in Vector2D left, in Vector2D right) => left.Equals(right);
     public static bool operator != (in Vector2D left, in Vector2D right) => !left.Equals(right);
-    
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector2D operator +(in Vector2D lhs, in Vector2D rhs)
     {
