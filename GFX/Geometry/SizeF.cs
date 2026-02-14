@@ -9,6 +9,16 @@ public struct SizeF : IEquatable<SizeF>
     public float width { readonly get => width_; set => width_ = Clamp(value); }
     public float height { readonly get => height_; set => height_ = Clamp(value); }
 
+    private static readonly float Trivial = 8.0f * float.MachineEpsilon;
+
+    private static float Clamp(float f) => f > Trivial ? f : 0.0f;
+
+    static float next(float f)
+    {
+        float x = MathF.Max(Trivial, f);
+        return MathF.BitIncrement(x);
+    }
+    
     public SizeF()
     {
         width_ = 0.0f;
@@ -27,19 +37,15 @@ public struct SizeF : IEquatable<SizeF>
         height_ = Clamp(size.height);
     }
 
-    private static readonly float Trivial = 8.0f * float.MachineEpsilon;
+    public readonly float GetArea() => width_ * height_;
 
-    private static float Clamp(float f) => f > Trivial ? f : 0.0f;
+    public readonly float AspectRatio() => width_ / height_;
 
     public void SetSize(float width, float height)
     {
         this.width = width;
         this.height = height;
     }
-
-    public readonly float GetArea() => width_ * height_;
-
-    public readonly float AspectRatio() => width_ / height_;
 
     public void Enlarge(float growWidth, float growHeight)
     {
@@ -66,17 +72,26 @@ public struct SizeF : IEquatable<SizeF>
     public readonly bool IsEmpty() => width_ == 0.0f || height_ == 0.0f;
     public readonly bool IsZero() => width_ == 0.0f && height_ == 0.0f;
 
-    public void Transpose()
-    {
-        (width_, height_) = (height_, width_);
-    }
-
     public void Scale(float scale) => Scale(scale, scale);
 
     public void Scale(float x_scale, float y_scale)
     {
         width *= x_scale;
         height *= y_scale;
+    }
+
+    // Scales the size by the inverse of the given scale (by dividing).
+    public void InvScale(float inv_scale) => InvScale(inv_scale, inv_scale);
+
+    public void InvScale(float inv_x_scale, float inv_y_scale)
+    {
+        width_ /= inv_x_scale;
+        height_ /= inv_y_scale;
+    }
+
+    public void Transpose()
+    {
+        (width_, height_) = (height_, width_);
     }
 
     public static SizeF ScaleSize(in SizeF s, float x_scale, float y_scale)
@@ -86,23 +101,11 @@ public struct SizeF : IEquatable<SizeF>
         return scaled_s;
     }
 
-    public static SizeF ScaleSize(in SizeF s, float scale)
-    {
-        return ScaleSize(s, scale, scale);
-    }
+    public static SizeF ScaleSize(in SizeF s, float scale) => ScaleSize(s, scale, scale);
 
-    public static SizeF TransposeSize(in SizeF s)
-    {
-        return new SizeF(s.height_, s.width_);
-    }
+    public static SizeF TransposeSize(in SizeF s) => new(s.height_, s.width_);
 
     public override readonly string ToString() => $"{width_}x{height_}";
-
-    static float next(float f)
-    {
-        float x = MathF.Max(Trivial, f);
-        return MathF.BitIncrement(x);
-    }
 
     public override readonly int GetHashCode() => HashCode.Combine(width_, height_);
 
