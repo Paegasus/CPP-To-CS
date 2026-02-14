@@ -2,7 +2,7 @@ namespace UI.Extensions;
 
 public static class FloatExtensions
 {
-    public extension(float source)
+    extension(float source)
     {
         /// <summary>
         /// The difference between 1.0f and the next representable value.

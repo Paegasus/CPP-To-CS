@@ -2,7 +2,7 @@ namespace UI.Extensions;
 
 public static class DoubleExtensions
 {
-    public extension(double source)
+    extension(double source)
     {
         /// <summary>
         /// The difference between 1.0 and the next representable value.

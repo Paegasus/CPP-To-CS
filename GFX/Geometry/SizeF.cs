@@ -6,17 +6,8 @@ public struct SizeF : IEquatable<SizeF>
 {
     private float width_, height_;
 
-    public float width
-    {
-        readonly get => width_;
-        set => width_ = Clamp(value);
-    }
-
-    public float height
-    {
-        readonly get => height_;
-        set => height_ = Clamp(value);
-    }
+    public float width { readonly get => width_; set => width_ = Clamp(value); }
+    public float height { readonly get => height_; set => height_ = Clamp(value); }
 
     public SizeF()
     {
@@ -29,10 +20,12 @@ public struct SizeF : IEquatable<SizeF>
         width_ = Clamp(width);
         height_ = Clamp(height);
     }
-    
-    public SizeF(in Size size) : this(size.width, size.height) { }
 
-    public static explicit operator SizeF(in Size size) => new(size);
+    public SizeF(in Size size)
+    {
+        width_ = Clamp(size.width);
+        height_ = Clamp(size.height);
+    }
 
     private static readonly float Trivial = 8.0f * float.MachineEpsilon;
 
@@ -44,20 +37,14 @@ public struct SizeF : IEquatable<SizeF>
         this.height = height;
     }
 
-    public readonly bool IsEmpty() => width_ <= 0.0f || height_ <= 0.0f;
+    public readonly float GetArea() => width_ * height_;
 
-    public readonly bool IsZero() => width_ == 0.0f && height_ == 0.0f;
+    public readonly float AspectRatio() => width_ / height_;
 
     public void Enlarge(float growWidth, float growHeight)
     {
-        float newWidth = width_ + growWidth;
-        float newHeight = height_ + growHeight;
-
-        if (!float.IsFinite(newWidth) || !float.IsFinite(newHeight))
-            throw new ArgumentOutOfRangeException("Enlarge operation resulted in non-finite value.");
-
-        width = newWidth;
-        height = newHeight;
+        width_ += growWidth;
+        height_ += growHeight;
     }
 
     public void SetToMin(in SizeF other)
@@ -71,6 +58,13 @@ public struct SizeF : IEquatable<SizeF>
         width_ = MathF.Max(width_, other.width_);
         height_ = MathF.Max(height_, other.height_);
     }
+    
+    // Expands width/height to the next representable value.
+    public void SetToNextWidth() => width_ = next(width_);
+    public void SetToNextHeight() => height_ = next(height_);
+
+    public readonly bool IsEmpty() => width_ == 0.0f || height_ == 0.0f;
+    public readonly bool IsZero() => width_ == 0.0f && height_ == 0.0f;
 
     public void Transpose()
     {
@@ -83,37 +77,6 @@ public struct SizeF : IEquatable<SizeF>
     {
         width *= x_scale;
         height *= y_scale;
-    }
-
-    public readonly float GetArea()
-    {
-        checked
-        {
-            return width_ * height_;
-        }
-    }
-
-    public override readonly string ToString() => $"{width_}x{height_}";
-
-    public override readonly int GetHashCode() => HashCode.Combine(width_, height_);
-
-    public readonly bool Equals(SizeF other) => width_ == other.width_ && height_ == other.height_;
-
-    public override readonly bool Equals(object? obj) => obj is SizeF other && Equals(other);
-
-    public static bool operator ==(in SizeF left, in SizeF right) => left.Equals(right);
-    public static bool operator !=(in SizeF left, in SizeF right) => !left.Equals(right);
-
-    public static SizeF operator +(SizeF lhs, in SizeF rhs)
-    {
-        lhs.Enlarge(rhs.width_, rhs.height_);
-        return lhs;
-    }
-
-    public static SizeF operator -(SizeF lhs, in SizeF rhs)
-    {
-        lhs.Enlarge(-rhs.width_, -rhs.height_);
-        return lhs;
     }
 
     public static SizeF ScaleSize(in SizeF s, float x_scale, float y_scale)
@@ -132,4 +95,43 @@ public struct SizeF : IEquatable<SizeF>
     {
         return new SizeF(s.height_, s.width_);
     }
+
+    public override readonly string ToString() => $"{width_}x{height_}";
+
+    static float next(float f)
+    {
+        float x = MathF.Max(Trivial, f);
+        return MathF.BitIncrement(x);
+    }
+
+    public override readonly int GetHashCode() => HashCode.Combine(width_, height_);
+
+    public readonly bool Equals(SizeF other) => width_ == other.width_ && height_ == other.height_;
+
+    public override readonly bool Equals(object? obj) => obj is SizeF other && Equals(other);
+
+    public static bool operator ==(in SizeF left, in SizeF right) => left.Equals(right);
+    public static bool operator !=(in SizeF left, in SizeF right) => !left.Equals(right);
+
+    public static SizeF operator +(in SizeF lhs, in SizeF rhs)
+    {
+        return new SizeF(lhs.width_ + rhs.width_, lhs.height_ + rhs.height_);
+    }
+
+    public static SizeF operator -(in SizeF lhs, in SizeF rhs)
+    {
+        return new SizeF(lhs.width_ - rhs.width_, lhs.height_ - rhs.height_);
+    }
+
+    public void operator +=(SizeF size)
+    {
+        SetSize(width_ + size.width_, height_ + size.height_);
+    }
+
+    public void operator -=(SizeF size)
+    {
+        SetSize(width_ - size.width_, height_ - size.height_);
+    }
+
+    public static explicit operator SizeF(in Size size) => new(size);
 }
