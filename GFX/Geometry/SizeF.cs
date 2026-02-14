@@ -68,7 +68,7 @@ public struct SizeF : IEquatable<SizeF>
     public void SetToNextWidth() => width_ = Next(width_);
     public void SetToNextHeight() => height_ = Next(height_);
 
-    public readonly bool IsEmpty() => width_ <= 0.0f || height_ <= 0.0f;
+    public readonly bool IsEmpty() => width_ == 0.0f || height_ == 0.0f;
     public readonly bool IsZero() => width_ == 0.0f && height_ == 0.0f;
 
     public void Scale(float scale) => Scale(scale, scale);
