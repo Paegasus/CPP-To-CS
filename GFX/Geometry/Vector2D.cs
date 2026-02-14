@@ -98,6 +98,7 @@ public struct Vector2D
         return result;
     }
 
+    // This function
     /*
     public static Vector2D operator - (in Vector2D v)
     {
