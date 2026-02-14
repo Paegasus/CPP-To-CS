@@ -68,7 +68,7 @@ public struct PointF : IComparable<PointF>, IEquatable<PointF>
 
     public void Scale(float x_scale, float y_scale)
     {
-        SetPoint(x * x_scale, y * y_scale);
+        SetPoint(x_ * x_scale, y_ * y_scale);
     }
 
     // Scales each component by the inverse of the given scales.
@@ -98,8 +98,8 @@ public struct PointF : IComparable<PointF>, IEquatable<PointF>
 #if DEBUG
         //DCHECK(allowed_distance > 0);
 #endif
-        float diff_x = x_ - rhs.x;
-        float diff_y = y_ - rhs.y;
+        float diff_x = x_ - rhs.x_;
+        float diff_y = y_ - rhs.y_;
         float distance = MathF.Sqrt(diff_x * diff_x + diff_y * diff_y);
 
         return distance < allowed_distance;
@@ -129,12 +129,12 @@ public struct PointF : IComparable<PointF>, IEquatable<PointF>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static PointF TransposePoint(in PointF p)
     {
-        return new PointF(p.y, p.x);
+        return new PointF(p.y_, p.x_);
     }
 
     public override readonly string ToString()
     {
-        return $"{x},{y}";
+        return $"{x_},{y_}";
     }
 
     // For use in collections (SortedSet, Dictionary keys, etc.)
@@ -148,7 +148,7 @@ public struct PointF : IComparable<PointF>, IEquatable<PointF>
 
     public override readonly bool Equals(object? obj) => obj is PointF other && Equals(other);
     
-    public readonly bool Equals(PointF other) => x == other.x && y == other.y;
+    public readonly bool Equals(PointF other) => x_ == other.x_ && y_ == other.y_;
 
     // A point is less than another point if its y-value is closer to the origin.
     // If the y-values are the same, then point with the x-value closer to the origin is considered less than the other.
@@ -165,8 +165,8 @@ public struct PointF : IComparable<PointF>, IEquatable<PointF>
     {
         PointF result = new(lhs.x, lhs.y);
 
-        result.x += rhs.x;
-        result.y += rhs.y;
+        result.x_ += rhs.x;
+        result.y_ += rhs.y;
         
         return result;
     }
@@ -175,8 +175,8 @@ public struct PointF : IComparable<PointF>, IEquatable<PointF>
     {
         PointF result = new(lhs.x, lhs.y);
         
-        result.x -= rhs.x;
-        result.y -= rhs.y;
+        result.x_ -= rhs.x;
+        result.y_ -= rhs.y;
 
         return result;
     }
@@ -184,6 +184,6 @@ public struct PointF : IComparable<PointF>, IEquatable<PointF>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector2DF operator - (in PointF lhs, in PointF rhs)
     {
-        return new Vector2DF(lhs.x - rhs.x, lhs.y - rhs.y);
+        return new Vector2DF(lhs.x_ - rhs.x_, lhs.y_ - rhs.y_);
     }
 }
