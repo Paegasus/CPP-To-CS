@@ -1,5 +1,7 @@
 using System.Numerics;
 
+using static UI.Numerics.SafeConversions;
+
 namespace UI.Numerics;
 
 /// <summary>
@@ -33,7 +35,7 @@ public readonly struct ClampedNumeric<T> : IEquatable<ClampedNumeric<T>>
     {
         // Although operators saturate, values can also be constructed from raw T,
         // so we must saturate here for consistency.
-        m_Value = Conversion.SaturatedCast<T, T>(value);
+        m_Value = SaturatedCast<T, T>(value);
     }
 
     public override string ToString() => m_Value.ToString() ?? string.Empty;

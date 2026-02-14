@@ -1,3 +1,8 @@
+using System.Runtime.CompilerServices;
+using UI.Numerics;
+
+using static UI.Numerics.ClampedMath;
+
 namespace UI.GFX.Geometry;
 
 public struct Vector2D
@@ -16,5 +21,86 @@ public struct Vector2D
     {
         x_ = x;
         y_ = y;
+    }
+
+    // True if both components of the vector are 0.
+    public readonly bool IsZero() => x_ == 0 && y_ == 0;
+
+    // Add the components of the |other| vector to the current vector.
+    public void Add(in Vector2D other)
+    {
+        x_ = ClampAdd(other.x_, x_);
+        y_ = ClampAdd(other.y_, y_);
+    }
+
+    // Subtract the components of the |other| vector from the current vector.
+    public void Subtract(in Vector2D other)
+    {
+        x_ = ClampSub(x_, other.x_);
+        y_ = ClampSub(y_, other.y_);
+    }
+
+    public void SetToMin(in Vector2D other)
+    {
+        x_ = Math.Min(x_, other.x_);
+        y_ = Math.Min(y_, other.y_);
+    }
+  
+    public void SetToMax(in Vector2D other)
+    {
+        x_ = Math.Max(x_, other.x_);
+        y_ = Math.Max(y_, other.y_);
+    }
+
+    // Gives the square of the diagonal length of the vector. Since this is
+    // cheaper to compute than Length(), it is useful when you want to compare
+    // relative lengths of different vectors without needing the actual lengths.
+    public long LengthSquared()
+    {
+        return (long)x_ * x_ + (long)y_ * y_;
+    }
+
+    // Gives the diagonal length of the vector.
+    public float Length()
+    {
+        return (float)Math.Sqrt((double)LengthSquared());
+    }
+
+    public void Transpose()
+    {
+        (x_, y_) = (y_, x_);
+    }
+
+    public override readonly string ToString() => $"[{x_} {y_}]";
+
+    public readonly bool Equals(Vector2D other) => x_ == other.x_ && y_ == other.y_;
+
+    public static bool operator == (in Vector2D left, in Vector2D right) => left.Equals(right);
+    public static bool operator != (in Vector2D left, in Vector2D right) => !left.Equals(right);
+    
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Vector2D operator +(in Vector2D lhs, in Vector2D rhs)
+    {
+        Vector2D result = new(lhs.x_, lhs.y_);
+        result.Add(rhs);
+        return result;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Vector2D operator -(in Vector2D lhs, in Vector2D rhs)
+    {
+        Vector2D result = new(lhs.x_, lhs.y_);
+        result.Subtract(rhs);
+        return result;
+    }
+
+    public static Vector2D operator - (in Vector2D v)
+    {
+        return new Vector2D(-(int)new ClampedNumeric<int>(v.x_), -(int)new ClampedNumeric<int>(v.y_));
+    }
+
+    public static explicit operator Vector2DF(in Vector2D source)
+    {
+        return new Vector2DF((float)source.x_, (float)source.y_);
     }
 }
