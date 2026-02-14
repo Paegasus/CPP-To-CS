@@ -98,9 +98,9 @@ public struct Vector2D
         return result;
     }
 
-    public static Vector2D operator - (in Vector2D v)
+    public static Vector2D operator - (in Vector2D other)
     {
-        return new Vector2D(-(int)new ClampedNumeric<int>(v.x_), -(int)new ClampedNumeric<int>(v.y_));
+        return new Vector2D(-(int)new ClampedNumeric<int>(other.x_), -(int)new ClampedNumeric<int>(other.y_));
     }
 
     public static explicit operator Vector2DF(in Vector2D source)
