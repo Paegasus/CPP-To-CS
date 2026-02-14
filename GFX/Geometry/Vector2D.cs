@@ -98,9 +98,17 @@ public struct Vector2D
         return result;
     }
 
-    public static Vector2D operator - (in Vector2D other)
+    /*
+    public static Vector2D operator - (in Vector2D v)
     {
-        return new Vector2D(-(int)new ClampedNumeric<int>(other.x_), -(int)new ClampedNumeric<int>(other.y_));
+        return new Vector2D(-(int)new ClampedNumeric<int>(v.x_), -(int)new ClampedNumeric<int>(v.y_));
+    }
+    */
+
+    public static Vector2D operator - (in Vector2D v)
+    {
+        // Negation can overflow for int.MinValue, so we use ClampSub from zero.
+        return new Vector2D(ClampSub(0, v.x_), ClampSub(0, v.y_));
     }
 
     public static explicit operator Vector2DF(in Vector2D source)
