@@ -1,6 +1,7 @@
-
-using System;
 using System.Runtime.CompilerServices;
+using UI.Numerics;
+
+using static UI.Numerics.AngleConversions;
 
 namespace UI.GFX.Geometry;
 
@@ -9,7 +10,7 @@ namespace UI.GFX.Geometry;
 /// </summary>
 public struct Vector3DF : IEquatable<Vector3DF>
 {
-    private const double kEpsilon = 1.0e-6;
+    private const double Epsilon = 1.0e-6;
 
     private float x_, y_, z_;
 
@@ -31,10 +32,10 @@ public struct Vector3DF : IEquatable<Vector3DF>
         z_ = z;
     }
     
-    public Vector3DF(in Vector2DF other)
+    public Vector3DF(in Vector2DF vector)
     {
-        x_ = other.x;
-        y_ = other.y;
+        x_ = vector.x;
+        y_ = vector.y;
         z_ = 0;
     }
 
@@ -141,10 +142,10 @@ public struct Vector3DF : IEquatable<Vector3DF>
     public readonly bool GetNormalized(out Vector3DF result)
     {
         result = this;
-        double len_sq = LengthSquared();
-        if (len_sq < kEpsilon * kEpsilon)
+        double lengthSquared = LengthSquared();
+        if (lengthSquared < Epsilon * Epsilon)
             return false;
-        result.InvScale((float)Math.Sqrt(len_sq));
+        result.InvScale((float)Math.Sqrt(lengthSquared));
         return true;
     }
     
@@ -178,6 +179,7 @@ public struct Vector3DF : IEquatable<Vector3DF>
     /// <summary>
     /// Returns the cross product of two vectors.
     /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector3DF CrossProduct(in Vector3DF lhs, in Vector3DF rhs)
     {
         Vector3DF result = lhs;
@@ -220,17 +222,12 @@ public struct Vector3DF : IEquatable<Vector3DF>
         return ScaleVector(v, scale, scale, scale);
     }
     
-    private static float RadiansToDegrees(float radians)
-    {
-        return (float)(radians * (180.0 / Math.PI));
-    }
-    
     /// <summary>
     /// Returns the angle between two vectors in degrees.
     /// </summary>
     public static float AngleBetweenVectorsInDegrees(in Vector3DF baseVec, in Vector3DF other)
     {
-        float angle = RadiansToDegrees(
+        float angle = RadToDeg(
             MathF.Acos(
                 Math.Clamp(DotProduct(baseVec, other) / baseVec.Length() / other.Length(), -1.0f, 1.0f)
             )
