@@ -13,7 +13,7 @@ public struct SizeF : IEquatable<SizeF>
 
     private static float Clamp(float f) => f > Trivial ? f : 0.0f;
 
-    static float next(float f)
+    private static float Next(float f)
     {
         float x = MathF.Max(Trivial, f);
         return MathF.BitIncrement(x);
@@ -49,8 +49,7 @@ public struct SizeF : IEquatable<SizeF>
 
     public void Enlarge(float growWidth, float growHeight)
     {
-        width_ += growWidth;
-        height_ += growHeight;
+        SetSize(width_ + growWidth, height_ + growHeight);
     }
 
     public void SetToMin(in SizeF other)
@@ -66,10 +65,10 @@ public struct SizeF : IEquatable<SizeF>
     }
     
     // Expands width/height to the next representable value.
-    public void SetToNextWidth() => width_ = next(width_);
-    public void SetToNextHeight() => height_ = next(height_);
+    public void SetToNextWidth() => width_ = Next(width_);
+    public void SetToNextHeight() => height_ = Next(height_);
 
-    public readonly bool IsEmpty() => width_ == 0.0f || height_ == 0.0f;
+    public readonly bool IsEmpty() => width_ <= 0.0f || height_ <= 0.0f;
     public readonly bool IsZero() => width_ == 0.0f && height_ == 0.0f;
 
     public void Scale(float scale) => Scale(scale, scale);
