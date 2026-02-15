@@ -58,34 +58,28 @@ public struct Point3F : IEquatable<Point3F>
 
     public readonly Vector3DF OffsetFromOrigin() => new Vector3DF(x_, y_, z_);
 
-    public override string ToString() => $"{x_},{y_},{z_}";
+    public override readonly string ToString() => $"{x_},{y_},{z_}";
 
-    public override int GetHashCode() => HashCode.Combine(x_, y_, z_);
+    public override readonly int GetHashCode() => HashCode.Combine(x_, y_, z_);
 
-    public override bool Equals(object obj) => obj is Point3F other && Equals(other);
+    public override readonly bool Equals(object? obj) => obj is Point3F other && Equals(other);
 
-    public bool Equals(Point3F other) => x_ == other.x_ && y_ == other.y_ && z_ == other.z_;
+    public readonly bool Equals(Point3F other) => x_ == other.x_ && y_ == other.y_ && z_ == other.z_;
 
     public static bool operator ==(in Point3F lhs, in Point3F rhs) => lhs.Equals(rhs);
     public static bool operator !=(in Point3F lhs, in Point3F rhs) => !lhs.Equals(rhs);
 
-    public static Point3F operator +(in Point3F lhs, in Vector3DF rhs) =>
-        new Point3F(lhs.x_ + rhs.x, lhs.y_ + rhs.y, lhs.z_ + rhs.z);
+    public static Point3F operator +(in Point3F lhs, in Vector3DF rhs) => new Point3F(lhs.x_ + rhs.x, lhs.y_ + rhs.y, lhs.z_ + rhs.z);
 
-    public static Point3F operator -(in Point3F lhs, in Vector3DF rhs) =>
-        new Point3F(lhs.x_ - rhs.x, lhs.y_ - rhs.y, lhs.z_ - rhs.z);
+    public static Point3F operator -(in Point3F lhs, in Vector3DF rhs) => new Point3F(lhs.x_ - rhs.x, lhs.y_ - rhs.y, lhs.z_ - rhs.z);
 
-    public static Vector3DF operator -(in Point3F lhs, in Point3F rhs) =>
-        new Vector3DF(lhs.x_ - rhs.x, lhs.y_ - rhs.y, lhs.z_ - rhs.z);
+    public static Vector3DF operator -(in Point3F lhs, in Point3F rhs) => new Vector3DF(lhs.x_ - rhs.x, lhs.y_ - rhs.y, lhs.z_ - rhs.z);
 
-    public static Point3F PointAtOffsetFromOrigin(in Vector3DF offset) =>
-        new Point3F(offset.x, offset.y, offset.z);
+    public static Point3F PointAtOffsetFromOrigin(in Vector3DF offset) => new Point3F(offset.x, offset.y, offset.z);
 
-    public static Point3F ScalePoint(in Point3F p, float x_scale, float y_scale, float z_scale) =>
-        new Point3F(p.x_ * x_scale, p.y_ * y_scale, p.z_ * z_scale);
+    public static Point3F ScalePoint(in Point3F p, float x_scale, float y_scale, float z_scale) => new Point3F(p.x_ * x_scale, p.y_ * y_scale, p.z_ * z_scale);
 
-    public static Point3F ScalePoint(in Point3F p, in Vector3DF v) =>
-        new Point3F(p.x_ * v.x, p.y_ * v.y, p.z_ * v.z);
+    public static Point3F ScalePoint(in Point3F p, in Vector3DF v) => new Point3F(p.x_ * v.x, p.y_ * v.y, p.z_ * v.z);
 
     public static Point3F ScalePoint(in Point3F p, float scale) => ScalePoint(p, scale, scale, scale);
 }
