@@ -115,7 +115,7 @@ public struct InsetsF : IEquatable<InsetsF>
         right_ *= x_scale;
     }
     
-    // public OutsetsF ToOutsets() => new OutsetsF(-top(), -left(), -bottom(), -right());
+    public OutsetsF ToOutsets() => new OutsetsF(-top(), -left(), -bottom(), -right());
 
     public override readonly string ToString() => $"x:{left_},{right_} y:{top_},{bottom_}";
     public override readonly int GetHashCode() => HashCode.Combine(top_, left_, bottom_, right_);

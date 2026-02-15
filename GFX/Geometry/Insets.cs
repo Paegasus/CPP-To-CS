@@ -130,7 +130,7 @@ public struct Insets : IEquatable<Insets>
     }
 
     // Conversion from Insets to Outsets negates all components.
-    // public Outsets ToOutsets() => new Outsets(-top(), -left(), -bottom(), -right());
+    public Outsets ToOutsets() => new Outsets(-top(), -left(), -bottom(), -right());
     
     /// <summary>
     /// Adjusts the vertical and horizontal dimensions by the values described in |vector|.
@@ -143,7 +143,7 @@ public struct Insets : IEquatable<Insets>
         set_top_bottom(ClampAdd(top(), vector.y), ClampSub(bottom(), vector.y));
     }
     
-    // public static explicit operator InsetsF(in Insets i) => new InsetsF(i);
+    public static explicit operator InsetsF(in Insets i) => new InsetsF(i.top(), i.left(), i.bottom(), i.right());
 
     public override readonly string ToString() => $"x:{left_},{right_} y:{top_},{bottom_}";
 
