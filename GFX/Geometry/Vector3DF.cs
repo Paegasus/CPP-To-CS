@@ -1,5 +1,4 @@
 using System.Runtime.CompilerServices;
-using UI.Numerics;
 
 using static UI.Numerics.AngleConversions;
 
@@ -18,12 +17,7 @@ public struct Vector3DF : IEquatable<Vector3DF>
     public float y { readonly get => y_; set => y_ = value; }
     public float z { readonly get => z_; set => z_ = value; }
 
-    public Vector3DF()
-    {
-        x_ = 0.0f;
-        y_ = 0.0f;
-        z_ = 0.0f;
-    }
+    public Vector3DF() : this(0f, 0f, 0f) { }
 
     public Vector3DF(float x, float y, float z)
     {

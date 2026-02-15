@@ -9,11 +9,7 @@ public struct PointF : IComparable<PointF>, IEquatable<PointF>
     public float x { readonly get => x_; set => x_ = value; }
     public float y { readonly get => y_; set => y_ = value; }
 
-    public PointF()
-    {
-        x_ = 0.0f;
-        y_ = 0.0f;
-    }
+    public PointF() : this(0f, 0f) { }
     
     public PointF(float x, float y)
     {

@@ -21,11 +21,7 @@ public struct Size : IEquatable<Size>
         set => height_ = Math.Max(0, value);
     }
 
-    public Size()
-    {
-        width_ = 0;
-        height_ = 0;
-    }
+    public Size() : this(0, 0) { }
 
     public Size(int width, int height)
     {

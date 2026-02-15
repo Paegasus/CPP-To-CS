@@ -19,11 +19,7 @@ public struct SizeF : IEquatable<SizeF>
         return MathF.BitIncrement(x);
     }
     
-    public SizeF()
-    {
-        width_ = 0.0f;
-        height_ = 0.0f;
-    }
+    public SizeF() : this(0f, 0f) { }
 
     public SizeF(float width, float height)
     {

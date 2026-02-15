@@ -1,6 +1,4 @@
-using System;
 using System.Runtime.CompilerServices;
-using System.Security.Cryptography.X509Certificates;
 
 namespace UI.GFX.Geometry;
 
@@ -11,11 +9,7 @@ public struct Vector2DF : IEquatable<Vector2DF>
     public float x { readonly get => x_; set => x_ = value; }
     public float y { readonly get => y_; set => y_ = value; }
 
-    public Vector2DF()
-    {
-        x_ = 0.0f;
-        y_ = 0.0f;
-    }
+    public Vector2DF() : this(0f, 0f) { }
 
     public Vector2DF(float x, float y)
     {
