@@ -1,6 +1,5 @@
-using System;
-using UI.Numerics;
 using static UI.Numerics.ClampedMath;
+using static UI.GFX.Geometry.InsetsConversions;
 
 namespace UI.GFX.Geometry;
 
@@ -221,6 +220,51 @@ public struct Insets : IEquatable<Insets>
     private static int ClampBottomOrRight(int top_or_left, int bottom_or_right)
     {
         return ClampAdd(top_or_left, bottom_or_right) - top_or_left;
+    }
+
+    // Helper methods to scale a Insets to a new Insets.
+
+    public static Insets ScaleToCeiledInsets(in Insets insets, float x_scale, float y_scale)
+    {
+        if (x_scale == 1.0f && y_scale == 1.0f)
+            return insets;
+
+        return ToCeiledInsets(InsetsF.ScaleInsets((InsetsF)insets, x_scale, y_scale));
+    }
+
+    public static Insets ScaleToCeiledInsets(in Insets insets, float scale)
+    {
+        if (scale == 1.0f)
+            return insets;
+        return ToCeiledInsets(InsetsF.ScaleInsets((InsetsF)insets, scale));
+    }
+
+    public static Insets ScaleToFlooredInsets(in Insets insets, float x_scale, float y_scale)
+    {
+        if (x_scale == 1.0f && y_scale == 1.0f)
+            return insets;
+        return ToFlooredInsets(InsetsF.ScaleInsets((InsetsF)insets, x_scale, y_scale));
+    }
+
+    public static Insets ScaleToFlooredInsets(in Insets insets, float scale)
+    {
+        if (scale == 1.0f)
+            return insets;
+        return ToFlooredInsets(InsetsF.ScaleInsets((InsetsF)insets, scale));
+    }
+
+    public static Insets ScaleToRoundedInsets(in Insets insets, float x_scale, float y_scale)
+    {
+        if (x_scale == 1.0f && y_scale == 1.0f)
+            return insets;
+        return ToRoundedInsets(InsetsF.ScaleInsets((InsetsF)insets, x_scale, y_scale));
+    }
+
+    public static Insets ScaleToRoundedInsets(in Insets insets, float scale)
+    {
+        if (scale == 1.0f)
+            return insets;
+        return ToRoundedInsets(InsetsF.ScaleInsets((InsetsF)insets, scale));
     }
 
     private static int SaturatingNegate(int v) => v == int.MinValue ? int.MaxValue : -v;

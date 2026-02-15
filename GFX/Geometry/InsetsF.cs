@@ -45,6 +45,17 @@ public struct InsetsF : IEquatable<InsetsF>
     public readonly float height() => top_ + bottom_;
     public readonly bool IsEmpty() => width() == 0f && height() == 0f;
 
+    public static InsetsF ScaleInsets(InsetsF i, float x_scale, float y_scale)
+    {
+        i.Scale(x_scale, y_scale);
+        return i;
+    }
+
+    public static InsetsF ScaleInsets(InsetsF i, float scale)
+    {
+        return ScaleInsets(i, scale, scale);
+    }
+
     public void Transpose()
     {
         (top_, left_) = (left_, top_);

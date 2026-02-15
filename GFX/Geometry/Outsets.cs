@@ -129,7 +129,7 @@ public struct Outsets : IEquatable<Outsets>
     }
 
     // Conversion from Outsets to Insets negates all components.
-    public Insets ToInsets() => new Insets(SaturatingNegate(top()), SaturatingNegate(left()), SaturatingNegate(bottom()), SaturatingNegate(right()));
+    public Insets ToInsets() => new Insets(-top(), -left(), -bottom(), -right());
 
     public override readonly string ToString() => $"x:{left_},{right_} y:{top_},{bottom_}";
 
