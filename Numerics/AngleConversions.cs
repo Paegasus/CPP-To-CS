@@ -2,7 +2,6 @@ namespace UI.Numerics;
 
 public static class AngleConversions
 {
-
     public static float DegToRad(float deg)
     {
         return deg * MathF.PI / 180.0f;

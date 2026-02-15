@@ -3,7 +3,11 @@ using static UI.GFX.Geometry.InsetsConversions;
 
 namespace UI.GFX.Geometry;
 
-/// <summary>
+//// <summary>
+/// Represents the widths of the four borders or margins of an unspecified
+/// rectangle. It stores the thickness of the top, left, bottom and right
+/// edges, without storing the actual size and position of the rectangle itself.
+///
 /// This can be used to represent a space within a rectangle, by "shrinking" the
 /// rectangle by the inset amount on all four sides. Alternatively, it can
 /// represent a border that has a different thickness on each side.
@@ -45,22 +49,22 @@ public struct Insets : IEquatable<Insets>
     }
 
     /// <summary>
-    /// Returns the total width taken up by the insets.
+    /// Returns the total width taken up by the insets/outsets, which is the sum of the left and right insets/outsets.
     /// </summary>
     public readonly int width() => left_ + right_;
 
     /// <summary>
-    /// Returns the total height taken up by the insets.
+    /// Returns the total height taken up by the insets/outsets, which is the sum of the top and bottom insets/outsets.
     /// </summary>
     public readonly int height() => top_ + bottom_;
 
     /// <summary>
-    /// Returns the size of the insets.
+    /// Returns the sum of the left and right insets/outsets as the width, the sum of the top and bottom insets/outsets as the height.
     /// </summary>
     public readonly Size size() => new Size(width(), height());
 
     /// <summary>
-    /// Returns true if the insets are empty.
+    /// Returns true if the insets/outsets are empty.
     /// </summary>
     public readonly bool IsEmpty() => width() == 0 && height() == 0;
     
