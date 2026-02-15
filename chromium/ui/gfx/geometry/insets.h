@@ -1,4 +1,29 @@
+// Copyright 2012 The Chromium Authors
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
 
+#ifndef UI_GFX_GEOMETRY_INSETS_H_
+#define UI_GFX_GEOMETRY_INSETS_H_
+
+#include "base/component_export.h"
+#include "base/numerics/clamped_math.h"
+#include "ui/gfx/geometry/insets_f.h"
+#include "ui/gfx/geometry/insets_outsets_base.h"
+
+namespace gfx {
+
+class Outsets;
+class Vector2d;
+
+// This can be used to represent a space within a rectangle, by "shrinking" the
+// rectangle by the inset amount on all four sides. Alternatively, it can
+// represent a border that has a different thickness on each side.
+class COMPONENT_EXPORT(GEOMETRY) Insets : public InsetsOutsetsBase<Insets> {
+ public:
+  using InsetsOutsetsBase::InsetsOutsetsBase;
+
+  // Conversion from Insets to Outsets negates all components.
+  Outsets ToOutsets() const;
 
   // Adjusts the vertical and horizontal dimensions by the values described in
   // |vector|. Offsetting insets before applying to a rectangle would be
