@@ -80,27 +80,35 @@ public struct Point : IComparable<Point>, IEquatable<Point>
 
     public static bool operator != (in Point left, in Point right) => !left.Equals(right);
 
-    public static Point operator + (in Point point, in  Vector2D vector)
+    public void operator +=(in Vector2D vector)
     {
-        return new Point(
-            ClampAdd(point.x_, vector.x),
-            ClampAdd(point.y_, vector.y)
-        );
-    }
-    public static Point operator - (in Point point, in  Vector2D vector)
-    {
-        return new Point(
-            ClampSub(point.x_, vector.x),
-            ClampSub(point.y_, vector.y)
-        );
+        x_ = ClampAdd(x_, vector.x);
+        y_ = ClampAdd(y_, vector.y);
     }
 
-    public static Vector2D operator - (in Point lhs, in Point rhs)
+    public void operator -=(in Vector2D vector)
     {
-        return new Vector2D(
-            ClampSub(lhs.x_, rhs.x_),
-            ClampSub(lhs.y_, rhs.y_)
-        );
+        x_ = ClampSub(x_, vector.x);
+        y_ = ClampSub(y_, vector.y);
+    }
+
+    public static Point operator +(in Point lhs, in Vector2D rhs)
+    {
+        Point result = lhs;
+        result += rhs;
+        return result;
+    }
+
+    public static Point operator -(in Point lhs, in Vector2D rhs)
+    {
+        Point result = lhs;
+        result -= rhs;
+        return result;
+    }
+
+    public static Vector2D operator -(in Point lhs, in Point rhs)
+    {
+        return new Vector2D(ClampSub(lhs.x, rhs.x), ClampSub(lhs.y, rhs.y));
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
