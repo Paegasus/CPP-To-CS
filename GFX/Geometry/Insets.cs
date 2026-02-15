@@ -147,11 +147,7 @@ public struct Insets : IEquatable<Insets>
     }
 
     // Conversion from Insets to Outsets negates all components.
-    public Outsets ToOutsets() => new Outsets(
-                                            SaturatingNegate(top()),
-                                            SaturatingNegate(left()),
-                                            SaturatingNegate(bottom()),
-                                            SaturatingNegate(right()));
+    public Outsets ToOutsets() => new Outsets(-top(), -left(), -bottom(), -right());
     
     /// <summary>
     /// Adjusts the vertical and horizontal dimensions by the values described in |vector|.
