@@ -161,28 +161,33 @@ public struct PointF : IComparable<PointF>, IEquatable<PointF>
     public static bool operator == (in PointF left, in PointF right) => left.Equals(right);
     public static bool operator != (in PointF left, in PointF right) => !left.Equals(right);
 
-    public static PointF operator + (in PointF lhs, in Vector2DF rhs)
+    public void operator +=(in Vector2DF vector)
     {
-        PointF result = new(lhs.x, lhs.y);
-
-        result.x_ += rhs.x;
-        result.y_ += rhs.y;
-        
-        return result;
-    }
-    
-    public static PointF operator - (in PointF lhs, in Vector2DF rhs)
-    {
-        PointF result = new(lhs.x, lhs.y);
-        
-        result.x_ -= rhs.x;
-        result.y_ -= rhs.y;
-
-        return result;
+        x_ += vector.x;
+        y_ += vector.y;
     }
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector2DF operator - (in PointF lhs, in PointF rhs)
+    public void operator -=(in Vector2DF vector)
+    {
+        x_ -= vector.x;
+        y_ -= vector.y;
+    }
+
+    public static PointF operator +(in PointF lhs, in Vector2DF rhs)
+    {
+        PointF result = lhs;
+        result += rhs;
+        return result;
+    }
+
+    public static PointF operator -(in PointF lhs, in Vector2DF rhs)
+    {
+        PointF result = lhs;
+        result -= rhs;
+        return result;
+    }
+
+    public static Vector2DF operator -(in PointF lhs, in PointF rhs)
     {
         return new Vector2DF(lhs.x_ - rhs.x_, lhs.y_ - rhs.y_);
     }
