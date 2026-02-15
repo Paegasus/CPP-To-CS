@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using UI.Numerics;
 using static UI.Numerics.ClampedMath;
 
 namespace UI.GFX.Geometry;
@@ -31,28 +28,30 @@ public struct Rect : IEquatable<Rect>
     public Rect(Point origin, Size size)
     {
         origin_ = origin;
-        size_ = new Size(ClampWidthOrHeight(origin.x(), size.width()), ClampWidthOrHeight(origin.y(), size.height()));
+        size_ = new Size(ClampWidthOrHeight(origin.x, size.width), ClampWidthOrHeight(origin.y, size.height));
     }
 
-    public readonly int x() => origin_.x();
+    public readonly int x() => origin_.x;
+
     public void set_x(int x)
     {
-        origin_.set_x(x);
-        size_.set_width(ClampWidthOrHeight(x, width()));
+        origin_.x = x;
+        size_.width = ClampWidthOrHeight(x, width());
     }
 
-    public readonly int y() => origin_.y();
+    public readonly int y() => origin_.y
+    ;
     public void set_y(int y)
     {
-        origin_.set_y(y);
-        size_.set_height(ClampWidthOrHeight(y, height()));
+        origin_.y = y;
+        size_.height = ClampWidthOrHeight(y, height());
     }
 
-    public readonly int width() => size_.width();
-    public void set_width(int width) => size_.set_width(ClampWidthOrHeight(x(), width));
+    public readonly int width() => size_.width;
+    public void set_width(int width) => size_.width = ClampWidthOrHeight(x(), width);
 
-    public readonly int height() => size_.height();
-    public void set_height(int height) => size_.set_height(ClampWidthOrHeight(y(), height));
+    public readonly int height() => size_.height;
+    public void set_height(int height) => size_.height = ClampWidthOrHeight(y(), height);
 
     public readonly Point origin() => origin_;
     public void set_origin(Point origin)
@@ -66,8 +65,8 @@ public struct Rect : IEquatable<Rect>
     public readonly Size size() => size_;
     public void set_size(Size size)
     {
-        set_width(size.width());
-        set_height(size.height());
+        set_width(size.width);
+        set_height(size.height);
     }
 
     public readonly int right() => x() + width();
@@ -156,9 +155,9 @@ public struct Rect : IEquatable<Rect>
 
     public readonly bool Contains(int point_x, int point_y) => (point_x >= x()) && (point_x < right()) && (point_y >= y()) && (point_y < bottom());
 
-    public readonly bool Contains(in Point point) => Contains(point.x(), point.y());
+    public readonly bool Contains(in Point point) => Contains(point.x, point.y);
 
-    public readonly bool Contains(in Rect rect) => (rect.x() >= x() && rect.right() <= right() && rect.y() >= y() && rect.bottom() <= bottom());
+    public readonly bool Contains(in Rect rect) => rect.x() >= x() && rect.right() <= right() && rect.y() >= y() && rect.bottom() <= bottom();
 
     public readonly bool Intersects(in Rect rect) => !(IsEmpty() || rect.IsEmpty() || rect.x() >= right() || rect.right() <= x() || rect.y() >= bottom() || rect.bottom() <= y());
 
@@ -276,9 +275,9 @@ public struct Rect : IEquatable<Rect>
 
     public void ToCenteredSize(in Size size)
     {
-        int new_x = x() + (width() - size.width()) / 2;
-        int new_y = y() + (height() - size.height()) / 2;
-        SetRect(new_x, new_y, size.width(), size.height());
+        int new_x = x() + (width() - size.width) / 2;
+        int new_y = y() + (height() - size.height) / 2;
+        SetRect(new_x, new_y, size.width, size.height);
     }
 
     public void ClampToCenteredSize(in Size to_size)
@@ -306,8 +305,8 @@ public struct Rect : IEquatable<Rect>
 
     public readonly int ManhattanDistanceToPoint(in Point point)
     {
-        int x_distance = Math.Max(0, Math.Max(x() - point.x(), point.x() - right()));
-        int y_distance = Math.Max(0, Math.Max(y() - point.y(), point.y() - bottom()));
+        int x_distance = Math.Max(0, Math.Max(x() - point.x, point.x - right()));
+        int y_distance = Math.Max(0, Math.Max(y() - point.y, point.y - bottom()));
 
         return x_distance + y_distance;
     }
@@ -338,7 +337,7 @@ public struct Rect : IEquatable<Rect>
         int new_x, width;
         SaturatedClampRange(x(), right, out new_x, out width);
         set_x(new_x);
-        size_.set_width(width);
+        size_.width = width;
     }
 
     private void AdjustForSaturatedBottom(int bottom)
@@ -346,7 +345,7 @@ public struct Rect : IEquatable<Rect>
         int new_y, height;
         SaturatedClampRange(y(), bottom, out new_y, out height);
         set_y(new_y);
-        size_.set_height(height);
+        size_.height = height;
     }
     
     private static void AdjustAlongAxis(int dst_origin, int dst_size, ref int origin, ref int size) {
@@ -427,8 +426,8 @@ public struct Rect : IEquatable<Rect>
     public static Rect BoundingRect(in Point p1, in Point p2)
     {
         Rect result = new Rect();
-        result.SetByBounds(Math.Min(p1.x(), p2.x()), Math.Min(p1.y(), p2.y()),
-                         Math.Max(p1.x(), p2.x()), Math.Max(p1.y(), p2.y()));
+        result.SetByBounds(Math.Min(p1.x, p2.x), Math.Min(p1.y, p2.y),
+                         Math.Max(p1.x, p2.x), Math.Max(p1.y, p2.y));
         return result;
     }
 
