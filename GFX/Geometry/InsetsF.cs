@@ -2,8 +2,16 @@ using System;
 
 namespace UI.GFX.Geometry;
 
-/// <summary>
-/// A floating point version of gfx::Insets.
+//// <summary>
+/// Represents the widths of the four borders or margins of an unspecified
+/// rectangle. It stores the thickness of the top, left, bottom and right
+/// edges, without storing the actual size and position of the rectangle itself.
+///
+/// This can be used to represent a space within a rectangle, by "shrinking" the
+/// rectangle by the inset amount on all four sides. Alternatively, it can
+/// represent a border that has a different thickness on each side.
+///
+/// This is the floating point version of Insets.
 /// </summary>
 public struct InsetsF : IEquatable<InsetsF>
 {
@@ -41,26 +49,30 @@ public struct InsetsF : IEquatable<InsetsF>
         right_ = right;
     }
 
+    // Returns the total width taken up by the insets/outsets, which is the
+    // sum of the left and right insets/outsets.
     public readonly float width() => left_ + right_;
+
+    // Returns the total height taken up by the insets/outsets, which is the
+    // sum of the top and bottom insets/outsets.
     public readonly float height() => top_ + bottom_;
+
+    // Returns true if the insets/outsets are empty.
     public readonly bool IsEmpty() => width() == 0f && height() == 0f;
 
-    public static InsetsF ScaleInsets(InsetsF i, float x_scale, float y_scale)
-    {
-        i.Scale(x_scale, y_scale);
-        return i;
-    }
-
-    public static InsetsF ScaleInsets(InsetsF i, float scale)
-    {
-        return ScaleInsets(i, scale, scale);
-    }
-
+    // Flips x- and y-axes.
     public void Transpose()
     {
         (top_, left_) = (left_, top_);
         (bottom_, right_) = (right_, bottom_);
     }
+
+    // These setters can be used together with the default constructor and the
+    // single-parameter constructor to construct InsetsF instances, for example:
+    //                                                    // T, L, B, R
+    //   InsetsF a = InsetsF().set_top(2);                // 2, 0, 0, 0
+    //   InsetsF b = InsetsF().set_left(2).set_bottom(3); // 0, 2, 3, 0
+    //   InsetsF c = InsetsF(1).set_top(5);               // 5, 1, 1, 1
 
     public InsetsF set_top(float top)
     {
@@ -86,17 +98,11 @@ public struct InsetsF : IEquatable<InsetsF>
         return this;
     }
 
-    public InsetsF set_left_right(float left, float right) {
-        left_ = left;
-        right_ = right;
-        return this;
-    }
-
-    public InsetsF set_top_bottom(float top, float bottom) {
-        top_ = top;
-        bottom_ = bottom;
-        return this;
-    }
+    // In addition to the above, we can also use the following methods to
+    // construct InsetsF/OutsetsF.
+    // TLBR() is for Chomium UI code. We should not use it in blink code because
+    // the order of parameters is different from the normal orders used in blink.
+    // Blink code can use the above setters and VH().
 
     public static InsetsF TLBR(float top, float left, float bottom, float right)
     {
@@ -108,6 +114,7 @@ public struct InsetsF : IEquatable<InsetsF>
         return new InsetsF(vertical, horizontal);
     }
 
+    // Sets each side to the maximum of the side and the corresponding side of |other|.
     public void SetToMax(in InsetsF other)
     {
         top_ = Math.Max(top_, other.top_);
@@ -116,8 +123,6 @@ public struct InsetsF : IEquatable<InsetsF>
         right_ = Math.Max(right_, other.right_);
     }
 
-    public void Scale(float scale) => Scale(scale, scale);
-
     public void Scale(float x_scale, float y_scale)
     {
         top_ *= y_scale;
@@ -125,7 +130,21 @@ public struct InsetsF : IEquatable<InsetsF>
         bottom_ *= y_scale;
         right_ *= x_scale;
     }
+
+    public void Scale(float scale) => Scale(scale, scale);
+
+    public static InsetsF ScaleInsets(InsetsF i, float x_scale, float y_scale)
+    {
+        i.Scale(x_scale, y_scale);
+        return i;
+    }
+
+    public static InsetsF ScaleInsets(InsetsF i, float scale)
+    {
+        return ScaleInsets(i, scale, scale);
+    }
     
+    // Conversion from InsetsF to OutsetsF negates all components.
     public OutsetsF ToOutsets() => new OutsetsF(-top(), -left(), -bottom(), -right());
 
     public override readonly string ToString() => $"x:{left_},{right_} y:{top_},{bottom_}";
@@ -153,7 +172,6 @@ public struct InsetsF : IEquatable<InsetsF>
         right_ -= other.right_;
     }
 
-    public static InsetsF operator -(in InsetsF v) => new InsetsF(-v.top_, -v.left_, -v.bottom_, -v.right_);
     public static InsetsF operator +(InsetsF lhs, in InsetsF rhs)
     {
         lhs += rhs;
@@ -165,4 +183,6 @@ public struct InsetsF : IEquatable<InsetsF>
         lhs -= rhs;
         return lhs;
     }
+
+    public static InsetsF operator -(in InsetsF v) => new InsetsF(-v.top_, -v.left_, -v.bottom_, -v.right_);
 }
