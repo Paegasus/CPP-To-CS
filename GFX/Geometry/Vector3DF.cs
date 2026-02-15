@@ -159,8 +159,21 @@ public struct Vector3DF : IEquatable<Vector3DF>
 
     public static bool operator ==(in Vector3DF left, in Vector3DF right) => left.Equals(right);
     public static bool operator !=(in Vector3DF left, in Vector3DF right) => !left.Equals(right);
-    
-    public static Vector3DF operator -(in Vector3DF v) => new Vector3DF(-v.x_, -v.y_, -v.z_);
+
+    public void operator +=(in Vector3DF other)
+    {
+        Add(other);
+    }
+
+    public void operator -=(in Vector3DF other)
+    {
+        Subtract(other);
+    }
+
+    public static Vector3DF operator -(in Vector3DF v)
+    {
+        return new Vector3DF(-v.x, -v.y, -v.z);
+    }
 
     public static Vector3DF operator +(in Vector3DF lhs, in Vector3DF rhs)
     {
@@ -172,10 +185,10 @@ public struct Vector3DF : IEquatable<Vector3DF>
     public static Vector3DF operator -(in Vector3DF lhs, in Vector3DF rhs)
     {
         Vector3DF result = lhs;
-        result.Subtract(rhs);
+        result.Add(-rhs);
         return result;
     }
-    
+
     /// <summary>
     /// Returns the cross product of two vectors.
     /// </summary>
