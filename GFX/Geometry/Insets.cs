@@ -127,15 +127,9 @@ public struct Insets : IEquatable<Insets>
     // TLBR() is for Chomium UI code. We should not use it in blink code because
     // the order of parameters is different from the normal orders used in blink.
     // Blink code can use the above setters and VH().
-    public static Insets TLBR(int top, int left, int bottom, int right)
-    {
-        return new Insets(top, left, bottom, right);
-    }
+    public static Insets TLBR(int top, int left, int bottom, int right) => new Insets(top, left, bottom, right);
 
-    public static Insets VH(int vertical, int horizontal)
-    {
-        return new Insets(vertical, horizontal);
-    }
+    public static Insets VH(int vertical, int horizontal) => new Insets(vertical, horizontal);
     
     // Sets each side to the maximum of the side and the corresponding side of |other|.
     public void SetToMax(in Insets other) {
