@@ -129,7 +129,7 @@ public struct Outsets : IEquatable<Outsets>
     }
 
     // Conversion from Outsets to Insets negates all components.
-    public Insets ToInsets() => new Insets(-top(), -left(), -bottom(), -right());
+    public Insets ToInsets() => new Insets(SaturatingNegate(top()), SaturatingNegate(left()), SaturatingNegate(bottom()), SaturatingNegate(right()));
 
     public override readonly string ToString() => $"x:{left_},{right_} y:{top_},{bottom_}";
 
@@ -162,10 +162,10 @@ public struct Outsets : IEquatable<Outsets>
     public static Outsets operator -(in Outsets v)
     {
         return new Outsets(
-            -v.top(),
-            -v.left(),
-            -v.bottom(),
-            -v.right()
+            SaturatingNegate(v.top()),
+            SaturatingNegate(v.left()),
+            SaturatingNegate(v.bottom()),
+            SaturatingNegate(v.right())
         );
     }
     
@@ -185,4 +185,6 @@ public struct Outsets : IEquatable<Outsets>
     {
         return ClampAdd(top_or_left, bottom_or_right) - top_or_left;
     }
+
+    private static int SaturatingNegate(int v) => v == int.MinValue ? int.MaxValue : -v;
 }
