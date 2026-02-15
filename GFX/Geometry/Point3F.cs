@@ -8,12 +8,11 @@ public struct Point3F : IEquatable<Point3F>
     private float y_;
     private float z_;
 
-    public Point3F()
-    {
-        x_ = 0f;
-        y_ = 0f;
-        z_ = 0f;
-    }
+    public float x { readonly get => x_; set => x_ = value; }
+    public float y { readonly get => y_; set => y_ = value; }
+    public float z { readonly get => z_; set => z_ = value; }
+
+    public Point3F() : this(0f, 0f, 0f) { }
 
     public Point3F(float x, float y, float z)
     {
@@ -28,10 +27,6 @@ public struct Point3F : IEquatable<Point3F>
         y_ = point.y;
         z_ = 0;
     }
-
-    public float x { readonly get => x_; set => x_ = value; }
-    public float y { readonly get => y_; set => y_ = value; }
-    public float z { readonly get => z_; set => z_ = value; }
 
     public void SetPoint(float x, float y, float z)
     {
