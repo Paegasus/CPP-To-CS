@@ -1,9 +1,7 @@
-using System;
-
 namespace UI.GFX.Geometry;
 
 /// <summary>
-/// A floating point version of gfx::Outsets.
+/// A floating point version of Outsets.
 /// </summary>
 public struct OutsetsF : IEquatable<OutsetsF>
 {
@@ -41,15 +39,28 @@ public struct OutsetsF : IEquatable<OutsetsF>
         right_ = right;
     }
 
+    // Returns the total width taken up by the insets/outsets, which is the sum of the left and right insets/outsets.
     public readonly float width() => left_ + right_;
+
+    // Returns the total height taken up by the insets/outsets, which is the sum of the top and bottom insets/outsets.
     public readonly float height() => top_ + bottom_;
+
+    // Returns true if the insets/outsets are empty.
     public readonly bool IsEmpty() => width() == 0f && height() == 0f;
 
+    // Flips x- and y-axes.
     public void Transpose()
     {
         (top_, left_) = (left_, top_);
         (bottom_, right_) = (right_, bottom_);
     }
+
+    // These setters can be used together with the default constructor and the
+    // single-parameter constructor to construct InsetsF instances, for example:
+    //                                                    // T, L, B, R
+    //   InsetsF a = InsetsF().set_top(2);                // 2, 0, 0, 0
+    //   InsetsF b = InsetsF().set_left(2).set_bottom(3); // 0, 2, 3, 0
+    //   InsetsF c = InsetsF(1).set_top(5);               // 5, 1, 1, 1
 
     public OutsetsF set_top(float top)
     {
@@ -75,30 +86,17 @@ public struct OutsetsF : IEquatable<OutsetsF>
         return this;
     }
 
-    public OutsetsF set_left_right(float left, float right)
-    {
-        left_ = left;
-        right_ = right;
-        return this;
-    }
+    // In addition to the above, we can also use the following methods to
+    // construct InsetsF/OutsetsF.
+    // TLBR() is for Chomium UI code. We should not use it in blink code because
+    // the order of parameters is different from the normal orders used in blink.
+    // Blink code can use the above setters and VH().
 
-    public OutsetsF set_top_bottom(float top, float bottom)
-    {
-        top_ = top;
-        bottom_ = bottom;
-        return this;
-    }
+    public static OutsetsF TLBR(float top, float left, float bottom, float right) => new OutsetsF(top, left, bottom, right);
 
-    public static OutsetsF TLBR(float top, float left, float bottom, float right)
-    {
-        return new OutsetsF(top, left, bottom, right);
-    }
+    public static OutsetsF VH(float vertical, float horizontal) => new OutsetsF(vertical, horizontal);
 
-    public static OutsetsF VH(float vertical, float horizontal)
-    {
-        return new OutsetsF(vertical, horizontal);
-    }
-
+    // Sets each side to the maximum of the side and the corresponding side of |other|.
     public void SetToMax(in OutsetsF other)
     {
         top_ = Math.Max(top_, other.top_);
@@ -107,8 +105,6 @@ public struct OutsetsF : IEquatable<OutsetsF>
         right_ = Math.Max(right_, other.right_);
     }
 
-    public void Scale(float scale) => Scale(scale, scale);
-
     public void Scale(float x_scale, float y_scale)
     {
         top_ *= y_scale;
@@ -116,6 +112,8 @@ public struct OutsetsF : IEquatable<OutsetsF>
         bottom_ *= y_scale;
         right_ *= x_scale;
     }
+
+    public void Scale(float scale) => Scale(scale, scale);
 
     public InsetsF ToInsets() => new InsetsF(-top(), -left(), -bottom(), -right());
 
@@ -144,7 +142,6 @@ public struct OutsetsF : IEquatable<OutsetsF>
         right_ -= other.right_;
     }
 
-    public static OutsetsF operator -(in OutsetsF v) => new OutsetsF(-v.top_, -v.left_, -v.bottom_, -v.right_);
     public static OutsetsF operator +(OutsetsF lhs, in OutsetsF rhs)
     {
         lhs += rhs;
@@ -156,4 +153,6 @@ public struct OutsetsF : IEquatable<OutsetsF>
         lhs -= rhs;
         return lhs;
     }
+
+    public static OutsetsF operator -(in OutsetsF v) => new OutsetsF(-v.top_, -v.left_, -v.bottom_, -v.right_);
 }

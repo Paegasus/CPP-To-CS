@@ -3,14 +3,6 @@ using System;
 namespace UI.GFX.Geometry;
 
 //// <summary>
-/// Represents the widths of the four borders or margins of an unspecified
-/// rectangle. It stores the thickness of the top, left, bottom and right
-/// edges, without storing the actual size and position of the rectangle itself.
-///
-/// This can be used to represent a space within a rectangle, by "shrinking" the
-/// rectangle by the inset amount on all four sides. Alternatively, it can
-/// represent a border that has a different thickness on each side.
-///
 /// This is the floating point version of Insets.
 /// </summary>
 public struct InsetsF : IEquatable<InsetsF>
