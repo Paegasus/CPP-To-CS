@@ -79,34 +79,33 @@ public struct Vector2D
     public static bool operator == (in Vector2D left, in Vector2D right) => left.Equals(right);
     public static bool operator != (in Vector2D left, in Vector2D right) => !left.Equals(right);
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector2D operator +(in Vector2D lhs, in Vector2D rhs)
+    public void operator +=(in Vector2D other)
     {
-        return new Vector2D(lhs.x_ + rhs.x_, lhs.y_ + rhs.y_);
+        Add(other);
     }
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector2D operator -(in Vector2D lhs, in Vector2D rhs)
+    public void operator -=(in Vector2D other)
     {
-        return new Vector2D(lhs.x_ - rhs.x_, lhs.y_ - rhs.y_);
+        Subtract(other);
     }
 
-    // This function in C++ has the following steps: saturated negate wrapper (if value is MinValue returns MaxValue) -> ClampedNumeric constructor -> saturated_cast
-    /*
-    public static Vector2D operator - (in Vector2D v)
-    {
-        return new Vector2D(-(int)new ClampedNumeric<int>(v.x_), -(int)new ClampedNumeric<int>(v.y_));
-    }
-    */
-
-    public static Vector2D operator - (in Vector2D v)
+    public static Vector2D operator -(in Vector2D v)
     {
         // Negation can overflow for int.MinValue, so we use ClampSub from zero.
         return new Vector2D(ClampSub(0, v.x_), ClampSub(0, v.y_));
     }
 
-    public static explicit operator Vector2DF(in Vector2D source)
+    public static Vector2D operator +(in Vector2D lhs, in Vector2D rhs)
     {
-        return new Vector2DF((float)source.x_, (float)source.y_);
+        Vector2D result = lhs;
+        result.Add(rhs);
+        return result;
+    }
+
+    public static Vector2D operator -(in Vector2D lhs, in Vector2D rhs)
+    {
+        Vector2D result = lhs;
+        result.Subtract(rhs);
+        return result;
     }
 }
