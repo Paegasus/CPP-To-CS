@@ -55,6 +55,7 @@ public struct Point3F : IEquatable<Point3F>
 
     public readonly Vector3DF OffsetFromOrigin() => new Vector3DF(x_, y_, z_);
 
+    // Returns a string representation of 3d point.
     public override readonly string ToString() => $"{x_},{y_},{z_}";
 
     public override readonly int GetHashCode() => HashCode.Combine(x_, y_, z_);
@@ -66,6 +67,7 @@ public struct Point3F : IEquatable<Point3F>
     public static bool operator ==(in Point3F lhs, in Point3F rhs) => lhs.Equals(rhs);
     public static bool operator !=(in Point3F lhs, in Point3F rhs) => !lhs.Equals(rhs);
 
+    // Add a vector to a point, producing a new point offset by the vector.
     public static Point3F operator +(in Point3F lhs, in Vector3DF rhs) => new Point3F(lhs.x_ + rhs.x, lhs.y_ + rhs.y, lhs.z_ + rhs.z);
 
     // Subtract a vector from a point, producing a new point offset by the vector's inverse.
