@@ -130,7 +130,7 @@ public struct Insets : IEquatable<Insets>
     }
 
     // Conversion from Insets to Outsets negates all components.
-    public Outsets ToOutsets() => new Outsets(-top(), -left(), -bottom(), -right());
+    public Outsets ToOutsets() => new Outsets(SaturatingNegate(top()), SaturatingNegate(left()), SaturatingNegate(bottom()), SaturatingNegate(right()));
     
     /// <summary>
     /// Adjusts the vertical and horizontal dimensions by the values described in |vector|.
@@ -176,10 +176,10 @@ public struct Insets : IEquatable<Insets>
     public static Insets operator -(in Insets v)
     {
         return new Insets(
-            -v.top(),
-            -v.left(),
-            -v.bottom(),
-            -v.right()
+            SaturatingNegate(v.top()),
+            SaturatingNegate(v.left()),
+            SaturatingNegate(v.bottom()),
+            SaturatingNegate(v.right())
         );
     }
     
@@ -205,4 +205,6 @@ public struct Insets : IEquatable<Insets>
     {
         return ClampAdd(top_or_left, bottom_or_right) - top_or_left;
     }
+
+    private static int SaturatingNegate(int v) => v == int.MinValue ? int.MaxValue : -v;
 }
