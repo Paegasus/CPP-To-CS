@@ -132,7 +132,8 @@ public struct Insets : IEquatable<Insets>
     public static Insets VH(int vertical, int horizontal) => new Insets(vertical, horizontal);
     
     // Sets each side to the maximum of the side and the corresponding side of |other|.
-    public void SetToMax(in Insets other) {
+    public void SetToMax(in Insets other)
+    {
         top_ = Math.Max(top_, other.top_);
         left_ = Math.Max(left_, other.left_);
         bottom_ = Math.Max(bottom_, other.bottom_);
