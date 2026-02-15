@@ -144,18 +144,32 @@ public struct Vector2DF : IEquatable<Vector2DF>
 
     public static bool operator !=(in Vector2DF left, in Vector2DF right) => !left.Equals(right);
 
-    public static Vector2DF operator +(in Vector2DF lhs, in Vector2DF rhs)
+    public void operator +=(in Vector2DF other)
     {
-        return new Vector2DF(lhs.x_ + rhs.x_, lhs.y_ + rhs.y_);
+        Add(other);
     }
 
-    public static Vector2DF operator -(in Vector2DF lhs, in Vector2DF rhs)
+    public void operator -=(in Vector2DF other)
     {
-        return new Vector2DF(lhs.x_ - rhs.x_, lhs.y_ - rhs.y_);
+        Subtract(other);
     }
 
     public static Vector2DF operator -(in Vector2DF v)
     {
         return new Vector2DF(-v.x_, -v.y_);
+    }
+
+    public static Vector2DF operator +(in Vector2DF lhs, in Vector2DF rhs)
+    {
+        Vector2DF result = lhs;
+        result.Add(rhs);
+        return result;
+    }
+
+    public static Vector2DF operator -(in Vector2DF lhs, in Vector2DF rhs)
+    {
+        Vector2DF result = lhs;
+        result.Add(-rhs);
+        return result;
     }
 }
