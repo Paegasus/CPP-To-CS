@@ -12,17 +12,8 @@ public struct BoxF : IEquatable<BoxF>
     private float depth_;
 
     public BoxF() : this(0f, 0f, 0f) { }
-
-    public BoxF(float width, float height, float depth)
-        : this(0f, 0f, 0f, width, height, depth)
-    {
-    }
-
-    public BoxF(float x, float y, float z, float width, float height, float depth)
-        : this(new Point3F(x, y, z), width, height, depth)
-    {
-    }
-
+    public BoxF(float width, float height, float depth) : this(0f, 0f, 0f, width, height, depth) { }
+    public BoxF(float x, float y, float z, float width, float height, float depth) : this(new Point3F(x, y, z), width, height, depth) { }
     public BoxF(Point3F origin, float width, float height, float depth)
     {
         origin_ = origin;
@@ -79,6 +70,7 @@ public struct BoxF : IEquatable<BoxF>
     }
 
     public readonly Point3F origin() => origin_;
+    
     public void set_origin(Point3F origin) { origin_ = origin; }
 
     // Expands |this| to contain the given point, if necessary. Please note, even
@@ -115,9 +107,9 @@ public struct BoxF : IEquatable<BoxF>
         depth_ = max_z - min_z;
     }
 
-    public override int GetHashCode() => HashCode.Combine(origin_, width_, height_, depth_);
+    public override readonly int GetHashCode() => HashCode.Combine(origin_, width_, height_, depth_);
 
-    public override bool Equals(object? obj) => obj is BoxF other && Equals(other);
+    public override readonly bool Equals(object? obj) => obj is BoxF other && Equals(other);
 
     public readonly bool Equals(BoxF other) => origin_.Equals(other.origin_) && width_ == other.width_ && height_ == other.height_ && depth_ == other.depth_;
 
