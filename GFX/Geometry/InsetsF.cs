@@ -142,8 +142,7 @@ public struct InsetsF : IEquatable<InsetsF>
     public override readonly string ToString() => $"x:{left_},{right_} y:{top_},{bottom_}";
     public override readonly int GetHashCode() => HashCode.Combine(top_, left_, bottom_, right_);
     public override readonly bool Equals(object? obj) => obj is InsetsF other && Equals(other);
-    public readonly bool Equals(InsetsF other) =>
-        top_ == other.top_ && left_ == other.left_ && bottom_ == other.bottom_ && right_ == other.right_;
+    public readonly bool Equals(InsetsF other) => top_ == other.top_ && left_ == other.left_ && bottom_ == other.bottom_ && right_ == other.right_;
 
     public static bool operator ==(in InsetsF left, in InsetsF right) => left.Equals(right);
     public static bool operator !=(in InsetsF left, in InsetsF right) => !left.Equals(right);
