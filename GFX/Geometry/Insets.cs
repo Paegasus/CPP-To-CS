@@ -216,6 +216,9 @@ public struct Insets : IEquatable<Insets>
         return insets;
     }
     
+    // Clamp the bottom/right to avoid integer over/underflow in width() and
+    // height(). This returns the clamped bottom/right given a |top_or_left| and
+    // a |bottom_or_right|.
     private static int ClampBottomOrRight(int top_or_left, int bottom_or_right)
     {
         return ClampAdd(top_or_left, bottom_or_right) - top_or_left;

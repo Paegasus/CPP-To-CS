@@ -4,7 +4,11 @@ using static UI.Numerics.ClampedMath;
 
 namespace UI.GFX.Geometry;
 
-/// <summary>
+//// <summary>
+/// Represents the widths of the four borders or margins of an unspecified
+/// rectangle. It stores the thickness of the top, left, bottom and right
+/// edges, without storing the actual size and position of the rectangle itself.
+///
 /// This can be used to represent a space surrounding a rectangle, by
 /// "expanding" the rectangle by the outset amount on all four sides.
 /// </summary>
@@ -45,22 +49,22 @@ public struct Outsets : IEquatable<Outsets>
     }
 
     /// <summary>
-    /// Returns the total width taken up by the outsets.
+    /// // Returns the total width taken up by the insets/outsets, which is the sum of the left and right insets/outsets.
     /// </summary>
     public readonly int width() => left_ + right_;
 
     /// <summary>
-    /// Returns the total height taken up by the outsets.
+    /// // Returns the total height taken up by the insets/outsets, which is the sum of the top and bottom insets/outsets.
     /// </summary>
     public readonly int height() => top_ + bottom_;
 
     /// <summary>
-    /// Returns the size of the outsets.
+    /// // Returns the sum of the left and right insets/outsets as the width, the sum of the top and bottom insets/outsets as the height.
     /// </summary>
     public readonly Size size() => new Size(width(), height());
 
     /// <summary>
-    /// Returns true if the outsets are empty.
+    /// Returns true if the insets/outsets are empty.
     /// </summary>
     public readonly bool IsEmpty() => width() == 0 && height() == 0;
     
@@ -72,6 +76,14 @@ public struct Outsets : IEquatable<Outsets>
         (top_, left_) = (left_, top_);
         (bottom_, right_) = (right_, bottom_);
     }
+
+    // These setters can be used together with the default constructor and the
+    // single-parameter constructor to construct Insets instances, for example:
+    //                                                                  // T, L, B, R
+    //   Insets a = Insets().set_top(2);                                // 2, 0, 0, 0
+    //   Insets b = Insets().set_left(2).set_bottom(3);                 // 0, 2, 3, 0
+    //   Insets c = Insets().set_left_right(1, 2).set_top_bottom(3, 4); // 3, 1, 4, 2                                      
+    //   Insets d = Insets(1).set_top(5);                               // 5, 1, 1, 1
 
     public Outsets set_top(int top)
     {
@@ -98,6 +110,9 @@ public struct Outsets : IEquatable<Outsets>
         right_ = ClampBottomOrRight(left_, right);
         return this;
     }
+
+    // These are preferred to the above setters when setting a pair of edges
+    // because these have less clamping and better performance.
     
     public Outsets set_left_right(int left, int right) {
         left_ = left;
@@ -111,6 +126,12 @@ public struct Outsets : IEquatable<Outsets>
         return this;
     }
 
+    // In addition to the above, we can also use the following methods to
+    // construct Insets/Outsets.
+    // TLBR() is for Chomium UI code. We should not use it in blink code because
+    // the order of parameters is different from the normal orders used in blink.
+    // Blink code can use the above setters and VH().
+
     public static Outsets TLBR(int top, int left, int bottom, int right)
     {
         return new Outsets(top, left, bottom, right);
@@ -120,7 +141,8 @@ public struct Outsets : IEquatable<Outsets>
     {
         return new Outsets(vertical, horizontal);
     }
-    
+
+    // Sets each side to the maximum of the side and the corresponding side of |other|.
     public void SetToMax(in Outsets other) {
         top_ = Math.Max(top_, other.top_);
         left_ = Math.Max(left_, other.left_);
@@ -181,6 +203,9 @@ public struct Outsets : IEquatable<Outsets>
         return lhs;
     }
     
+    // Clamp the bottom/right to avoid integer over/underflow in width() and
+    // height(). This returns the clamped bottom/right given a |top_or_left| and
+    // a |bottom_or_right|.
     private static int ClampBottomOrRight(int top_or_left, int bottom_or_right)
     {
         return ClampAdd(top_or_left, bottom_or_right) - top_or_left;
