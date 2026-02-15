@@ -74,6 +74,14 @@ public struct Insets : IEquatable<Insets>
         (bottom_, right_) = (right_, bottom_);
     }
 
+    // These setters can be used together with the default constructor and the
+    // single-parameter constructor to construct Insets instances, for example:
+    //                                                                  // T, L, B, R
+    //   Insets a = Insets().set_top(2);                                // 2, 0, 0, 0
+    //   Insets b = Insets().set_left(2).set_bottom(3);                 // 0, 2, 3, 0
+    //   Insets c = Insets().set_left_right(1, 2).set_top_bottom(3, 4); // 3, 1, 4, 2
+    //   Insets d = Insets(1).set_top(5);                               // 5, 1, 1, 1
+
     public Insets set_top(int top)
     {
         top_ = top;
@@ -99,6 +107,9 @@ public struct Insets : IEquatable<Insets>
         right_ = ClampBottomOrRight(left_, right);
         return this;
     }
+
+    // These are preferred to the above setters when setting a pair of edges
+    // because these have less clamping and better performance.
     
     public Insets set_left_right(int left, int right) {
         left_ = left;
@@ -112,6 +123,11 @@ public struct Insets : IEquatable<Insets>
         return this;
     }
 
+    // In addition to the above, we can also use the following methods to
+    // construct Insets/Outsets.
+    // TLBR() is for Chomium UI code. We should not use it in blink code because
+    // the order of parameters is different from the normal orders used in blink.
+    // Blink code can use the above setters and VH().
     public static Insets TLBR(int top, int left, int bottom, int right)
     {
         return new Insets(top, left, bottom, right);
@@ -122,6 +138,7 @@ public struct Insets : IEquatable<Insets>
         return new Insets(vertical, horizontal);
     }
     
+    // Sets each side to the maximum of the side and the corresponding side of |other|.
     public void SetToMax(in Insets other) {
         top_ = Math.Max(top_, other.top_);
         left_ = Math.Max(left_, other.left_);
@@ -130,7 +147,11 @@ public struct Insets : IEquatable<Insets>
     }
 
     // Conversion from Insets to Outsets negates all components.
-    public Outsets ToOutsets() => new Outsets(SaturatingNegate(top()), SaturatingNegate(left()), SaturatingNegate(bottom()), SaturatingNegate(right()));
+    public Outsets ToOutsets() => new Outsets(
+                                            SaturatingNegate(top()),
+                                            SaturatingNegate(left()),
+                                            SaturatingNegate(bottom()),
+                                            SaturatingNegate(right()));
     
     /// <summary>
     /// Adjusts the vertical and horizontal dimensions by the values described in |vector|.
