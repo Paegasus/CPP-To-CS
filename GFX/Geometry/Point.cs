@@ -53,62 +53,10 @@ public struct Point : IComparable<Point>, IEquatable<Point>
 
     public void Transpose() => (x_, y_) = (y_, x_); // Swap x_ and y_ (using tuple deconstruction swap)
 
-    public override readonly string ToString() => $"{x_},{y_}";
-
-    // For use in collections (SortedSet, Dictionary keys, etc.)
-    public override readonly int GetHashCode() => HashCode.Combine(y_, x_);
-
     public readonly int CompareTo(Point other)
     {
         int yComparison = y_.CompareTo(other.y_);
         return yComparison != 0 ? yComparison : x_.CompareTo(other.x_);
-    }
-
-    public override readonly bool Equals(object? obj) => obj is Point other && Equals(other);
-
-    public readonly bool Equals(Point other) => x_ == other.x_ && y_ == other.y_;
-
-    // A point is less than another point if its y-value is closer to the origin.
-    // If the y-values are the same, then point with the x-value closer to the origin is considered less than the other.
-    // This comparison is required to use Point in sets, or sorted vectors.
-    public static bool operator < (in Point left, in Point right) => left.CompareTo(right) < 0;
-    public static bool operator > (in Point left, in Point right) => left.CompareTo(right) > 0;
-    public static bool operator <= (in Point left, in Point right) => left.CompareTo(right) <= 0;
-    public static bool operator >= (in Point left, in Point right) => left.CompareTo(right) >= 0;
-
-    public static bool operator == (in Point left, in Point right) => left.Equals(right);
-
-    public static bool operator != (in Point left, in Point right) => !left.Equals(right);
-
-    public void operator +=(in Vector2D vector)
-    {
-        x_ = ClampAdd(x_, vector.x);
-        y_ = ClampAdd(y_, vector.y);
-    }
-
-    public void operator -=(in Vector2D vector)
-    {
-        x_ = ClampSub(x_, vector.x);
-        y_ = ClampSub(y_, vector.y);
-    }
-
-    public static Point operator +(in Point lhs, in Vector2D rhs)
-    {
-        Point result = lhs;
-        result += rhs;
-        return result;
-    }
-
-    public static Point operator -(in Point lhs, in Vector2D rhs)
-    {
-        Point result = lhs;
-        result -= rhs;
-        return result;
-    }
-
-    public static Vector2D operator -(in Point lhs, in Point rhs)
-    {
-        return new Vector2D(ClampSub(lhs.x, rhs.x), ClampSub(lhs.y, rhs.y));
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -165,5 +113,57 @@ public struct Point : IComparable<Point>, IEquatable<Point>
         if (scale == 1.0f)
             return point;
         return PointConversions.ToRoundedPoint(PointF.ScalePoint(new PointF(point), scale, scale));
+    }
+
+    public override readonly string ToString() => $"{x_},{y_}";
+
+    // For use in collections (SortedSet, Dictionary keys, etc.)
+    public override readonly int GetHashCode() => HashCode.Combine(y_, x_);
+
+    public override readonly bool Equals(object? obj) => obj is Point other && Equals(other);
+
+    public readonly bool Equals(Point other) => x_ == other.x_ && y_ == other.y_;
+
+    // A point is less than another point if its y-value is closer to the origin.
+    // If the y-values are the same, then point with the x-value closer to the origin is considered less than the other.
+    // This comparison is required to use Point in sets, or sorted vectors.
+    public static bool operator < (in Point left, in Point right) => left.CompareTo(right) < 0;
+    public static bool operator > (in Point left, in Point right) => left.CompareTo(right) > 0;
+    public static bool operator <= (in Point left, in Point right) => left.CompareTo(right) <= 0;
+    public static bool operator >= (in Point left, in Point right) => left.CompareTo(right) >= 0;
+
+    public static bool operator == (in Point left, in Point right) => left.Equals(right);
+
+    public static bool operator != (in Point left, in Point right) => !left.Equals(right);
+
+    public void operator +=(in Vector2D vector)
+    {
+        x_ = ClampAdd(x_, vector.x);
+        y_ = ClampAdd(y_, vector.y);
+    }
+
+    public void operator -=(in Vector2D vector)
+    {
+        x_ = ClampSub(x_, vector.x);
+        y_ = ClampSub(y_, vector.y);
+    }
+
+    public static Point operator +(in Point lhs, in Vector2D rhs)
+    {
+        Point result = lhs;
+        result += rhs;
+        return result;
+    }
+
+    public static Point operator -(in Point lhs, in Vector2D rhs)
+    {
+        Point result = lhs;
+        result -= rhs;
+        return result;
+    }
+
+    public static Vector2D operator -(in Point lhs, in Point rhs)
+    {
+        return new Vector2D(ClampSub(lhs.x, rhs.x), ClampSub(lhs.y, rhs.y));
     }
 }
