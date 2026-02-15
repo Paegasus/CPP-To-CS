@@ -2,6 +2,7 @@ using System;
 
 namespace UI.GFX.Geometry;
 
+// A point has an x, y and z coordinate.
 public struct Point3F : IEquatable<Point3F>
 {
     private float x_;
@@ -41,6 +42,7 @@ public struct Point3F : IEquatable<Point3F>
 
     public readonly bool IsOrigin() => x_ == 0 && y_ == 0 && z_ == 0;
 
+    // Returns the squared euclidean distance between two points.
     public readonly float SquaredDistanceTo(in Point3F other)
     {
         float dx = x_ - other.x_;
@@ -66,9 +68,27 @@ public struct Point3F : IEquatable<Point3F>
 
     public static Point3F operator +(in Point3F lhs, in Vector3DF rhs) => new Point3F(lhs.x_ + rhs.x, lhs.y_ + rhs.y, lhs.z_ + rhs.z);
 
+    // Subtract a vector from a point, producing a new point offset by the vector's inverse.
     public static Point3F operator -(in Point3F lhs, in Vector3DF rhs) => new Point3F(lhs.x_ - rhs.x, lhs.y_ - rhs.y, lhs.z_ - rhs.z);
 
+    // Subtract one point from another, producing a vector that represents the distances between the two points along each axis.
     public static Vector3DF operator -(in Point3F lhs, in Point3F rhs) => new Vector3DF(lhs.x_ - rhs.x, lhs.y_ - rhs.y, lhs.z_ - rhs.z);
+
+    // Offset the point by the given vector.
+    public void operator +=(in Vector3DF v)
+    {
+        x_ += v.x;
+        y_ += v.y;
+        z_ += v.z;
+    }
+
+    // Offset the point by the given vector's inverse.
+    public void operator -=(in Vector3DF v)
+    {
+        x_ -= v.x;
+        y_ -= v.y;
+        z_ -= v.z;
+    }
 
     public static Point3F PointAtOffsetFromOrigin(in Vector3DF offset) => new Point3F(offset.x, offset.y, offset.z);
 
