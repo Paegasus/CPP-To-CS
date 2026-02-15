@@ -83,29 +83,6 @@ public struct Size : IEquatable<Size>
     /// </summary>
     public readonly long Area64() => (long)width_ * height_;
 
-    public override readonly string ToString() => $"{width_}x{height_}";
-
-    public override readonly int GetHashCode() => HashCode.Combine(width_, height_);
-
-    public readonly bool Equals(Size other) => width_ == other.width_ && height_ == other.height_;
-
-    public override readonly bool Equals(object? obj) => obj is Size other && Equals(other);
-
-    public static bool operator ==(in Size left, in Size right) => left.Equals(right);
-    public static bool operator !=(in Size left, in Size right) => !left.Equals(right);
-
-    public static Size operator +(Size lhs, in Size rhs)
-    {
-        lhs.Enlarge(rhs.width_, rhs.height_);
-        return lhs;
-    }
-
-    public static Size operator -(Size lhs, in Size rhs)
-    {
-        lhs.Enlarge(-rhs.width_, -rhs.height_);
-        return lhs;
-    }
-
     public static Size TransposeSize(in Size s)
     {
         return new Size(s.height_, s.width_);
@@ -157,5 +134,38 @@ public struct Size : IEquatable<Size>
             return size;
 
         return ToRoundedSize(SizeF.ScaleSize((SizeF)size, scale, scale));
+    }
+
+    public override readonly string ToString() => $"{width_}x{height_}";
+
+    public override readonly int GetHashCode() => HashCode.Combine(width_, height_);
+
+    public readonly bool Equals(Size other) => width_ == other.width_ && height_ == other.height_;
+
+    public override readonly bool Equals(object? obj) => obj is Size other && Equals(other);
+
+    public static bool operator ==(in Size left, in Size right) => left.Equals(right);
+    public static bool operator !=(in Size left, in Size right) => !left.Equals(right);
+
+    public void operator +=(in Size size)
+    {
+        Enlarge(size.width, size.height);
+    }
+
+    public void operator -=(in Size size)
+    {
+        Enlarge(-size.width, -size.height);
+    }
+
+    public static Size operator +(Size lhs, in Size rhs)
+    {
+        lhs += rhs;
+        return lhs;
+    }
+
+    public static Size operator -(Size lhs, in Size rhs)
+    {
+        lhs -= rhs;
+        return lhs;
     }
 }
