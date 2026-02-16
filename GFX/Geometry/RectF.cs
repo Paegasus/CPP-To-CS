@@ -257,9 +257,9 @@ public struct RectF : IEquatable<RectF>
         Math.Abs(x - rect.x) <= tolerance_x && Math.Abs(y - rect.y) <= tolerance_y &&
         Math.Abs(right() - rect.right()) <= tolerance_x && Math.Abs(bottom() - rect.bottom()) <= tolerance_y;
 
-    public override string ToString() => $"{origin_} {size_}";
-    public override int GetHashCode() => HashCode.Combine(origin_, size_);
-    public override bool Equals(object obj) => obj is RectF other && Equals(other);
+    public override readonly string ToString() => $"{origin_} {size_}";
+    public override readonly int GetHashCode() => HashCode.Combine(origin_, size_);
+    public override bool Equals(object? obj) => obj is RectF other && Equals(other);
     public bool Equals(RectF other) => origin_.Equals(other.origin_) && size_.Equals(other.size_);
 
     private static void AdjustAlongAxis(float dst_origin, float dst_size, ref float origin, ref float size)
