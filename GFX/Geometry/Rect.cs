@@ -579,7 +579,7 @@ public struct Rect : IEquatable<Rect>
     // the distance between the edge and the nearest integer grid is smaller than
     // `error`, the edge is snapped to the integer grid.  The default error is 0.001
     // , which is used by cc/viz. Use this when scaling the window/layer size.
-    public static Rect ScaleToEnclosingRectIgnoringError(in Rect rect, float scale, float error = 0.001f)
+    public static Rect ScaleToEnclosingRectIgnoringError(in Rect rect, float scale, float epsilon = 0.001f)
     {
         RectF rect_f = rect;
         rect_f.Scale(scale);
@@ -591,11 +591,11 @@ public struct Rect : IEquatable<Rect>
     {
         // Check a or b by itself.
         Rect maximum = a;
-        uint64_t maximum_area = a.size().Area64();
-        if (b.size().Area64() > maximum_area)
+        ulong maximum_area = (ulong)a.size().Area64();
+        if ((ulong)b.size().Area64() > maximum_area)
         {
             maximum = b;
-            maximum_area = b.size().Area64();
+            maximum_area = (ulong) b.size().Area64();
         }
         // Check the regions that include the intersection of a and b. This can be
         // done by taking the intersection and expanding it vertically and
@@ -603,25 +603,29 @@ public struct Rect : IEquatable<Rect>
         // a or b.
         Rect intersection = a;
         intersection.InclusiveIntersect(b);
+        
         if (!intersection.size().IsZero())
         {
             Rect vert_expanded_intersection = intersection;
-            vert_expanded_intersection.SetVerticalBounds(
-                std::min(a.y(), b.y()), std::max(a.bottom(), b.bottom()));
-            if (vert_expanded_intersection.size().Area64() > maximum_area)
+            vert_expanded_intersection.SetVerticalBounds(Math.Min(a.y(), b.y()), Math.Max(a.bottom(), b.bottom()));
+
+            if ((ulong)vert_expanded_intersection.size().Area64() > maximum_area)
             {
                 maximum = vert_expanded_intersection;
-                maximum_area = vert_expanded_intersection.size().Area64();
+                maximum_area = (ulong) vert_expanded_intersection.size().Area64();
             }
+
             Rect horiz_expanded_intersection = intersection;
-            horiz_expanded_intersection.SetHorizontalBounds(
-                std::min(a.x(), b.x()), std::max(a.right(), b.right()));
-            if (horiz_expanded_intersection.size().Area64() > maximum_area)
+
+            horiz_expanded_intersection.SetHorizontalBounds(Math.Min(a.x(), b.x()), Math.Max(a.right(), b.right()));
+            
+            if ((ulong)horiz_expanded_intersection.size().Area64() > maximum_area)
             {
                 maximum = horiz_expanded_intersection;
-                maximum_area = horiz_expanded_intersection.size().Area64();
+                maximum_area = (ulong)horiz_expanded_intersection.size().Area64();
             }
         }
+
         return maximum;
     }
 }
