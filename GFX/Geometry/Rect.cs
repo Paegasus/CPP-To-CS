@@ -581,7 +581,7 @@ public struct Rect : IEquatable<Rect>
     // , which is used by cc/viz. Use this when scaling the window/layer size.
     public static Rect ScaleToEnclosingRectIgnoringError(in Rect rect, float scale, float epsilon = 0.001f)
     {
-        RectF rect_f = rect;
+        RectF rect_f = new RectF(rect);
         rect_f.Scale(scale);
         return ToEnclosingRectIgnoringError(rect_f, epsilon);
     }
@@ -603,7 +603,7 @@ public struct Rect : IEquatable<Rect>
         // a or b.
         Rect intersection = a;
         intersection.InclusiveIntersect(b);
-        
+
         if (!intersection.size().IsZero())
         {
             Rect vert_expanded_intersection = intersection;
