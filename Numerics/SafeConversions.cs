@@ -64,13 +64,28 @@ public static class SafeConversions
     // Rounds towards negative infinity (i.e., down).
     public static int ClampFloor(float value)
     {
-        return SaturatedCast<int, float>(MathF.Floor(value));
+        //return SaturatedCast<int, float>(MathF.Floor(value));
+         return int.CreateSaturating(MathF.Floor(value));
+    }
+
+    public static int ClampFloor(double value)
+    {
+        //return SaturatedCast<int, double>(Math.Floor(value));
+        return int.CreateSaturating(Math.Floor(value));
     }
 
     // Rounds towards positive infinity (i.e., up).
     public static int ClampCeil(float value)
     {
-        return SaturatedCast<int, float>(MathF.Ceiling(value));
+        //return SaturatedCast<int, float>(MathF.Ceiling(value));
+        return int.CreateSaturating(MathF.Ceiling(value));
+    }
+
+    public static int ClampCeil(double value)
+    {
+        // ceil gives a double, then we saturate into int range.
+        //return SaturatedCast<int, double>(Math.Ceiling(value));
+        return int.CreateSaturating(Math.Ceiling(value));
     }
 
     // Rounds towards nearest integer, with ties away from zero.
@@ -84,7 +99,22 @@ public static class SafeConversions
     // -1.5 to -2.
     public static int ClampRound(float value)
     {
-        float rounded = MathF.Round(value);
-        return SaturatedCast<int, float>(rounded);
+        //return SaturatedCast<int, float>(MathF.Round(value));
+        return SaturatedCast<int, float>(MathF.Round(value));
+    }
+
+    public static int ClampRound(double value)
+    {
+        //return SaturatedCast<int, double>(Math.Round(value));
+        return SaturatedCast<int, double>(Math.Round(value));
+    }
+
+    // This performs a safe, absolute value via unsigned overflow.
+    public static uint SafeUnsignedAbs(int value)
+    {
+        // This works even for int.MinValue, because it uses unsigned wraparound.
+        return value < 0
+                    ? 0u - (uint)value
+                    : (uint)value;
     }
 }
