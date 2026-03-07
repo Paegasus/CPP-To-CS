@@ -20,7 +20,6 @@ public class Node : EventTarget
         kDocumentFragmentNode = 11,
     }
 
-
     public enum DocumentPosition
     {
         kDocumentPositionEquivalent = 0x00,
@@ -30,6 +29,18 @@ public class Node : EventTarget
         kDocumentPositionContains = 0x08,
         kDocumentPositionContainedBy = 0x10,
         kDocumentPositionImplementationSpecific = 0x20,
+    }
+
+    public static Node FromDomNodeId(DOMNodeId dom_node_id)
+    {
+        throw new NotImplementedException();
+    }
+
+    // Returns the existing DOMNodeID for the node if it has already been
+    // assigned, otherwise, assigns a new DOMNodeID and return that.
+    public DOMNodeId GetDomNodeId()
+    {
+        throw new NotImplementedException();
     }
 
     public override string InterfaceName => throw new NotImplementedException();
