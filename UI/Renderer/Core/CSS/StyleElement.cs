@@ -3,9 +3,13 @@ using UI.Renderer.Framework.Text;
 
 namespace UI.Renderer.Core.CSS;
 
-public abstract class StyleElement
+public class StyleElement
 {
-    public enum ProcessingResult { kProcessingSuccessful, kProcessingFatalError };
+    public enum ProcessingResult
+    {
+        kProcessingSuccessful,
+        kProcessingFatalError
+    }
     
     // We want CSS Modules to behave similar to the "already started" flag Import
     // Maps, essentially making it a one-shot operation when the <style> element
@@ -17,7 +21,7 @@ public abstract class StyleElement
         kPending,  // Still unknown.
         kClassic,  // Definitely a classic style tag.
         kModule    // Definitely a declarative CSS module.
-    };
+    }
 
     private bool has_finished_parsing_children_ = true;
     private bool loading_ = true;
@@ -28,23 +32,36 @@ public abstract class StyleElement
     private PendingSheetType pending_sheet_type_;
     private RenderBlockingBehavior render_blocking_behavior_;
 
-    public bool CreatedByParser
+    private ProcessingResult CreateSheetOrModule(Element, string text)
     {
-        get => created_by_parser_;
+        throw new NotImplementedException();
     }
 
-    /*
-    public abstract bool Disabled { get; set; }
-    public abstract Node? OwnerNode { get; }
-    public virtual StyleSheet? ParentStyleSheet => null;
-    public abstract string Href { get; }
-    public abstract string Title { get; }
-    public virtual MediaList? Media => null;
-    public abstract string Type { get; }
-    public virtual CSSRule? OwnerRule => null;
-    public abstract void ClearOwnerNode();
-    public abstract Uri BaseUrl { get; }
-    public abstract bool IsLoading { get; }
-    public virtual bool IsCSSStyleSheet => false;
-    */
+    private void AddImportMapEntry(Element, string text) { throw new NotImplementedException(); }
+
+    private ProcessingResult Process(Element) { throw new NotImplementedException(); }
+
+    private void ClearSheet(Element owner_element) { throw new NotImplementedException(); }
+
+    public bool CreatedByParser { get => created_by_parser_; }
+
+    public CSSStyleSheet? Sheet => sheet_?.Get();
+    public bool IsModule { get; }
+    
+    virtual  AtomicString type() const = 0;
+    virtual  AtomicString media() const = 0;
+
+    // Returns whether |this| and |node| are the same object. Helps us verify
+    // parameter validity in certain member functions with an Element parameter
+    // which should only be called by a subclass with |this|.
+    virtual bool IsSameObject(const Node& node) const = 0;
+    public CSSStyleSheet sheet() { return sheet_.Get(); }
+    public bool IsLoading() { throw new NotFiniteNumberException(); }
+    public bool SheetLoaded(Document document){ throw new NotFiniteNumberException(); }
+    public void SetToPendingState(Document document, Element element) { throw new NotFiniteNumberException(); }
+    public void RemovedFrom(Element element, ContainerNode insertionPoint) { throw new NotFiniteNumberException(); }
+    public void BlockingAttributeChanged(Element element) { throw new NotFiniteNumberException(); }
+    public ProcessingResult ProcessStyleSheet(Document document, Element element) { throw new NotFiniteNumberException(); }
+    public ProcessingResult ChildrenChanged(Element element) { throw new NotFiniteNumberException(); }
+    public ProcessingResult FinishParsingChildren(Element element) { throw new NotFiniteNumberException(); }
 }
